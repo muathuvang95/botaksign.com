@@ -572,8 +572,9 @@ class Nbdesigner_Plugin {
         wp_register_script( 'fontfaceobserver', NBDESIGNER_PLUGIN_URL . 'assets/libs/fontfaceobserver.js', array(), '2.0.13' );            
         wp_register_style( 'nbd-general', NBDESIGNER_CSS_URL . 'nbd-general.css', array('dashicons'), NBDESIGNER_VERSION );
         wp_enqueue_style( array( 'nbd-general' ) );
+
+        wp_register_style( 'admin_nbdesigner', NBDESIGNER_CSS_URL . 'admin-nbdesigner.css', array('wp-color-picker'), NBDESIGNER_VERSION );
         if ( in_array( $hook, apply_filters( 'nbd_admin_hooks_need_asset', array( 'post.php', 'post-new.php', 'nbdesigner_page_nbdesigner_manager_fonts', 'nbdesigner_page_nbdesigner_manager_arts', 'toplevel_page_nbdesigner', 'nbdesigner_page_nbdesigner_manager_product', 'toplevel_page_nbdesigner_shoper', 'nbdesigner_page_nbdesigner_frontend_translate', 'nbdesigner_page_nbdesigner_tools', 'nbdesigner_page_manage_color' ) ) ) ){
-            wp_register_style( 'admin_nbdesigner', NBDESIGNER_CSS_URL . 'admin-nbdesigner.css', array('wp-color-picker'), NBDESIGNER_VERSION );
             wp_register_script( 'admin_nbdesigner', NBDESIGNER_JS_URL . 'admin-nbdesigner.js', array('jquery', 'jquery-ui-resizable', 'jquery-ui-draggable', 'jquery-ui-autocomplete', 'wp-color-picker', 'jquery-ui-datepicker', 'jquery-ui-sortable' ), NBDESIGNER_VERSION );
             wp_localize_script( 'admin_nbdesigner', 'admin_nbds', array(
                 'url'           => admin_url( 'admin-ajax.php' ),

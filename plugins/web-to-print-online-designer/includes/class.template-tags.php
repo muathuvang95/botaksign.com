@@ -44,6 +44,9 @@ if(!class_exists('NBD_Template_Tag')) {
                 add_submenu_page(
                     'nbdesigner', esc_html__('Template Tags', 'web-to-print-online-designer'), esc_html__('Template Tags', 'web-to-print-online-designer'), 'manage_nbd_tool', 'edit-tags.php?taxonomy=template_tag&post_type=product', null
                 );
+                add_submenu_page(
+                    'nbd_faq', esc_html__('Printing FAQs', 'web-to-print-online-designer'), esc_html__('Printing FAQs', 'web-to-print-online-designer'), 'manage_nbd_tool', 'edit.php?post_type=nbd-faq', null
+                );
             }
         }
         public function init_taxonomy( ){

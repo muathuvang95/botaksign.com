@@ -728,6 +728,52 @@ jQuery(document).ready(function ($) {
     };
     $('.depend_trigger').on( 'change', triggerDepend );
     triggerDepend();
+
+        NBDESIGNADMIN.initFaqSortable();
+    jQuery('#nbf-categories').on('change', function(){
+        var cat_id = jQuery(this).val(),
+        data = 'cat_id=' + cat_id + '&action=nbf_get_faqs_of_category';
+
+        jQuery.post(admin_nbds.url, data, function(response) {
+            jQuery('.nbf-table-wrap').html('').append( response );
+        });
+    });
+    jQuery('#nbf-add-faqs').on('click', function(e){
+        e.preventDefault();
+        var ids = [];
+
+        jQuery('.faqs-availabled input[type="checkbox"]').each(function() {
+            if ( jQuery(this).is( ':checked' ) ) ids.push( jQuery( this ).val() );
+            jQuery(this).prop('checked', false);
+        });
+
+        ids.forEach(function( id ){
+            if( !NBDESIGNADMIN.isExistFaq( id, 'faq' ) ){
+                var name = jQuery('.faqs-availabled tr[data-id="' + id + '"] .nbf-title' ).text();
+                NBDESIGNADMIN.addFaqRow( id, name );
+            }
+        });
+    });
+    jQuery('#nbf-remove-faqs').on('click', function(e){
+        e.preventDefault();
+
+        var ids = [];
+        jQuery('.faqs-selected input[type="checkbox"]').each(function() {
+            if ( jQuery(this).is( ':checked' ) ) ids.push( jQuery( this ).val() );
+            jQuery(this).prop('checked', false);
+        });
+
+        ids.forEach(function( id ){
+            NBDESIGNADMIN.removeFaqRow( id );
+        });
+    });
+
+    jQuery('.nbd-check-connection').on('click', function(e){
+        e.preventDefault();
+        var place = jQuery(this).attr('data-place');
+        NBDESIGNADMIN.checkConnection( place );
+    });
+
 });
 jQuery(window).on('scroll', function () {
     nbdScrollEffect();
@@ -2534,6 +2580,92 @@ var NBDESIGNADMIN = {
         if( options_tring != '' ) options_tring = options_tring.slice(1, -1);
         jQuery('#nbls_keys_string').val( keys_string );
         jQuery('#nbls_options_string').val( options_tring );
+    },
+    
+    initFaqSortable: function(){
+        jQuery( '.faqs-selected tbody' ).sortable({
+            items: 'tr',
+            cursor: 'move',
+            axis: 'y',
+            handle: 'td.sort',
+            scrollSensitivity: 40,
+            forcePlaceholderSize: true,
+            helper: 'clone',
+            opacity: 0.65
+        });
+    },
+    isExistFaq: function( id ){
+        return jQuery('.faqs-selected tbody tr[data-id="' + id + '"]').length > 0;
+    },
+    addFaqRow: function( id, name ){
+        jQuery('.faqs-selected tbody').append('<tr data-id="' + id + '"><td class="sort"></td><th class="check"><input type="checkbox" value="' + id + '"/><input name="_nbd_faq[faqs][]" type="hidden" value="' + id + '"/></th><td>' + name + '</td></tr>');
+        this.initFaqSortable();
+    },
+    removeFaqRow: function( id ){
+        jQuery('.faqs-selected tbody tr[data-id="' + id + '"]').remove();
+        this.initFaqSortable();
+    },
+    checkConnection: function( place ){
+        formdata = 'action=check_flysystem_connected&place=' + place;
+        jQuery('.' + place + '-checking').addClass('active');
+        jQuery.post(admin_nbds.url, formdata, function(data){
+            if( data && data.is_connected ){
+                alert('Connected successfully!');
+            }else{
+                alert('Connected failed!');
+            }
+            jQuery('.' + place + '-checking').removeClass('active');
+        });
+    },
+    importSettings: function(event){
+        event.preventDefault();
+        var input = jQuery('#nbd-import-settings-file');
+
+        input.trigger('click');
+
+        input.on('click', function(e){
+            e.stopPropagation();
+        });
+
+        function uploadFile( file ){
+            type = file.type.toLowerCase();
+            if( type != 'application/json' ) return;
+
+            var con = confirm( admin_nbds.nbds_lang.are_you_sure );
+            if( con == true ){
+                var formData = new FormData;
+                formData.append( 'file', file );
+                formData.append( 'action', 'nbd_import_settings' );
+                formData.append( 'nonce', admin_nbds.nonce );
+
+                jQuery('#nbd-import-settings-loading').show();
+
+                jQuery.ajax({
+                    url: admin_nbds.url,
+                    method: "POST",
+                    dataType: 'json',
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function(data) {
+                        if( data.flag == 1 ){
+                            window.location = admin_nbds.setting_page;
+                        }else{
+                            alert( data.mes );
+                        }
+                    }
+                });
+            }
+        }
+
+        function handleFiles(files) {
+            if(files.length > 0) uploadFile(files[0]);
+        }
+
+        input.off('change').on('change', function(){
+            handleFiles(this.files);
+        });
     }
 };
 function base64Encode(str) {

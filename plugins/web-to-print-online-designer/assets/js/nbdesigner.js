@@ -1082,6 +1082,10 @@ jQuery(document).ready(function () {
             if ( event.target.closest( '.nbdl-search-type-wrap' ) ) return;
             jQuery('#nbdl-search-type').removeClass('active');
         });
+        
+        jQuery('.nbd-faq-head').on('click', function(){
+            jQuery(this).parent('.nbd-faq-wrap').toggleClass('active');
+        });
     });
 });
 (function ($, window) {
