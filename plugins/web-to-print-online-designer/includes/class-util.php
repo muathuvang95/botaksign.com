@@ -1348,7 +1348,8 @@ function default_frontend_setting(){
         'nbdesigner_hide_print_option_in_editor'    => 'no',
         'nbdesigner_object_center_scaling'          => 'no',
         'nbdesigner_disable_auto_load_template'     => 'no',
-        'nbdesigner_lazy_load_template'             => 'no'
+        'nbdesigner_lazy_load_template'             => 'no',
+        'nbdesigner_auto_fill_template_masks'       => 'no',
     ));
 }
 function nbd_multicheckbox_settings(){
