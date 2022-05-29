@@ -159,6 +159,11 @@
             }
             $layout = 'modern';
             include NBDESIGNER_PLUGIN_DIR . 'views/editor_components/js_config.php';
+            $enable_sticker_preview     = 0;
+            if( $nbes_settings ){
+                $_nbes_settings         = unserialize( $nbes_settings );
+                $enable_sticker_preview = isset( $_nbes_settings['sticker_preview'] ) && $_nbes_settings['sticker_preview'] == 1 ? 1 : 0;
+            }
         ?>
     </head>
     <body ng-app="nbd-app" class="nbd-mode-modern nbd-mode-<?php esc_attr_e( $ui_mode ); ?> <?php echo (is_rtl()) ? 'nbd-modern-rtl' : '';?> <?php if( $is_iphone ) echo 'iphone'; ?>">     
@@ -251,6 +256,12 @@
         <?php endif; ?>
         <?php endif; ?>
         <!-- End. NBO  -->
+        <?php if( $enable_sticker_preview ): ?>
+        <script type="text/javascript">
+            NBDESIGNCONFIG.enable_sticker_preview = 1;
+        </script>
+        <script type="text/javascript" src="<?php echo NBDESIGNER_PLUGIN_URL .'assets/js/sticker/contour.js'; ?>"></script>
+        <?php endif; ?>
         <script type="text/javascript" src="<?php echo NBDESIGNER_PLUGIN_URL .'assets/js/designer-modern.min.js'; ?>"></script>
         <script type="text/javascript" src="<?php echo NBDESIGNER_PLUGIN_URL .'assets/js/app-modern.min.js'; ?>"></script>
         <?php if(file_exists( NBDESIGNER_DATA_DIR . '/custom.js' )): ?>

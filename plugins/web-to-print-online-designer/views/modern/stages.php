@@ -122,7 +122,10 @@
 'border-top-right-radius' : calcStyle(stage.config.hasOwnProperty( 'safe_radius_left' )? ((stage.states.scaleRange[stage.states.currentScaleIndex].ratio * stage.config.safe_radius_left > 0) ? (stage.states.scaleRange[stage.states.currentScaleIndex].ratio * stage.config.safe_radius_left) : 0) : 0 ) ,
 'border-bottom-left-radius' : calcStyle(stage.config.hasOwnProperty( 'safe_radius_bottom' )? ((stage.states.scaleRange[stage.states.currentScaleIndex].ratio * stage.config.safe_radius_bottom > 0) ? (stage.states.scaleRange[stage.states.currentScaleIndex].ratio * stage.config.safe_radius_bottom) : 0) : 0 ) ,
 'border-bottom-right-radius' : calcStyle(stage.config.hasOwnProperty( 'safe_radius_right' )? ((stage.states.scaleRange[stage.states.currentScaleIndex].ratio * stage.config.safe_radius_right > 0) ? (stage.states.scaleRange[stage.states.currentScaleIndex].ratio * stage.config.safe_radius_right) : 0) : 0 ) ,
-'bottom' : calcStyle(stage.states.scaleRange[stage.states.currentScaleIndex].ratio * (stage.config.bleed_b  + stage.config.margin_b))}"></div>                                 
+'bottom' : calcStyle(stage.states.scaleRange[stage.states.currentScaleIndex].ratio * (stage.config.bleed_b  + stage.config.margin_b))}"></div>
+                                <?php if( $enable_sticker_preview ): ?>
+                                <div class="sticker-contour-wrap" ng-class="{'active': stickerCutline.active}" ></div>
+                                <?php endif; ?>                                
                             </div>
                         </div>
                     </div>
