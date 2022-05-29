@@ -1,0 +1,27 @@
+.cate-content9:first-child .nbfw_banner-container > a{
+    text-align: left;
+}
+.cate-content9:last-child .nbfw-txt-info{
+    left: 0;
+    right: auto;
+    text-align: left !important;
+}
+.cate-content9:last-child .nbfw_banner-container .txt-des,
+.cate-content9:last-child .nbfw_banner-container .txt-primary{
+    padding-right: 0;
+    padding-left: 16px;
+}
+.cate-content9:first-child .nbfw_banner-container .txt-primary,
+.cate-content9:first-child .nbfw_banner-container .txt-des{
+    padding-left: 0;
+    padding-right: 16px;
+}
+#company9-c .sign9 .avatar9{
+    margin-right: 0;
+    margin-left: 44px;
+}
+.step9 .aio-icon-default{
+    float: right;
+    margin-right: 0;
+    margin-left: 10px;
+}

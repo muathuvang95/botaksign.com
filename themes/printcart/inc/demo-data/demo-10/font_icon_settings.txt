@@ -1,0 +1,1 @@
+a:1:{s:8:"Defaults";a:4:{s:7:"include";s:20:"smile_fonts/Defaults";s:6:"folder";s:20:"smile_fonts/Defaults";s:5:"style";s:21:"Defaults/Defaults.css";s:6:"config";s:11:"charmap.php";}}
