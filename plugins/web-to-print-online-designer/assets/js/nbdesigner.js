@@ -22,6 +22,9 @@ jQuery(document).ready(function () {
         }
         jQuery('#nbd-m-custom-design-wrap').addClass('is-visible');
     });
+    if( navigator.vendor && navigator.vendor.indexOf('Apple') > -1 && navigator.userAgent.indexOf("Safari") != -1 && navigator.userAgent.indexOf("CriOS") == -1 ){
+        jQuery('#nbd-chat-app').addClass('safari');
+    }
     var width = jQuery(window).innerWidth();
     var height = jQuery(window).height();
     var w = -width;
