@@ -1336,6 +1336,7 @@ function default_frontend_setting(){
         'nbdesigner_enable_pixabay'                 => 'yes',
         'nbdesigner_enable_unsplash'                => 'yes',
         'nbdesigner_enable_pexels'                  => 'yes',
+        'nbdesigner_enable_freepik'                 => 'yes',
         
         'nbdesigner_show_grid'                      => 'no',
         'nbdesigner_show_ruler'                     => 'no',
