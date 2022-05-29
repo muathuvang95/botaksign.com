@@ -1347,6 +1347,7 @@ function default_frontend_setting(){
         'nbdesigner_show_design_border'             => 'no',
         'nbdesigner_hide_print_option_in_editor'    => 'no',
         'nbdesigner_object_center_scaling'          => 'no',
+        'nbdesigner_always_show_layer_action'       => 'no',
         'nbdesigner_disable_auto_load_template'     => 'no',
         'nbdesigner_lazy_load_template'             => 'no',
         'nbdesigner_auto_fill_template_masks'       => 'no',
