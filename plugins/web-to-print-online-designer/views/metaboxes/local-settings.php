@@ -275,4 +275,22 @@
             <?php do_action( 'after_nbes_settings', $post_id ); ?>
         </div>
     </div>
+    <div class="postbox closed nbd-admin-setting-margin-10" >
+        <button type="button" class="handlediv" aria-expanded="true">
+            <span class="screen-reader-text"><?php esc_html_e( 'Toggle panel: Sticker cutline preview', 'web-to-print-online-designer' ); ?></span><span class="toggle-indicator" aria-hidden="false"></span>
+        </button>
+        <h2 class="nbd-admin-setting-local-setting-title"><span><b><?php esc_html_e( 'Sticker cutline preview', 'web-to-print-online-designer' ); ?></b></span></h2>
+        <div class="inside">
+            <div class="nbo-form-field">
+                <label ><b><?php esc_html_e( 'Enable sticker cutline preview', 'web-to-print-online-designer' ); ?></b></label>
+                <div class="nbo-option-val">
+                    <input type="hidden" value="0" name="_nbes_settings[sticker_preview]"/>
+                    <input type="checkbox" value="1" name="_nbes_settings[sticker_preview]" id="_nbes_settings_sticker_preview" <?php checked( $nbes_settings['sticker_preview'] ); ?> class="short" />
+                    <label for="_nbes_settings_sticker_preview"><?php esc_html_e('Enable', 'web-to-print-online-designer'); ?></label>
+                    <br />
+                    <i><?php _e('Please set "Bleed top-bottom" and "Bleed left-right" for each side.', 'web-to-print-online-designer'); ?></i>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

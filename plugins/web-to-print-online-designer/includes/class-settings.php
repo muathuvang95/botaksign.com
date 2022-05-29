@@ -680,7 +680,9 @@ if( !class_exists('NBD_Local_Settings') ) {
                 'background_colors'     => array( 'codes' => array(), 'names' => array() ),
                 'foreground_colors'     => array( 'codes' => array(), 'names' => array() ),
                 'force_fg'              => false,
-                'combination_colors'    => array( 'bg_codes' => array(), 'bg_names' => array(), 'fg_codes' => array(), 'fg_names' => array() )
+                'combination_colors'    => array( 'bg_codes' => array(), 'bg_names' => array(), 'fg_codes' => array(), 'fg_names' => array() ),
+                /* Sticker cutline preview */
+                'sticker_preview'       => 0
             ), $post_id);
             if( $nbes_settings ){
                 $nbes_settings      = unserialize( $nbes_settings );

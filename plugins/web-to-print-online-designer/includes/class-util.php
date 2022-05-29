@@ -2963,6 +2963,9 @@ function nbd_export_pdfs( $nbd_item_key, $watermark = true, $force = false, $sho
                     $pdf->SetAlpha(1);
                 }
             }
+            if( isset( $config->contour ) ){
+                $pdf->ImageSVG( '@' . $config->contour, $mLeft + $cdLeft, $mTop + $cdTop, $cdWidth, $cdHeight, '', '', '', 0, true );
+            }
             do_action( 'after_nbd_pdf', $pdf, $_pdf, $nbd_item_key, $extra );
             if( !$force ){
                 $output_file = $folder .'/'. $nbd_item_key .'_'.$key.'.pdf';
@@ -3357,6 +3360,9 @@ function custom_nbd_export_pdfs( $nbd_item_key, $watermark = false, $force = fal
                     $pdf->StopTransform();
                     $pdf->SetAlpha(1);
                 }
+            }
+            if( isset( $config->contour ) ){
+                $pdf->ImageSVG( '@' . $config->contour, $mLeft + $cdLeft, $mTop + $cdTop, $cdWidth, $cdHeight, '', '', '', 0, true );
             }
             do_action( 'after_nbd_pdf', $pdf, $_pdf, $nbd_item_key, $extra );
             if( !$force ){
