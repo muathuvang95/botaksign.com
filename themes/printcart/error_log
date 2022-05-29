@@ -34,3 +34,11 @@ Stack trace:
 Stack trace:
 #0 {main}
   thrown in /home/btksigndotcom/public_html/wp-content/themes/printcart/index.php on line 15
+[27-Apr-2022 04:41:54 Asia/Singapore] PHP Fatal error:  Uncaught Error: Call to undefined function printcart_get_options() in /home/btksigndotcom/public_html/wp-content/themes/printcart/index.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/btksigndotcom/public_html/wp-content/themes/printcart/index.php on line 15
+[27-Apr-2022 04:43:59 Asia/Singapore] PHP Fatal error:  Uncaught Error: Call to undefined function printcart_get_options() in /home/btksigndotcom/public_html/wp-content/themes/printcart/index.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/btksigndotcom/public_html/wp-content/themes/printcart/index.php on line 15

@@ -799,9 +799,3 @@ function botak_cancel_unpaid_orders() {
     }
 }
 add_action( 'woocommerce_cancel_unpaid_orders', 'botak_cancel_unpaid_orders' );
-
-function var_dump_($func) {
-    echo '<pre>';
-    var_dump($func);
-    echo '</pre>';
-}

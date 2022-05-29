@@ -39,7 +39,11 @@ if( isset( $product_id ) && $product_id ) {
 }
 
 if ( count($products) > 0 ) {
-    $keys = array_rand( $products, 4 );
+    $num = 4;
+    if( count($products) < 4 ) {
+        $num = count($products);
+    }
+    $keys = array_rand( $products, $num );
     ?>
 
     <section style="margin-top: 256px;" class="related">

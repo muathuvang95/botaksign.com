@@ -1,0 +1,76 @@
+.order-time-info {
+    display: inline-block;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+.order-time-info .time-notice {
+    margin-top: 10px;
+}
+.order-time-info .time-notice p{
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+/*Working time setup admin*/
+.working-time-title {
+    margin-top: 10px;
+    font-weight: 600;
+}
+.working-time-container {
+    padding: 15px 0px;
+    display: flex;
+    border-bottom: 1px solid #ccc;
+}
+.working-time-container label {
+    font-weight: 600;
+}
+.working-time-container .working-time-checkbox {
+    width: 100px;
+}
+.working-time-container .working-time-checkbox input {
+    margin-top: 3px;
+}
+.working-time-container .time-setup {
+    width: calc(100% - 100px);
+}
+.working-time-container .open-time, .working-time-container .close-time {
+    display: inline-block;
+    float: left;
+    margin-bottom: 10px;
+    width: 120px;
+    clear: both;
+}
+.working-time-container .open-time label, .working-time-container .open-time input,
+.working-time-container .close-time label, .working-time-container .close-time input {
+    width: 100%
+}
+.holiday-container {
+    padding: 10px 0px;
+}
+.holiday-container .start-holiday,
+.holiday-container .end-holiday{
+    padding-bottom: 5px;
+}
+
+/*Order dashboard*/
+.toplevel_page_mybts-order_dashboard #wpbody-content {
+    overflow-y: auto !important;
+}
+tr.order-super-rush {
+    background-color: #f31f1f;
+    color: #fff;
+}
+tr.order-rush {
+    background-color: #f9b9ba;
+}
+tr.order-standard {
+    background-color: #f8f7c7;
+}
+tr.order-reupload-aw {
+    background-color: #d0edfb;
+}
+tr.order-reupload-aw td.col_artwork_amendment {
+    background-color: red;
+}

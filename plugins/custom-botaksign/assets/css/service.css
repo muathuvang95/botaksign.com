@@ -1,0 +1,125 @@
+/*Service element in VC*/
+.artwork-service {
+    margin-bottom: 60px;
+}
+.artwork-service .title-block {
+    margin-bottom: 30px;
+    padding: 0px 15px;
+}
+.artwork-service .title-block h2 {
+    font-size: 34px;
+    font-weight: 600;
+    border-bottom: 3px solid #ccc;
+}
+.artwork-service .title-block h2 span { 
+    width: 50px;
+    display: inline-flex;
+}
+.service-block {
+    padding: 0px 15px;
+    margin-bottom: 36px;
+}
+.service-block .image-block {
+    width: 100px;
+    margin-right: 20px;
+}
+.service-block .image-block img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    box-shadow: 0px 0px 5px #ccc;
+}
+.service-block .content-block {
+    width: calc(100% - 360px);
+    display: flex;
+}
+.service-block .content-block .content-block-container {
+    margin-top: auto;
+    margin-bottom: auto;
+    max-width: 100%;
+}
+.service-block .content-block p{
+    margin-bottom: 0px;
+}
+.service-block .content-block a, .service-block .content-block a:hover{
+    color: #333;
+}
+.service-block .content-block .title{
+    font-size: 30px;
+    line-height: 30px;
+    font-weight: 600;
+    display: flex;
+    margin-bottom: 8px;
+}
+.service-block .content-block .title a{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.service-block .content-block .title span{
+    padding-left: 20px;
+}
+.service-block .content-block .description {
+    font-size: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 22px;
+    max-height: 44px;
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
+.service-block .price-block-desktop {
+    width: 180px;
+    margin-left: 60px;
+}
+.service-block .price-block-desktop p{
+    font-weight: 600;
+    font-size: 24px;
+    margin-bottom: 0px;
+}
+.service-block .price-block-desktop .title{
+    margin-top: 10px;
+}
+.service-block .content-block .price-block-mobile {
+    display: none;
+    font-size: 18px;
+    margin-top: 7px;
+    font-weight: 700;
+}
+
+.order_details .product-service td:first-child{
+    padding-left: 60px;
+    width: 60%;
+}
+@media (max-width: 767px) {
+    /*artwork service*/
+    .artwork-service .title-block {
+        margin-bottom: 20px;
+    }
+    .artwork-service .title-block h2 {
+        font-size: 30px;
+    }
+    .service-block .content-block {
+        width: calc(100% - 120px);
+    }
+    .service-block .content-block .title {
+        font-size: 24px;
+    }
+    .service-block .price-block-desktop {
+        display: none;
+    }
+    .service-block .content-block .price-block-mobile {
+        display: block;
+    }
+}
+@media (max-width: 639px) {
+    /*artwork service*/
+    .artwork-service .title-block h2 {
+        font-size: 24px;
+        width: 100%;
+    }
+    .artwork-service .title-block h2 span {
+        display: none;
+    }
+}

@@ -6,11 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 $tabs = apply_filters( 'woocommerce_product_tabs', array() );
 
 if ( ! empty( $tabs ) ) : ?>
-    <style>
-        .single-product .wc-tabs {
-            display: block!important;
-        }
-    </style>
 
     <div class="woocommerce-tabs wc-tabs-wrapper">
         <ul class="tabs wc-tabs" role="tablist">

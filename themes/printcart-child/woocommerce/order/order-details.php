@@ -311,7 +311,7 @@ $est_time = show_est_completion($order);
 	<h2 class="woocommerce-order-details__title"><?php esc_html_e( 'Order details', 'woocommerce' ); ?></h2>
         
         <div class="order-time-info">
-            <div class="title"><b>Your order will be completed & delivered by:</b></div>
+            <div class="title"><b>Your order will be completed by:</b></div>
             <div class="time"><?php if($period_time_delivery != '') { echo $period_time_delivery.' '.date("d F Y" , $order_completed_str); } else { echo $est_time['total_time']; } ?></div>
             <div class="notice">
                 <p>* This timing does not take into account:</p>

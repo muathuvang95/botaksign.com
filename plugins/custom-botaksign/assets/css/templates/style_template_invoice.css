@@ -1,0 +1,123 @@
+@page{
+    margin: 30px;
+}
+table{
+    border-collapse: collapse;
+}
+.logo{
+    margin-left: 0px;
+    margin-top: 0px;
+    width:284px;
+}
+.sub-logo{
+    margin-right: 0px;
+    margin-top: 0px;
+    width:234px;
+}
+.bill-to{
+    color: #27793d;
+    display: block;
+    font-size: 15pt;
+    font-family: segoe-bold;
+}
+.header-infor .bill-to-td{
+    /* scroll-padding-top: 200px; */
+}
+.cash-invoice-no{
+    color: #27793d;
+    right: 150px;
+    font-size: 15pt;
+    font-family: segoe-bold;
+}
+.bill-to-td, .cash-invoice-no-td{
+    padding-top: 20px;
+}
+.tex-bol{
+    font-size: 12pt;
+    color: #231f20;
+    font-family: segoe-bold !important;
+}
+.tex-sub{
+    font-size: 12pt;
+    color: #231f20;
+    font-family: Myriad-Pro-Light !important;
+}
+.main-page-number{
+    width: 100%;
+    text-align: right;
+}
+.page-number{
+    font-size: 10pt;
+    color: #231f20;
+    font-family: segoe-bold,Myriad-Pro-Semibold !important;
+}
+.product td{
+    border-bottom: 1px solid #27793d;
+    padding-bottom: 15px;
+    padding-top: 15px;
+}
+.stt, .description, .qty, .unit_price, .amount{
+    padding-top: 20px;
+    color: #27793d;
+    font-size: 12pt;
+    padding-bottom: 5px;
+    font-family: segoe-bold;
+}
+.stt-text, .description-text, .qty-text, .unit_price-text, .amount-text{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-family: segoe-bold,Myriad-Pro-Semibold !important;
+}
+.sub-product{
+    color: #231f20;
+    font-size: 10pt;
+}
+.disclaimer,.total{
+    color: #27793d;
+    display: block;
+    font-size: 15pt !important;
+    font-family: segoe-bold;
+}
+.subtotal, .gst{
+    color: #27793d;
+    display: block;
+    font-size: 12pt;
+    font-family: segoe-bold;
+}
+.subtotal-price, .gst-price {
+    font-size: 12pt;
+    color: #231f20;
+    font-family: Myriad-Pro-Semibold,segoe-bold !important;
+}
+.total-price{
+    font-size: 15pt;
+    color: #231f20;
+    font-family: Myriad-Pro-Semibold,segoe-bold !important;
+}
+#total-price td{
+    padding-top: 20px;
+}
+.text-number{
+    color: #231f20;
+    font-size: 12pt;
+    font-family: Myriad-Pro-Semibold !important;
+}
+.text-val{
+    color: #231f20;
+    font-size: 12pt;
+    font-weight: 100;
+    font-family: Myriad-Pro-Light !important;
+}
+#footer-text{
+    text-align: center;
+}
+#footer-text .footer-title{
+    font-size: 15pt;
+    font-family: Cooper-Black-Regular !important;
+    color: #27793d;
+}
+.footer-text-1, .footer-text-2, .footer-text-3, .footer-text-4, .footer-text-5, .footer-text-6{
+    font-size: 10pt;
+    color:  #231f20;
+    font-family: Myriad-Pro-Light !important;
+}
