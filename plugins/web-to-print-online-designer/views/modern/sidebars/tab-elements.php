@@ -93,6 +93,18 @@
                             </div>
                         </div>
                     </div>
+                    <div ng-if="settings['nbdesigner_enable_google_maps'] == 'yes' && settings['nbdesigner_static_map_api_key'] != ''" class="item" data-type="maps" data-api="false" ng-click="onClickTab('maps', 'element')">
+                        <div class="main-item">
+                            <div class="item-icon" style="padding: 20px 5px">
+                                <i class="icon-nbd maps-icon" >
+                                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="40" height="40" viewBox="0 0 480 480" xml:space="preserve"><g><g><path fill="#ea4335" d="M240,40c-35.346,0-64,28.654-64,64c0,35.346,28.654,64,64,64c35.33-0.04,63.96-28.67,64-64C304,68.654,275.346,40,240,40z M240,152c-26.499-0.026-47.974-21.501-48-48c0-26.51,21.49-48,48-48c26.51,0,48,21.49,48,48S266.51,152,240,152z"/></g></g><g><g><path fill="#4285f4" d="M474.528,224.416l-96-32c-1.407-0.468-2.915-0.54-4.36-0.208l-65.368,15.36C327.92,167.312,344,126.664,344,104 C344,46.562,297.438,0,240,0S136,46.562,136,104c0,22.456,15.776,62.544,34.608,102.4l-56.664-14.16 c-1.414-0.368-2.903-0.329-4.296,0.112l-104,32C2.29,225.385-0.001,228.487,0,232v240c0,4.418,3.582,8,8,8 c0.797-0.002,1.589-0.121,2.352-0.352l101.864-31.344l125.848,31.456c1.238,0.304,2.53,0.304,3.768,0L375.2,448.304l94.328,31.288 c4.202,1.365,8.715-0.934,10.081-5.137c0.258-0.793,0.39-1.622,0.391-2.455V232C479.997,228.558,477.794,225.504,474.528,224.416z M152,104c0.057-48.577,39.423-87.943,88-88c48.577,0.057,87.943,39.423,88,88c0,22.768-19.288,68.08-40.48,110.984 C269.464,251.568,250.04,286.4,240,304C218.168,265.712,152,146.184,152,104z M464,460.912l-85.96-28.504 c-1.402-0.477-2.912-0.547-4.352-0.2l-133.6,31.56L113.936,432.24c-1.412-0.363-2.897-0.325-4.288,0.112L16,461.168V237.904 l96.216-29.6l67.472,16.88c24.8,50.12,51.344,95.352,53.424,98.88c2.247,3.804,7.153,5.066,10.957,2.819 c1.163-0.687,2.132-1.657,2.819-2.819c2.072-3.504,28.28-48.2,52.952-97.944l75.784-17.816L464,237.768V460.912z"/></g></g></svg>
+                                </i>
+                            </div>
+                            <div class="item-info">
+                                <span class="item-name"><?php esc_html_e('Maps','web-to-print-online-designer'); ?></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="pointer"></div>
             </div>
@@ -304,6 +316,73 @@
                         <div class="frames-wrapper">
                             <div class="frame-wrap" ng-repeat="frame in resource.frames track by $index" ng-click="addFrame(frame)">
                                 <photo-frame data-frame="frame"></photo-frame>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="settings['nbdesigner_enable_google_maps'] == 'yes' && settings['nbdesigner_static_map_api_key'] != ''" class="content-item type-maps" data-type="maps">
+                        <div class="google-maps-options">
+                            <div class="google-maps-search">
+                                <input ng-keyup="$event.keyCode == 13 && updateMapUrl()" ng-model="resource.maps.address" type="text" name="search" placeholder="<?php esc_attr_e('Your address','web-to-print-online-designer'); ?>">
+                                <i class="icon-nbd icon-nbd-fomat-search" ng-click="updateMapUrl()"></i>
+                            </div>
+                            <div class="google-maps-option">
+                                <select id="google-maps-maptype" ng-change="updateMapUrl()" ng-model="resource.maps.maptype">
+                                    <option value="roadmap"><?php esc_html_e('Roadmap','web-to-print-online-designer'); ?></option>
+                                    <option value="satellite"><?php esc_html_e('Satellite','web-to-print-online-designer'); ?></option>
+                                    <option value="terrain"><?php esc_html_e('Terrain','web-to-print-online-designer'); ?></option>
+                                    <option value="hybrid"><?php esc_html_e('Hybrid','web-to-print-online-designer'); ?></option>
+                                </select>
+                                <label for="google-maps-maptype" ><?php esc_html_e('Map type','web-to-print-online-designer'); ?><label/>
+                            </div>
+                            <div class="google-maps-option">
+                                <select id="google-maps-maptype" ng-change="updateMapUrl()" ng-model="resource.maps.zoom">
+                                    <?php foreach( range(1, 20) as $range ): ?>
+                                    <option value="<?php echo $range; ?>"><?php echo $range; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <label for="google-maps-maptype" ><?php esc_html_e('Map zoom','web-to-print-online-designer'); ?><label/>
+                            </div>
+                            <div class="google-maps-option">
+                                <input type="number" ng-min="100" ng-max="640" ng-step="1" ng-model="resource.maps.width" id="google-maps-width" />
+                                <label for="google-maps-width" ><?php esc_html_e('Map width','web-to-print-online-designer'); ?><label/>
+                            </div>
+                            <div class="google-maps-option">
+                                <input type="number" ng-min="100" ng-max="640" ng-step="1" ng-model="resource.maps.height" id="google-maps-height" />
+                                <label for="google-maps-height" ><?php esc_html_e('Map height','web-to-print-online-designer'); ?><label/>
+                            </div>
+                            <div class="google-maps-option">
+                                <select id="google-maps-markers-label" ng-change="updateMapUrl()" ng-model="resource.maps.markers.label">
+                                    <?php 
+                                        $marker_labels = array_merge( array(''), range( 0, 9 ), range( 'A', 'Z' ) );
+                                        foreach( $marker_labels as $marker_label ): 
+                                    ?>
+                                    <option value="<?php echo $marker_label; ?>"><?php echo $marker_label == '' ? 'None' : $marker_label; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <label for="google-maps-markers-label" ><?php esc_html_e('Marker label','web-to-print-online-designer'); ?><label/>
+                            </div>
+                            <div class="google-maps-option">
+                                <select id="google-maps-markers-size" ng-change="updateMapUrl()" ng-model="resource.maps.markers.size">
+                                    <option value="normal"><?php esc_html_e('Normal','web-to-print-online-designer'); ?></option>
+                                    <option value="mid"><?php esc_html_e('Mid','web-to-print-online-designer'); ?></option>
+                                    <option value="small"><?php esc_html_e('Small','web-to-print-online-designer'); ?></option>
+                                </select>
+                                <label for="google-maps-markers-size" ><?php esc_html_e('Marker size','web-to-print-online-designer'); ?><label/>
+                            </div>
+                            <div class="google-maps-option">
+                                <select id="google-maps-markers-color" ng-change="updateMapUrl()" ng-model="resource.maps.markers.color">
+                                    <option ng-style="{'background-color': color, color: '#fff'}" ng-repeat="color in resource.defaultPalette[0]" value="{{color}}">{{color}}</option>
+                                </select>
+                                <label for="google-maps-markers-color" ><?php esc_html_e('Marker color','web-to-print-online-designer'); ?><label/>
+                            </div>
+                            <div class="google-maps-preview google-maps-option" ng-class="resource.maps.loading ? 'loading' : ''" ng-if="resource.maps.url !=''">
+                                <span class="nbd-button" ng-click="addImageFromUrl( resource.maps.url )"><?php esc_html_e('Insert map','web-to-print-online-designer'); ?></span>
+                                <img ng-click="addImageFromUrl( resource.maps.url )" ng-src="{{resource.maps.url}}" title="<?php esc_html_e('Click to insert this map','web-to-print-online-designer'); ?>"/>
+                                <div class="loading-maps" >
+                                    <svg class="circular" viewBox="25 25 50 50">
+                                        <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+                                    </svg>
+                                </div>
                             </div>
                         </div>
                     </div>

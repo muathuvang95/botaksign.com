@@ -381,6 +381,14 @@ if( !class_exists('Nbdesigner_Settings_General') ) {
                         'class'         => 'regular-text',
                         'default'       => '',
                         'type'          => 'text'
+                    ),
+                    array(
+                        'title'         => esc_html__( 'Google Maps Static API key', 'web-to-print-online-designer'),
+                        'description'   => esc_html__( 'This feature allow the customer search and insert Google maps into the design.', 'web-to-print-online-designer').' <a href="https://developers.google.com/maps/documentation/maps-static/intro" target="_blank">' . esc_html__("Where do I get the Google Maps Static API key?", 'web-to-print-online-designer').'</a>',
+                        'id'            => 'nbdesigner_static_map_api_key',
+                        'class'         => 'regular-text',
+                        'default'       => '',
+                        'type'          => 'text'
                     )
                 ),
                 'customization' => array(

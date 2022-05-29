@@ -268,6 +268,17 @@ if(!class_exists('Nbdesigner_Settings_Frontend')){
                             'yes'   => esc_html__('Yes', 'web-to-print-online-designer'),
                             'no'    => esc_html__('No', 'web-to-print-online-designer')
                         ) 
+                    ),
+                    array(
+                        'title'         => esc_html__( 'Enable Google Maps Static', 'web-to-print-online-designer'),
+                        'id'            => 'nbdesigner_enable_google_maps',
+                        'description'   => sprintf(__( 'Require <a href="%s" target="_blank" >Google Maps Static API key</a>', 'web-to-print-online-designer'), esc_url(admin_url('admin.php?page=nbdesigner&tab=general#nbdesigner_static_map_api_key'))),
+                        'default'       => 'no',
+                        'type'          => 'radio',
+                        'options'       => array(
+                            'yes'   => esc_html__('Yes', 'web-to-print-online-designer'),
+                            'no'    => esc_html__('No', 'web-to-print-online-designer')
+                        ) 
                     )
                 ),
                 'tool-image' => array(
