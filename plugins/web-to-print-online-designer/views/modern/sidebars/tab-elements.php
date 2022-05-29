@@ -283,6 +283,26 @@
                                 </div>
                                 <div><button class="nbd-button" ng-click="removeBackgroundCanvas()"><?php esc_html_e('Remove background', 'web-to-print-online-designer'); ?></button></div>
                             </div>
+                            <div class="free-draw-options">
+                                <div class="draw-item" ng-class="resource.drawMode.status ? 'active' : ''" ng-click="enableDrawMode()" title="<?php esc_html_e('Free Draw','web-to-print-online-designer'); ?>">
+                                    <i class="icon-nbd icon-nbd-drawing"></i>
+                                </div>
+                                <div class="draw-item" ng-click="addGeometricalObject( 'circle' )" title="<?php esc_html_e('Circle','web-to-print-online-designer'); ?>">
+                                    <i class="icon-nbd icon-nbd-layer-circle"></i>
+                                </div>
+                                <div class="draw-item" ng-click="addGeometricalObject( 'triangle' )" title="<?php esc_html_e('Triangle','web-to-print-online-designer'); ?>">
+                                    <i class="icon-nbd icon-nbd-layer-triangle"></i>
+                                </div>
+                                <div class="draw-item" ng-click="addGeometricalObject( 'rect' )" title="<?php esc_html_e('Rectangle','web-to-print-online-designer'); ?>">
+                                    <i class="icon-nbd icon-nbd-layer-rect"></i>
+                                </div>
+                                <div class="draw-item" ng-click="addGeometricalObject( 'hexagon' )" title="<?php esc_html_e('Hexagon','web-to-print-online-designer'); ?>">
+                                    <i class="icon-nbd icon-nbd-layer-polygon"></i>
+                                </div>
+                                <div class="draw-item" ng-click="addGeometricalObject( 'line' )" title="<?php esc_html_e('Line','web-to-print-online-designer'); ?>">
+                                    <i class="icon-nbd icon-nbd-line"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="content-item type-shapes" data-type="shapes" id="nbd-shape-wrap">
