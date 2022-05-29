@@ -3555,3 +3555,91 @@ img.tag-thumb {
 .sticker-contour-wrap.active svg {
     opacity: 1;
 }
+
+.item-edit-text .sub-menu {
+    min-width: 250px;
+    padding: 30px 10px 15px;
+}
+.draw-item {
+    width: 100px;
+    height: 100px;
+    background: #fff;
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+    -webkit-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;
+    margin-bottom: 10px;
+}
+.draw-item:hover {
+    -webkit-box-shadow: 0 3px 10px 0 rgba(75,79,84,.5);
+    -moz-box-shadow: 0 3px 10px 0 rgba(75,79,84,.5);
+    -ms-box-shadow: 0 3px 10px 0 rgba(75,79,84,.5);
+    box-shadow: 0 3px 10px 0 rgba(75,79,84,.5);
+}
+.draw-item i{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-30px,-30px);
+    font-size: 60px;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    color: #404762;
+    padding: 0;
+}
+.draw-item.active {
+    background: #404762;
+}
+.draw-item.active i{
+    color: #fff;
+}
+.draw-item i svg{
+    width: 60px;
+    height: 60px;
+    margin: 0;
+}
+.nbd-sidebar #tab-element .nbd-items-dropdown .content-items .content-item.type-draw {
+    padding: 0px;
+}
+.free-draw-options {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding-top: 15px;
+}
+.free-draw-settings {
+    border-bottom: 1px solid #fff;
+}
+.geo-object-options li span {
+    line-height: 24px;
+    height: 24px;
+    display: inline-block;
+    vertical-align: top;
+}
+.geo-object-stroke{
+    width: 40px;
+    padding: 0px 10px;
+}
+.geo-object-options li span.non-stroke {
+    position: relative;
+    display: inline-block;
+    width: 24px;
+    border-radius: 2px;
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.15) 1px 1px 6px inset, rgba(255, 255, 255, 0.25) -1px -1px 0px inset;
+    overflow: hidden;
+}
+.geo-object-options li span.non-stroke:after {
+    position: absolute;
+    content: '';
+    width: 33px;
+    top: 0;
+    left: 0;
+    transform-origin: top left;
+    transform: rotate(45deg);
+    height: 1px;
+    background: red;
+}
