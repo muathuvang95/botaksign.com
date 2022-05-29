@@ -102,6 +102,7 @@ require_once(NBDESIGNER_PLUGIN_DIR . 'includes/class-template-loader.php');
 require_once(NBDESIGNER_PLUGIN_DIR . 'includes/class-settings.php');
 require_once(NBDESIGNER_PLUGIN_DIR . 'includes/class-debug.php');
 require_once(NBDESIGNER_PLUGIN_DIR . 'includes/class-helper.php');
+require_once(NBDESIGNER_PLUGIN_DIR . 'includes/class-import-export-product.php' );
 require_once(NBDESIGNER_PLUGIN_DIR . 'includes/class-update-data.php');
 require_once(NBDESIGNER_PLUGIN_DIR . 'includes/class.category.php');
 require_once(NBDESIGNER_PLUGIN_DIR . 'includes/table/class.product.templates.php');

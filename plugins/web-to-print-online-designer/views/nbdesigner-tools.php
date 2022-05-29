@@ -227,3 +227,303 @@
         });
     </script>
 </div>
+<div id="nbd-import-export-demo" class="nbd-tool-section">
+    <style>
+        .nbp-loading-wrap {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: rgba(255,255,255,0.85);
+            display: table;
+            opacity: 0;
+            visibility: hidden;
+            z-index: -1;
+        }
+        .nbp-loading-spinner {
+            width: 300px;
+            height: 50px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            margin: auto;
+            text-align: center;
+        }
+        .nbp-loading-ball {
+            width: 20px;
+            height: 20px;
+            background-color: #444;
+            border-radius: 50%;
+            display: inline-block;
+            -webkit-animation: nbpLoading 3s cubic-bezier(0.77,0,0.175,1) infinite;
+            animation: nbpLoading 3s cubic-bezier(0.77,0,0.175,1) infinite;
+        }
+        .nbp-loading-wrap.nbp-show {
+            opacity: 1 !important;
+            z-index: 9999;
+            visibility: visible;
+        }
+        .nbix-pseudo-dropdown {
+            position: relative;
+            widh: 300px;
+        }
+        .nbix-pseudo-list {
+            position: absolute;
+            top: 36px;
+            width: 300px;
+            -webkit-box-shadow: 0 3px 10px 0 rgb(75 79 84 / 30%);
+            -moz-box-shadow: 0 3px 10px 0 rgba(75,79,84,.3);
+            -ms-box-shadow: 0 3px 10px 0 rgba(75,79,84,.3);
+            box-shadow: 0 3px 10px 0 rgb(75 79 84 / 30%);
+            background: #fff;
+            z-index: 99;
+            cursor: pointer;
+            display: none;
+            opacity: 0;
+        }
+        .nbix-pseudo-list.active {
+            display: block;
+            opacity: 1;
+        }
+        .nbix-pseudo-list-item {
+            display: flex;
+            padding: 5px 10px;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+        }
+        .nbix-pseudo-list-item img{
+            width: 50px;
+            height: 50px;
+        }
+        .nbix-pseudo-result-name {
+            flex-basis: calc(100% - 30px);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            line-height: 30px;
+        }
+        .nbix-pseudo-result {
+            height: 36px;
+            padding: 3px 8px;
+            border: 1px solid #eee;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            box-sizing: border-box;
+            width: 300px;
+        }
+        @keyframes nbpLoading{
+            0% {
+                -webkit-transform: translateX(0) scale(1);
+                -webkit-transform: translateX(0) scale(1);
+                -ms-transform: translateX(0) scale(1);
+                transform: translateX(0) scale(1);
+            }
+            25% {
+                -webkit-transform: translateX(-50px) scale(0.3);
+                -webkit-transform: translateX(-50px) scale(0.3);
+                -ms-transform: translateX(-50px) scale(0.3);
+                transform: translateX(-50px) scale(0.3);
+            }
+            50% {
+                -webkit-transform: translateX(0) scale(1);
+                -webkit-transform: translateX(0) scale(1);
+                -ms-transform: translateX(0) scale(1);
+                transform: translateX(0) scale(1);
+            }
+            75% {
+                -webkit-transform: translateX(50px) scale(0.3);
+                -webkit-transform: translateX(50px) scale(0.3);
+                -ms-transform: translateX(50px) scale(0.3);
+                transform: translateX(50px) scale(0.3);
+            }
+            100% {
+                -webkit-transform: translateX(0) scale(1);
+                -webkit-transform: translateX(0) scale(1);
+                -ms-transform: translateX(0) scale(1);
+                transform: translateX(0) scale(1);
+            }
+        }
+        @-webkit-keyframes nbpLoading{
+            0% {
+                -webkit-transform: translateX(0) scale(1);
+                -webkit-transform: translateX(0) scale(1);
+                -ms-transform: translateX(0) scale(1);
+                transform: translateX(0) scale(1);
+            }
+            25% {
+                -webkit-transform: translateX(-50px) scale(0.3);
+                -webkit-transform: translateX(-50px) scale(0.3);
+                -ms-transform: translateX(-50px) scale(0.3);
+                transform: translateX(-50px) scale(0.3);
+            }
+            50% {
+                -webkit-transform: translateX(0) scale(1);
+                -webkit-transform: translateX(0) scale(1);
+                -ms-transform: translateX(0) scale(1);
+                transform: translateX(0) scale(1);
+            }
+            75% {
+                -webkit-transform: translateX(50px) scale(0.3);
+                -webkit-transform: translateX(50px) scale(0.3);
+                -ms-transform: translateX(50px) scale(0.3);
+                transform: translateX(50px) scale(0.3);
+            }
+            100% {
+                -webkit-transform: translateX(0) scale(1);
+                -webkit-transform: translateX(0) scale(1);
+                -ms-transform: translateX(0) scale(1);
+                transform: translateX(0) scale(1);
+            }
+        }
+    </style>
+    <div id="nbd-export-demo" style="display: none;">
+        <h2><?php esc_html_e('Export product data', 'web-to-print-online-designer'); ?></h2>
+        <div>
+            <select class="nbie-export-product">
+                <?php
+                    $products = nbd_get_all_product_has_design();
+                    foreach ( $products as $product ):
+                ?>
+                <option value="<?php echo $product->ID; ?>"><?php echo $product->post_title; ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div style="margin-top: 10px">
+            <button class="button nbix-export-btn" ><?php _e("Export data", 'web-to-print-online-designer'); ?></button>
+        </div>
+    </div>
+    <div id="nbd-import-demo">
+        <h2><?php esc_html_e('Import product data', 'web-to-print-online-designer'); ?></h2>
+        <div class="nbie-import-product-options">
+            <select class="nbie-import-product" style="display: none;">
+                <?php
+                    $demo_data_path = NBDESIGNER_PLUGIN_DIR . 'data/demo_datas.json';
+                    $products       = json_decode( file_get_contents( $demo_data_path ), true );
+                    foreach ( $products as $key => $product ):
+                ?>
+                <option value="<?php echo substr( $key, 1 ); ?>"><?php echo $product['name']; ?></option>
+                <?php endforeach; ?>
+            </select>
+            <div class="nbix-pseudo-dropdown">
+                <div class="nbix-pseudo-result">
+                    <span class="nbix-pseudo-result-name"><?php _e("-- Select product --", 'web-to-print-online-designer'); ?></span>
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M16.594 8.578l1.406 1.406-6 6-6-6 1.406-1.406 4.594 4.594z"/>
+                    </svg>
+                </div>
+                <div class="nbix-pseudo-list">
+                    <?php foreach ( $products as $key => $product ): ?>
+                    <div class="nbix-pseudo-list-item" data-id="<?php echo substr( $key, 1 ); ?>" data-name="<?php echo $product['name']; ?>" >
+                        <span class="nbix-pseudo-list-name"><?php echo $product['name']; ?></span>
+                        <img src="<?php echo $product['image']; ?>" />
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </di>
+        </div>
+        <div style="margin-top: 10px">
+            <button class="button nbix-import-btn" ><?php _e("Import data", 'web-to-print-online-designer'); ?></button>
+        </div>
+    </div>
+    <div class="nbp-loading-wrap">
+        <div class="nbp-loading-spinner">
+            <div class="nbp-loading-ball"></div>
+            <p id="nbp-processing" style="display: none;font-weight: bold;white-space: nowrap;"><?php _e("Processing ", 'web-to-print-online-designer'); ?><span id="nbp-process-loaded"></span> / <span id="nbp-process-total"></span></p>
+            <p><?php _e("Please do not close or deactive this tab!", 'web-to-print-online-designer'); ?></p>
+        </div>
+    </div>
+    <script language="javascript">
+        jQuery( document ).ready( function($) {
+            function export_product_data(){
+                var product_id = $('.nbie-export-product').val();
+                var formdata = new FormData();
+                formdata.append('product_id', product_id);
+                formdata.append('action', 'nbd_export_product');
+                $.ajax({
+                    url: admin_nbds.url,
+                    data: formdata,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    success: function(data){
+                        if(parseInt(data.flag) == 1){
+                            alert('Success!');
+                        }else {
+                            alert('Oops! Try again!');
+                        }
+                    }
+                });
+            }
+
+            var currentImportStep = 1, totalStep;
+
+            function import_product_data(){
+                var product_id = $('.nbie-import-product').val();
+                if( !product_id ) return;
+                var formdata = new FormData();
+                formdata.append('product_id', product_id);
+                formdata.append('step', currentImportStep);
+                formdata.append('action', 'nbd_import_product');
+                jQuery('.nbp-loading-wrap').addClass('nbp-show');
+                $.ajax({
+                    url: admin_nbds.url,
+                    data: formdata,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    success: function(data){
+                        if( parseInt( data.flag ) == 1 ){
+                            totalStep = data.total_steps;
+                            jQuery('#nbp-processing').show();
+                            $('#nbp-process-loaded').html(currentImportStep);
+                            $('#nbp-process-total').html(totalStep);
+                            if( data.total_steps > data.current_step ){
+                                currentImportStep = data.current_step * 1 + 1;
+                                import_product_data();
+                            }else{
+                                jQuery('.nbp-loading-wrap').removeClass('nbp-show');
+                                jQuery('#nbp-processing').hide();
+                            }
+                        }else {
+                            alert('Oops! Try again!');
+                        }
+                    }
+                });
+            }
+
+            jQuery('.nbix-export-btn').on('click', function(){
+                export_product_data();
+            });
+
+            jQuery('.nbix-import-btn').on('click', function(){
+                import_product_data();
+            });
+
+            jQuery('.nbix-pseudo-result').on('click', function(){
+                jQuery(this).parents('.nbix-pseudo-dropdown').find('.nbix-pseudo-list').toggleClass('active');
+            });
+
+            jQuery('.nbix-pseudo-list-item, .nbix-pseudo-list-item svg, .nbix-pseudo-result-name').on('click', function(){
+                var id = jQuery(this).hasClass('nbix-pseudo-list-item') ? jQuery(this).attr('data-id') : jQuery(this).parent('.nbix-pseudo-list-item').attr('data-id'),
+                name = jQuery(this).hasClass('nbix-pseudo-list-item') ? jQuery(this).attr('data-name') : jQuery(this).parent('.nbix-pseudo-list-item').attr('data-name');
+                jQuery(this).parents('.nbie-import-product-options').find('.nbie-import-product').val( id );
+                jQuery(this).parents('.nbix-pseudo-list').removeClass('active');
+                jQuery(this).parents('.nbie-import-product-options').find('.nbix-pseudo-result-name').html( name );
+            });
+
+            jQuery(document).on('click', function(event){
+                var wrapEl = jQuery('.nbie-import-product-options');
+                if( wrapEl.has(event.target).length == 0 && !wrapEl.is(event.target) ){
+                    jQuery('.nbix-pseudo-list').removeClass('active');
+                }
+            });
+        });
+    </script>
+</div>
+<?php do_action( 'nbd_after_admin_tools' );
