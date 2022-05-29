@@ -809,6 +809,11 @@ angular.module('optionApp', []).controller('optionCtrl', function( $scope, $time
                         field.general.attributes.add_att = false;
                         field.general.attributes.remove_att = false;
                         break;
+                    case 'shape':
+                        field.general.data_type.value = 'm';
+                        field.general.data_type.hidden = true;
+                        field.general.attributes.options[0].name = nbd_options.nbd_options_lang.shape_name;
+                        break;
                     case 'size':
                         field.general.data_type.value = 'm';
                         field.general.data_type.hidden = true;
@@ -1260,6 +1265,7 @@ angular.module('optionApp', []).controller('optionCtrl', function( $scope, $time
             case 'pricing_rates': //CS botak add pricing ratea
             case 'production_time': //CS botak add production time
             case 'calculation_option': //CS botak add calculation option
+            case 'shape':            
                 klass = 'wod';
                 break;
             case 'terms_conditions':
@@ -1308,6 +1314,9 @@ angular.module('optionApp', []).controller('optionCtrl', function( $scope, $time
                 break;
             case 'area':
                 type_number = 7;
+                break;
+            case 'shape':
+                type_number = 7.1;
                 break;
             case 'orientation':
                 type_number = 8;
@@ -2962,6 +2971,13 @@ angular.module('optionApp', []).controller('optionCtrl', function( $scope, $time
                             });
                         }
                         break;
+                    case 'shape':
+                        if( field.general.attributes.options.length > 0 ){
+                            angular.forEach(field.general.attributes.options, function(op, opIndex){
+                                fields[fieldIndex].general.attributes.options[opIndex].shape = op.shape;
+                            });
+                        }
+                        break;                    
                 }
             }
 
@@ -3045,6 +3061,17 @@ angular.module('optionApp', []).controller('optionCtrl', function( $scope, $time
         setTimeout(function(){
             jQuery('form[name="nboForm"]').submit();
         });
+    };
+    $scope.validateSvgShape = function( fieldIndex, opIndex ){
+        $scope.options.fields[fieldIndex].general.attributes.options[opIndex].shape = $scope.options.fields[fieldIndex].general.attributes.options[opIndex].shape.replace(/<!--[\s\S]*?-->/g, "").replace(/<\?xml[\s\S]*?\?>/g, "").replace(/<style[\s\S]*?style>/g, "").replace(/\n|\r/gm, " ").replace( /  /g, " " ).replace(/^ /g, "").replace( / $/g, "" ).replace(/(?:class|id|style|xmlns\:xlink|xml\:space|fill)=['\"][^'\"]*['\"]/g, "" ).replace(/<\/?g>/g , "").replace(/\s{2,}/g, ' ').replace(/(\/?>) </g, '$1<').replace(/<path/g, '<path fill="rgba(0,0,0,0.001)"');
+        var reg = /d=["'](.*?)["']/g,
+        match = reg.exec( $scope.options.fields[fieldIndex].general.attributes.options[opIndex].shape ),
+        path, absPath;
+        if( match ){
+            path = match[1];
+            absPath = Snap.path.toAbsolute(path);
+            $scope.options.fields[fieldIndex].general.attributes.options[opIndex].shape = $scope.options.fields[fieldIndex].general.attributes.options[opIndex].shape.replace(reg, 'd="' + absPath + '"');
+        }
     };
     $scope.init();
 }).directive('stringToNumber', function() {

@@ -206,6 +206,7 @@
                                         <a class="nbd-field-btn button" ng-click="add_field('dimension')"><?php _e('Custom dimension', 'web-to-print-online-designer'); ?> <span class="nbo-type-label wod">5</span></a>
                                         <a class="nbd-field-btn button" ng-click="add_field('dpi')"><?php _e('DPI', 'web-to-print-online-designer'); ?> <span class="nbo-type-label wod">6</span></a>
                                         <a class="nbd-field-btn button" ng-click="add_field('area')"><?php _e('Area design shape', 'web-to-print-online-designer'); ?> <span class="nbo-type-label wod">7</span></a>
+                                        <a class="nbd-field-btn button" ng-click="add_field('shape')"><?php _e('Custom area design shape', 'web-to-print-online-designer'); ?> <span class="nbo-type-label wod">7.1</span></a>                                        
                                         <a class="nbd-field-btn button" ng-click="add_field('orientation')"><?php _e('Orientation', 'web-to-print-online-designer'); ?> <span class="nbo-type-label wod">8</span></a>
                                         <a class="nbd-field-btn button" ng-click="add_field('padding')"><?php _e('Padding', 'web-to-print-online-designer'); ?> <span class="nbo-type-label wod">9</span></a>
                                         <a class="nbd-field-btn button" ng-click="add_field('rounded_corner')"><?php _e('Rounded corners', 'web-to-print-online-designer'); ?> <span class="nbo-type-label wod">10</span></a>
@@ -244,6 +245,7 @@
                                         <span class="nbo-type-label wod">5</span>
                                         <span class="nbo-type-label wod">6</span>
                                         <span class="nbo-type-label wod">7</span>
+                                        <span class="nbo-type-label wod">7.1</span>                                        
                                         <span class="nbo-type-label wod">8</span> 
                                         <span class="nbo-type-label wod">9</span> 
                                         <span class="nbo-type-label wod">10</span> 
