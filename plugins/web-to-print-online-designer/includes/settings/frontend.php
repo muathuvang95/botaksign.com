@@ -260,6 +260,16 @@ if(!class_exists('Nbdesigner_Settings_Frontend')){
                         ) 
                     ),
                     array(
+                        'title'         => esc_html__( 'Enable Storyset', 'web-to-print-online-designer'),
+                        'id'            => 'nbdesigner_enable_storyset',
+                        'default'       => 'yes',
+                        'type'          => 'radio',
+                        'options'       => array(
+                            'yes'   => esc_html__('Yes', 'web-to-print-online-designer'),
+                            'no'    => esc_html__('No', 'web-to-print-online-designer')
+                        ) 
+                    ),
+                    array(
                         'title'         => esc_html__( 'Enable photo frame', 'web-to-print-online-designer'),
                         'id'            => 'nbdesigner_enable_frame',
                         'default'       => 'yes',
@@ -416,6 +426,16 @@ if(!class_exists('Nbdesigner_Settings_Frontend')){
                         'title'         => esc_html__( 'Enable images from Pexels', 'web-to-print-online-designer'),
                         'id'            => 'nbdesigner_enable_pexels',
                         'description'   => sprintf(__( 'Require <a href="%s" target="_blank" >Pexels API Key</a>', 'web-to-print-online-designer'), esc_url(admin_url('admin.php?page=nbdesigner&tab=general#nbdesigner_pexels_api_key'))),
+                        'default'       => 'yes',
+                        'type'          => 'radio',
+                        'options'       => array(
+                            'yes'   => esc_html__('Yes', 'web-to-print-online-designer'),
+                            'no'    => esc_html__('No', 'web-to-print-online-designer')
+                        ) 
+                    ),
+                    array(
+                        'title'         => esc_html__( 'Enable images from Freepik', 'web-to-print-online-designer'),
+                        'id'            => 'nbdesigner_enable_freepik',
                         'default'       => 'yes',
                         'type'          => 'radio',
                         'options'       => array(
