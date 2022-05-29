@@ -3489,3 +3489,13 @@ img.tag-thumb {
     pointer-events: none;
     opacity: 0.3;
 }
+
+.image-shape-wrapper {
+    text-align: left;
+}
+.custom_image_shape-wrapper .nbd-button {
+    margin-left: 0 !important;
+}
+.custom_image_shape-wrapper {
+    margin-top: 10px;
+}
