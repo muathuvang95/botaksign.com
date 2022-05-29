@@ -4290,6 +4290,15 @@ function nbd_format_time( $datetime ) {
 
     return date_i18n( $date_format . ' ' . $time_format, $timestamp );
 }
+function nbd_get_current_page(){
+    global $pagenow;
+    if ( ! empty( $_GET['page'] ) ) {
+        return $_GET['page'];
+    } else {
+        if( $pagenow != 'index.php' ) return $pagenow;
+        return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    }
+}
 function nbd_check_publish_design_permission( $user_id ){
     if( 'on' == get_user_meta( $user_id, 'nbd_auto_approve_design', true ) ) return true;
     $user           = new \WP_User( $user_id );

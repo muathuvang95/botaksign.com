@@ -132,6 +132,7 @@ require_once(NBDESIGNER_PLUGIN_DIR . 'vendor/autoload.php');
 require_once(NBDESIGNER_PLUGIN_DIR . 'includes/aws/aws.php');
 require_once(NBDESIGNER_PLUGIN_DIR . 'includes/payment/payment.php');
 require_once(NBDESIGNER_PLUGIN_DIR . 'includes/gallery-image/gallery-image.php');
+require_once(NBDESIGNER_PLUGIN_DIR . 'includes/class-live-chat.php' );
 require_once(NBDESIGNER_PLUGIN_DIR . 'includes/class-faq.php' );
 
 if ( ! empty( $_GET['page'] ) ) {
