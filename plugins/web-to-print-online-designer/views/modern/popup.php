@@ -17,6 +17,7 @@
     include 'popup-contents/hotkeys.php';
     include 'popup-contents/upload-terms.php';
     include 'popup-contents/confirm-delete-layers.php';
+    include 'popup-contents/confirm-delete-stage.php';    
     include 'popup-contents/confirm-clear-all.php';
     include 'popup-contents/prompt-insert-part-template.php';
     if( $task == 'create_template' ) {include 'popup-contents/global-template-category.php';};
@@ -27,6 +28,7 @@
     include 'popup-contents/my-templates2.php';
     include 'popup-contents/my-templates.php';
     include 'popup-contents/my-cart-designs.php';
+    include 'popup-contents/stage-grid-view.php';    
     if( $task == 'create' || ( $task == 'edit' && ( isset( $_GET['design_type'] ) && $_GET['design_type'] == 'template' ) ) ){
         include 'popup-contents/template-tags.php';
     }

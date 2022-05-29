@@ -3485,3 +3485,7 @@ img.tag-thumb {
     top: 5px;
     font-size: 10px;
 }
+.context-item.disable {
+    pointer-events: none;
+    opacity: 0.3;
+}

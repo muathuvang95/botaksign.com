@@ -1,6 +1,6 @@
 <div class="nbd-context-menu" id="nbd-context-menu" ng-style="ctxMenuStyle" ng-click="ctxMenuStyle.visibility = 'hidden'">
     <div class="main-context">
-        <ul class="contexts">
+        <ul class="contexts layer-context" ng-if="stages[currentStage].states.isActiveLayer">
             <li class="context-item" ng-click="setLayerAttribute('excludeFromExport', !stages[currentStage].states.excludeFromExport)" ng-show="settings.task == 'create_template' && !stages[currentStage].states.excludeFromExport"><i class="icon-nbd icon-nbd-clear"></i> <?php esc_html_e('Exclude from export','web-to-print-online-designer'); ?></li>
             <li class="context-item" ng-click="rotateLayer('reflect-hoz')" ng-show="stages[currentStage].states.isLayer"><i class="icon-nbd icon-nbd-reflect-horizontal"></i> <?php esc_html_e('Reflect Horizontal','web-to-print-online-designer'); ?></li>
             <li class="context-item" ng-click="rotateLayer('reflect-ver')" ng-show="stages[currentStage].states.isLayer"><i class="icon-nbd icon-nbd-reflect-vertical"></i> <?php esc_html_e('Reflect Vertical','web-to-print-online-designer'); ?></li>
@@ -83,6 +83,36 @@
             <li class="context-item" ng-click="copyLayers()"><i class="icon-nbd icon-nbd-content-copy"></i> <?php esc_html_e('Duplicate','web-to-print-online-designer'); ?></li>
             <li class="context-item"  ng-click="deactiveAllLayer()" ng-show="stages[currentStage].states.isGroup"><i class="icon-nbd icon-nbd-ungroup"></i> <?php esc_html_e('Ungroup','web-to-print-online-designer'); ?></li>
             <li class="context-item" ng-click="deleteLayers()"><i class="icon-nbd icon-nbd-delete"></i> <?php esc_html_e('Delete','web-to-print-online-designer'); ?></li>
+        </ul>
+        <ul class="contexts" class="stage-context" ng-if="!stages[currentStage].states.isActiveLayer">
+            <li class="context-item" ng-click="copyStage()"><i class="icon-nbd icon-nbd-content-copy"></i> <?php esc_html_e('Copy Design','web-to-print-online-designer'); ?></li>
+            <li class="context-item" ng-click="pasteStage()" ng-class="!!tempStageDesign ? '' : 'disable'">
+                <i class="icon-nbd icon-nbd-24">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path fill="#888" d="M19 2h-4.18C14.4.84 13.3 0 12 0c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm7 18H5V4h2v3h10V4h2v16z"/></svg>
+                </i> 
+                <?php esc_html_e('Paste Design','web-to-print-online-designer'); ?>
+            </li>
+            <li class="separator" ></li>
+            <li class="context-item" ng-click="duplicateStage()" ng-class="!!settings.dynamicStage ? '' : 'disable'">
+                <i class="icon-nbd icon-nbd-24">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path fill="#888" d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm-1 4l6 6v10c0 1.1-.9 2-2 2H7.99C6.89 23 6 22.1 6 21l.01-14c0-1.1.89-2 1.99-2h7zm-1 7h5.5L14 6.5V12z"/></svg>
+                </i> 
+                <?php esc_html_e('Duplicate Stage','web-to-print-online-designer'); ?>
+            </li>
+            <li class="context-item" ng-click="_addStage()" ng-class="!!settings.dynamicStage ? '' : 'disable'">
+                <i class="icon-nbd icon-nbd-24">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path fill="#888" d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z"/></svg>
+                </i>
+                <?php esc_html_e('Add Stage','web-to-print-online-designer'); ?>
+            </li>
+            <li class="context-item" ng-click="confirmDeleteStage()" ng-class="!!settings.dynamicStage ? '' : 'disable'"><i class="icon-nbd icon-nbd-delete"></i> <?php esc_html_e('Delete Stage','web-to-print-online-designer'); ?></li>
+            <li class="separator" ></li>
+            <li class="context-item" ng-click="showGridView()" ng-show="settings.canSwapStage">
+                <i class="icon-nbd icon-nbd-24">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path fill="#888" d="M4 11h5V5H4v6zm0 7h5v-6H4v6zm6 0h5v-6h-5v6zm6 0h5v-6h-5v6zm-6-7h5V5h-5v6zm6-6v6h5V5h-5z"/></svg>
+                </i> 
+                <?php esc_html_e('Grid View','web-to-print-online-designer'); ?>
+            </li>
         </ul>
     </div>
 </div>
