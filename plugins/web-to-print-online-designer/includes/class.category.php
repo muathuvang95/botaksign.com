@@ -44,3 +44,26 @@ class NBD_Category extends Walker {
         }
     }    
 }
+class NBF_List_Category extends Walker {
+    public $tree_type = 'category';
+    public $db_fields = array( 'parent' => 'parent', 'id' => 'term_id' );
+
+    function start_el( &$output, $category, $depth = 0, $args = array(), $id = 0 ) {
+        extract( $args );
+        $indent     = str_repeat( "&mdash;", $depth );
+        $url        = 'term.php?taxonomy=nbd-faq-category&amp;post_type=nbd-faq&amp;tag_ID=' . $category->term_id . '&amp;wp_http_referer=' . urlencode( admin_url( 'edit-tags.php?taxonomy=nbd-faq-category&post_type=nbd-faq' ) );
+        $class_name = $args['has_children'] ? ' class="has-children"' : '';
+        $output    .= '<tr' . $class_name . '><th>' . $indent . ' <a href="' . $url . '">' . $category->name . '</a></th><td>' . $category->count . '</td></tr>';
+    }
+}
+
+class NBF_Dropdown_Category extends Walker {
+    public $tree_type = 'category';
+    public $db_fields = array( 'parent' => 'parent', 'id' => 'term_id' );
+
+    function start_el( &$output, $category, $depth = 0, $args = array(), $id = 0 ) {
+        extract( $args );
+        $indent     = str_repeat( "&mdash;", $depth ) . ' ';
+        $output    .= '<option value="' . $category->term_id . '">' . $indent . $category->name . '</option>';
+    }
+}

@@ -3891,6 +3891,84 @@ body.woocommerce-account ul li.woocommerce-MyAccount-navigation-link--my-store a
     color: #404762;
 }
 
+.nbd-force-hiden {
+    display: none !important;
+}
+.nbd-popup-design-by {
+    font-size: 14px;
+}
+.nbd-faqs-wrap {
+    padding: 5px;
+}
+.nbd-faq-wrap {
+    margin-bottom: 5px;
+    border-radius: 2px;
+    transition: box-shadow .2s;
+    -webkit-transition: box-shadow .2s;
+    -webkit-box-shadow: 0 1px 4px 0 rgba(0,0,0,0.14);
+    -moz-box-shadow: 0 1px 4px 0 rgba(0,0,0,0.14);
+    -ms-box-shadow: 0 1px 4px 0 rgba(0,0,0,0.14);
+    box-shadow: 0 1px 4px 0 rgba(0,0,0,0.14);
+}
+.nbd-faq-wrap:hover {
+    -webkit-box-shadow: 0 3px 10px 0 rgba(75,79,84,.3);
+    -moz-box-shadow: 0 3px 10px 0 rgba(75,79,84,.3);
+    -ms-box-shadow: 0 3px 10px 0 rgba(75,79,84,.3);
+    box-shadow: 0 3px 10px 0 rgba(75,79,84,.3);
+}
+.nbd-faq-head{
+    padding: 10px;
+    color: #404762;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: capitalize;
+    font-size: 16px;
+    position: relative;
+}
+.nbd-faq-head:before,
+.nbd-faq-head:after {
+    content: '';
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    height: 2px;
+    width: 13px;
+    background: #404762;
+    transition: all .4s;
+    -webkit-transition: all .4s;
+}
+.nbd-faq-head:before{
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    right: 32px;
+}
+.nbd-faq-head:after {
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+.nbd-faq-wrap.active .nbd-faq-head:before{
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+.nbd-faq-wrap.active .nbd-faq-head:after{
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+.nbd-faq-body {
+    height: 0;
+    transition: all .4s;
+    -webkit-transition: all .4s;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+.nbd-faq-body-inner {
+    padding: 10px;
+}
+.nbd-faq-wrap.active .nbd-faq-body {
+    height: unset;
+    border-top: 1px solid #ddd;
+}
+
 @media (max-width: 768px){
     .nbdl-search-content-wrap {
         width: 300px;
