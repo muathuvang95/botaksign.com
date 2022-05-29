@@ -598,6 +598,17 @@ $layout = nbdesigner_get_option('nbdesigner_design_layout');
                     <input type="checkbox" value="1" name="_nbdesigner_option[request_quote]" id="_nbd_request_quote" <?php checked( $option['request_quote'] ); ?> class="short"/> 
                     <?php esc_html_e('Set product price to ', 'web-to-print-online-designer') . wc_price(0); ?>
                 </div>
+                <div class="nbdesigner-opt-inner">
+                    <div>
+                        <label class="nbdesigner-option-label"><?php esc_html_e('Dynamic side', 'web-to-print-online-designer'); ?></label>
+                        <input type="hidden" value="0" name="_nbdesigner_option[dynamic_side]"/>
+                        <input type="checkbox" value="1" name="_nbdesigner_option[dynamic_side]" id="_nbd_request_quote" <?php checked( $option['dynamic_side'] ); ?> class="short"/>
+                    </div>
+                    <div>
+                        <label class="nbdesigner-option-label"><?php esc_html_e('Price per additional side', 'web-to-print-online-designer'); ?></label>
+                        <input type="number" step="any" class="short nbdesigner-short-input wc_input_price" name="_nbdesigner_option[additional_price]" value="<?php if(isset($option['additional_price'])) echo $option['additional_price']; else echo '0'; ?>"/>
+                    </div>
+                </div>
                 <?php
                     if( $layout == 'c' ){
                 ?>
