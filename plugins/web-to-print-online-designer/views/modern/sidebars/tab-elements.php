@@ -93,6 +93,20 @@
                             </div>
                         </div>
                     </div>
+                    <?php if( $task == 'create' || ( $task == 'edit' && $design_type == 'template' ) ): ?>
+                    <div class="item" data-type="image-shape" data-api="false" ng-click="onClickTab('image-shape', 'element')">
+                        <div class="main-item">
+                            <div class="item-icon">
+                                <i class="icon-vcard">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px"><path fill="#888" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                </i>
+                            </div>
+                            <div class="item-info">
+                                <span class="item-name"><?php esc_html_e('Image Placeholder','web-to-print-online-designer'); ?></span>
+                            </div>
+                        </div>
+                    </div>
+                    <?php endif; ?>
                     <div ng-if="settings['nbdesigner_enable_google_maps'] == 'yes' && settings['nbdesigner_static_map_api_key'] != ''" class="item" data-type="maps" data-api="false" ng-click="onClickTab('maps', 'element')">
                         <div class="main-item">
                             <div class="item-icon" style="padding: 20px 5px">
@@ -319,6 +333,20 @@
                             </div>
                         </div>
                     </div>
+                    <?php if( $task == 'create' || ( $task == 'edit' && $design_type == 'template' ) ): ?>
+                    <div class="content-item type-image-shape" data-type="image-shape">
+                        <div class="image-shape-wrapper">
+                            <div>
+                                <span class="shape_mask shape-type-{{n}}" ng-click="addMask(n)" ng-repeat="n in [] | range:25"></span>
+                            </div>
+                            <div class="custom_image_shape-wrapper">
+                                <div><?php esc_html_e('Custom Shape','web-to-print-online-designer'); ?></div>
+                                <textarea class="form-control hover-shadow nbdesigner_svg_code" rows="5" ng-change="getPathCommand()" ng-model="svgPath" placeholder="<?php esc_html_e('Enter svg code','web-to-print-online-designer'); ?>"/></textarea>
+                                <button ng-class="pathCommand !='' ? '' : 'nbd-disabled'" class="nbd-button" ng-click="addMask(-1)"><?php esc_html_e('Add Shape','web-to-print-online-designer'); ?></button>
+                            </div>
+                        </div>
+                    </div>
+                    <?php endif; ?>
                     <div ng-if="settings['nbdesigner_enable_google_maps'] == 'yes' && settings['nbdesigner_static_map_api_key'] != ''" class="content-item type-maps" data-type="maps">
                         <div class="google-maps-options">
                             <div class="google-maps-search">

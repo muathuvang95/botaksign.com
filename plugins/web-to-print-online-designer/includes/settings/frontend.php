@@ -694,7 +694,18 @@ if(!class_exists('Nbdesigner_Settings_Frontend')){
                             'yes'   => esc_html__('Yes', 'web-to-print-online-designer'),
                             'no'    => esc_html__('No', 'web-to-print-online-designer')
                         ) 
-                    )
+                    ),
+                    array(
+                        'title'         => esc_html__( 'Auto fill template photo placeholders', 'web-to-print-online-designer' ),
+                        'id'            => 'nbdesigner_auto_fill_template_masks',
+                        'description'   => esc_html__( 'Selected image will be auto fill template photo placeholder.', 'web-to-print-online-designer' ),
+                        'default'       => 'no',
+                        'type'          => 'radio',
+                        'options'       => array(
+                            'yes'   => esc_html__('Yes', 'web-to-print-online-designer'),
+                            'no'    => esc_html__('No', 'web-to-print-online-designer')
+                        )
+                    ),
                 )
             ));
         }
