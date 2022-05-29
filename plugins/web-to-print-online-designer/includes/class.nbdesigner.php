@@ -5690,6 +5690,9 @@ class Nbdesigner_Plugin {
                     }
                 }
             }
+            if( isset( $config->contour ) ){
+                $pdf->ImageSVG( '@' . $config->contour, $mLeft + $cdLeft, $mTop + $cdTop, $cdWidth, $cdHeight, '', '', '', 0, true );
+            }
             if(!$force){
                 $folder = NBDESIGNER_CUSTOMER_DIR .'/'. $nbd_item_key. '/pdfs';
                 if(!file_exists($folder)){
@@ -6075,6 +6078,9 @@ class Nbdesigner_Plugin {
                         $pdf->StopTransform();
                         $pdf->SetAlpha(1);
                     }
+                }
+                if( isset( $config->contour ) ){
+                    $pdf->ImageSVG( '@' . $config->contour, $mLeft + $cdLeft, $mTop + $cdTop, $cdWidth, $cdHeight, '', '', '', 0, true );
                 }
             }
             if(!file_exists($folder)){
