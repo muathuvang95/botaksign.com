@@ -114,7 +114,6 @@
                                 </div>
                             </div>
                         </div>
-                        <?php endif; ?>
                         <?php //Tab library image upload ?>
                         <div class="item" id="nb-tab-gallery" data-type="library" data-api="true">
                             <div class="main-item" ng-click="onClickTab('library', 'photo')" ng-if="settings.is_logged" >
