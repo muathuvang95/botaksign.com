@@ -39,14 +39,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="item" data-type="lines" data-api="false" ng-click="onClickTab('line', 'element')">
-                        <div class="main-item">
-                            <div class="item-icon"><i class="icon-nbd icon-nbd-line"></i></div>
-                            <div class="item-info">
-                                <span class="item-name"><?php esc_html_e('Lines','web-to-print-online-designer'); ?></span>
-                            </div>
-                        </div>
-                    </div>
                     <div ng-if="settings['nbdesigner_enable_flaticon'] == 'yes' && settings['nbdesigner_flaticon_api_key'] != ''" class="item" data-type="flaticon" data-api="false" ng-click="onClickTab('flaticon', 'element')">
                         <div class="main-item">
                             <div class="item-icon" style="padding: 20px 5px">
