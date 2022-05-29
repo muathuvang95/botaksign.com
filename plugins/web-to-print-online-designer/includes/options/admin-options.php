@@ -1823,7 +1823,10 @@ function nbd_option_i18n(){
         'calculation_option'    => __('Calculation Option', 'web-to-print-online-designer'), //CS botak calculation option
         'terms_conditions'      => __('Terms & Conditions' , 'web-to-print-online-designer'), // CS-V3 add new Terms Condistions
         'frame'                 => __('Frame options', 'web-to-print-online-designer'),
-        'number_file'           => __('Number of upload files', 'web-to-print-online-designer')
+        'number_file'           => __('Number of upload files', 'web-to-print-online-designer'),
+        'shape_name'            => __('Shape Name', 'web-to-print-online-designer'),
+        'shape'                 => __('Area Design Shape', 'web-to-print-online-designer')
+
     );
 }
 $nbd_printing_options = NBD_ADMIN_PRINTING_OPTIONS::instance();

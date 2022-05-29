@@ -1147,6 +1147,63 @@ if (!empty($tax_rates)) {
     .nbo-ad-pseudo-list .nbo-ad-list-item.active > .nbo-recomand svg path {
         fill: #fff;
     }
+    .nbd-field-shape .nbo-ad-pseudo-list {
+        padding: 5px;
+        display: flex !important;
+        flex-wrap: wrap;
+    }
+    .nbd-field-shape .nbo-ad-pseudo-list .nbo-ad-list-item {
+        width: 50px;
+        height: 50px;
+        padding: 0;
+        margin: 5px;
+        align-items: center;
+        text-align: center;
+        border-bottom: none;
+    }
+    .nbd-field-shape .nbo-ad-pseudo-list .nbo-ad-list-item:hover {
+        background: #fff;
+    }
+    .nbd-field-shape .nbo-ad-pseudo-list .nbo-ad-list-item.active {
+        background: #f8f8f8;
+    }
+    .nbd-field-shape .nbo-ad-result .nbo-ad-result-name{
+        width: 30px;
+        height: 30px;
+        align-items: center;
+        text-align: center;
+        display: flex !important;
+    }
+    .nbd-field-shape .nbo-ad-result .nbo-ad-result-shape svg{
+        height: 30px;
+        width: 30px;
+    }
+    .nbd-field-shape .nbo-ad-result .nbo-ad-result-shape svg path{
+        fill: #f8f8f8;
+        stroke-width: 1;
+        stroke: #999;
+    }
+    .nbd-field-shape .nbo-ad-result .nbo-ad-result-name {
+        flex-basis: calc(100% - 60px);
+    }
+    .nbd-field-shape .nbo-ad-pseudo-list .nbo-ad-list-item svg{
+        height: 50px;
+        width: 50px;
+        display: block;
+    }
+    .nbd-field-shape .nbo-ad-pseudo-list .nbo-ad-list-item svg path{
+        fill: #f8f8f8;
+        stroke-width: 1;
+        stroke: #999;
+    }
+    .nbd-field-shape .nbo-ad-pseudo-list .nbo-ad-list-item:hover svg path{
+        fill: #f1f1f1;
+        stroke: #404762;
+    }
+    .nbd-field-shape .nbo-ad-pseudo-list .nbo-ad-list-item.active svg path{
+        fill: #404762 !important;
+        stroke: #404762;
+    }
     .nbo-rotate-180 {
         transform: rotate(180deg);
     }
@@ -1755,7 +1812,9 @@ foreach( $options["fields"] as $key => $field ){
                     $tempalte = $currentDir .'/options-builder/page'.$_prefix.'.php';
                     break;
             }
-        }else{
+        } else if( isset( $field['nbd_type'] ) && $field['nbd_type'] == 'shape' ){
+            $tempalte = $currentDir .'/options-builder/shape'.$_prefix.'.php';
+        } else{
             switch($field['appearance']['display_type']){
                 case 's':
                     $tempalte = $currentDir .'/options-builder/swatch'.$_prefix.'.php';
@@ -2813,6 +2872,9 @@ if( $cart_item_key != ''){ ?>
                                     }
                                 }
                             }
+                            if( angular.isDefined( origin_field.nbd_type ) && origin_field.nbd_type == 'shape' ){
+                                field.shape = selected_option.shape;
+                            }
                         }
                     }
                     // Check show/hide Terms Condistion
@@ -3248,6 +3310,11 @@ if( $cart_item_key != ''){ ?>
                                 var option = origin_field.general.attributes.options[field.value];
                                 nbOption.extraOdOption.fold = option.fold;
                                 break;
+                            case 'shape':
+                                var option = origin_field.general.attributes.options[field.value];
+                                nbOption.extraOdOption.shape = option.shape;
+                                break;
+
                         }
                     }
                 }
@@ -4329,6 +4396,9 @@ if( $cart_item_key != ''){ ?>
                         var field = $scope.get_field(field_id),
                         type = field.appearance.display_type,
                         selector = '';
+                        if( angular.isDefined( field.nbd_type ) && field.nbd_type == 'shape' ){
+                            type = 'ad';
+                        }
                         switch( type ){
                             case 's':
                                 selector = '> .nbd-swatch-wrap input[type="radio"]';
@@ -7268,6 +7338,10 @@ if( $cart_item_key != ''){ ?>
             text += '';
             div.innerHTML = text;
             return $sce.trustAsHtml(div.textContent);
+        };
+    }]).filter('svg_trusted', ['$sce', function($sce){
+        return function(text) {
+            return $sce.trustAsHtml(text);
         };
     }]);
     <?php if( !$in_design_editor && !$in_nbau_mode_2 ) : ?>

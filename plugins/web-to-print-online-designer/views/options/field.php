@@ -49,6 +49,7 @@
     include 'templates/size.php';
     include 'templates/dpi.php';
     include 'templates/area.php';
+    include 'templates/shape.php';
     include 'templates/orientation.php';
     include 'templates/dimension.php';
     include 'templates/padding.php';
