@@ -1695,6 +1695,25 @@
 .nbd-tag.selected:after {
     border-left: 10px solid #404762;
 }
+.stage-mask-wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.stage-area-design-shape svg{
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.stage-area-design-shape{
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
 @keyframes radio_ripple {
     0% {
         box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0);
