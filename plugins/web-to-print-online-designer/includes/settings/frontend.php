@@ -674,6 +674,17 @@ if(!class_exists('Nbdesigner_Settings_Frontend')){
                         ) 
                     ),
                     array(
+                        'title'         => esc_html__( 'Always show layer corner actions', 'web-to-print-online-designer'),
+                        'id'            => 'nbdesigner_always_show_layer_action',
+                        'description'   => esc_html__('Show layer corner actions even they are outside stage.', 'web-to-print-online-designer'),
+                        'default'       => 'no',
+                        'type'          => 'radio',
+                        'options'       => array(
+                            'yes'   => esc_html__('Yes', 'web-to-print-online-designer'),
+                            'no'    => esc_html__('No', 'web-to-print-online-designer')
+                        )
+                    ),
+                    array(
                         'title'         => esc_html__( 'Disable auto load primary tempalte.', 'web-to-print-online-designer'),
                         'id'            => 'nbdesigner_disable_auto_load_template',
                         'description'   => esc_html__('Always show blank design pages and only load templates until the customer choose them.', 'web-to-print-online-designer'),
