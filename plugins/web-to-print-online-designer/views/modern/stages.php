@@ -48,6 +48,7 @@
                                 <div class="bounding-rect" ng-style="stages[currentStage].states.boundingObject">
                                     <span ng-if="settings.nbdesigner_show_layer_size == 'yes'" class="bounding-rect-real-size" ng-style="{'transform': stages[currentStage].states.boundingRealSize.transform}">{{stages[currentStage].states.boundingRealSize.size}}</span>
                                 </div>
+                                <div class="bounding-corner" ng-class="corner.type != '' ? 'corner-action' : 'bounding-holder'" data-type="corner.type" data-stage="{{stageIndex}}" ng-repeat="corner in stage.states.corners" ng-style="corner.style" ></div>
                                 <div class="bounding-rect bounding-rect-upload-zone" ng-style="stages[currentStage].states.uploadZone" >
                                     <i ng-style="{transform: 'rotate(-'+stages[currentStage].states.rotate.angle+'deg)'}" class="icon-nbd icon-nbd-replace-image"></i>
                                     <span class="upload-zone-title" ng-style="{transform: 'rotate(-'+stages[currentStage].states.rotate.angle+'deg)'}"><?php esc_html_e('Drop to replace', 'web-to-print-online-designer'); ?></span>
