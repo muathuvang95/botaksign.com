@@ -13,14 +13,20 @@
             <div class="stage-main-wrap">
                 <div class="stage-main" ng-class="stage.config.bgType == 'image' ? 'nbd-without-shadow' : ''" ng-style="{'width' : calcStyle(stage.config.cwidth * stage.states.scaleRange[stage.states.currentScaleIndex].ratio),
                     'height' : calcStyle(stage.config.cheight * stage.states.scaleRange[stage.states.currentScaleIndex].ratio)}">
-                    <div class="stage-background" ng-style="{'background-color': stage.config.bgType == 'image' ? '#fff' : (stage.config.bgType == 'color' ? stage.config.bgColor : 'transparent')}">
+                    <div class="stage-background" ng-style="{'background-color': stage.config.bgType == 'image' ? '#fff' : (( stage.config.bgType == 'color' && ( ( stage.config.show_overlay == '1' && stage.config.img_overlay != '' ) || !areaDesignShapes[$index] ) )  ? stage.config.bgColor : 'transparent')}">
                         <img ng-if="stage.config.bgType == 'image'" ng-src='{{stage.config.bgImage}}'/>
                     </div>
-                    <div class="design-wrap" ng-class="settings.nbdesigner_show_design_border == 'yes' ? 'has-border' : ''" ng-style="{'width' : calcStyle(stage.config.width * stage.states.scaleRange[stage.states.currentScaleIndex].ratio),
+                    <div class="design-wrap" ng-class="settings.nbdesigner_show_design_border == 'yes' ? 'has-border' : ''" ng-style="{
+                        'width' : calcStyle(stage.config.width * stage.states.scaleRange[stage.states.currentScaleIndex].ratio),
                         'height' : calcStyle(stage.config.height * stage.states.scaleRange[stage.states.currentScaleIndex].ratio),
                         'top' : calcStyle(stage.config.top * stage.states.scaleRange[stage.states.currentScaleIndex].ratio + offsetDesignWrap),
-                        'left' : calcStyle(stage.config.left * stage.states.scaleRange[stage.states.currentScaleIndex].ratio + offsetDesignWrap)}">
-                        <div class="design-zone" ng-class="stage.config.area_design_type == '2' ? 'nbd-round' : ''">
+                        'left' : calcStyle(stage.config.left * stage.states.scaleRange[stage.states.currentScaleIndex].ratio + offsetDesignWrap),
+                        'background-color': ( stage.config.bgType == 'color' && !!areaDesignShapes[$index] ) ? stage.config.bgColor : 'transparent'
+                    }">
+                        <div class="design-zone" ng-style="{
+                            '-webkit-clip-path': !!areaDesignShapes[$index] ? 'url(#area-design-shape-' + $index + ')' : 'none',
+                            'clip-path': !!areaDesignShapes[$index] ? 'url(#area-design-shape-' + $index + ')' : 'none'
+                        }">
                             <canvas nbd-canvas stage="stage" ctx="ctxMenuStyle" index="{{$index}}" id="nbd-stage-{{$index}}" last="{{$last ? 1 : 0}}"></canvas>
                         </div>
                         <div class="stage-grid">
@@ -77,6 +83,10 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="stage-area-design-shape" ng-style="{
+                            'width' : calcStyle(stage.config.width * stage.states.scaleRange[stage.states.currentScaleIndex].ratio),
+                            'height' : calcStyle(stage.config.height * stage.states.scaleRange[stage.states.currentScaleIndex].ratio)
+                        }"></div>
                     </div>
                     <div class="stage-overlay" ng-style="{'width' : calcStyle(stage.config.width * stage.states.scaleRange[stage.states.currentScaleIndex].ratio),
                         'height' : calcStyle(stage.config.height * stage.states.scaleRange[stage.states.currentScaleIndex].ratio),
@@ -90,7 +100,7 @@
                         'left' : calcStyle(stage.config.left * stage.states.scaleRange[stage.states.currentScaleIndex].ratio + offsetDesignWrap)}"
                         style="pointer-events: none;">
                         <div class="stage-guideline">
-                            <div class="stage-guideline-inner" ng-show="settings.bleedLine">
+                            <div class="stage-guideline-inner" ng-class="{'nbd-round': stage.config.area_design_type == '2', 'shaped': !!areaDesignShapes[$index]}" ng-show="settings.bleedLine">
                                 <div ng-class="stage.config.area_design_type == '2' ? 'nbd-round' : ''" ng-show="stage.config.showBleed == '1'" class="bleed-line"ng-style="{'width' : calcStyle(stage.states.scaleRange[stage.states.currentScaleIndex].ratio * (stage.config.width - 2 * ((stage.config.bleed_l + stage.config.bleed_r) / 2 ))),
 'height' : calcStyle(stage.states.scaleRange[stage.states.currentScaleIndex].ratio * (stage.config.height - 2 * ((stage.config.bleed_t + stage.config.bleed_b) / 2))),
 'left' : calcStyle(stage.states.scaleRange[stage.states.currentScaleIndex].ratio * (stage.config.bleed_l)),
@@ -101,7 +111,7 @@
 'border-bottom-left-radius' : calcStyle(stage.config.bleed_radius_bottom ? stage.states.scaleRange[stage.states.currentScaleIndex].ratio * stage.config.bleed_radius_bottom : 0),
 'border-bottom-right-radius' : calcStyle(stage.config.bleed_radius_right ? stage.states.scaleRange[stage.states.currentScaleIndex].ratio * stage.config.bleed_radius_right : 0),
 'right' : calcStyle(stage.states.scaleRange[stage.states.currentScaleIndex].ratio * (stage.config.bleed_r))}"></div>
-                                <div ng-class="stage.config.area_design_type == '2' ? 'nbd-round' : ''" ng-show="stage.config.showSafeZone == '1'" class="safe-line" 
+                                <div ng-class="{'nbd-round': stage.config.area_design_type == '2', 'shaped': !!areaDesignShapes[$index]}" ng-show="stage.config.showSafeZone == '1'" class="safe-line" 
                                     ng-style="{'width' : calcStyle(stage.states.scaleRange[stage.states.currentScaleIndex].ratio * (stage.config.width - 2 * ((stage.config.bleed_l + stage.config.bleed_r) / 2 ) - 2 * ((stage.config.margin_l + stage.config.margin_r) / 2 ))),
 'height' : calcStyle(stage.states.scaleRange[stage.states.currentScaleIndex].ratio * (stage.config.height - 2 * ((stage.config.bleed_t + stage.config.bleed_b) / 2 ) - 2 * ((stage.config.margin_t + stage.config.margin_b) / 2 ))),
 'left' : calcStyle(stage.states.scaleRange[stage.states.currentScaleIndex].ratio * (stage.config.bleed_l  + stage.config.margin_l)),
