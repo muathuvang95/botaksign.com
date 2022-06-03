@@ -1356,7 +1356,7 @@ class WC_REST_Custom_Controller {
 			$query_last .= " AND ( ( mt4.meta_key = '_payment_method' AND mt4.meta_value = '${payment}' ) )";
 		}
 		if($completion != '') {
-			$time_from = strtotime('-6 now');
+			$time_from = strtotime('-10 now');
 			$time_to = strtotime('-8 now');
 			// $query_first .= " INNER JOIN wp_postmeta AS mt5 ON ( wp_posts.ID = mt5.post_id )";
 			// $query_last .= "AND ( ( mt5.meta_key = '_order_time_completed_str' AND mt5.meta_value BETWEEN '${time_from}' AND '${time_to}' ) )";
