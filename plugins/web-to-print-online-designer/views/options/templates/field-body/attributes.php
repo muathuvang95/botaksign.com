@@ -114,7 +114,7 @@
                         <div ng-show="field.general.depend_quantity.value != 'y' && ((field.nbd_type !== 'size' && field.nbd_type !== 'dimension' && field.nbd_type !== 'pricing_rates') || field.general.measure_price == 'n')" ng-if="field.nbd_type !== 'terms_conditions'"> <?php //CS botak break role measure ?>
                             <div><?php _e('Additional Price', 'web-to-print-online-designer'); ?></div>
                             <div>
-                                <input name="options[fields][{{fieldIndex}}][general][attributes][options][{{opIndex}}][price][0]" class="nbd-short-ip" type="text" ng-model="op.price[0]"/>
+                                <input autocomplete="off" ng-click="initFormulaPrice(op.price[0], 0, fieldIndex, opIndex)" name="options[fields][{{fieldIndex}}][general][attributes][options][{{opIndex}}][price][0]" class="nbd-short-ip" type="text" ng-model="op.price[0]"/>
                             </div>
                         </div>
                         <div ng-if="field.nbd_type === 'pricing_rates'">
@@ -181,7 +181,7 @@
                                 <tr>
                                     <td><?php _e('Additional Price', 'web-to-print-online-designer'); ?></td>
                                     <td ng-repeat="break in options.quantity_breaks">
-                                        <input name="options[fields][{{fieldIndex}}][general][attributes][options][{{opIndex}}][price][{{$index}}]" class="nbd-short-ip" type="text" ng-model="op.price[$index]"/>
+                                        <input autocomplete="off" ng-click="initFormulaPrice(op.price[$index], $index, fieldIndex, opIndex)" name="options[fields][{{fieldIndex}}][general][attributes][options][{{opIndex}}][price][{{$index}}]" class="nbd-short-ip" type="text" ng-model="op.price[$index]"/>
                                     </td>
                                 </tr>
                             </table>
@@ -462,7 +462,7 @@
                                     <div ng-show="field.general.depend_quantity.value != 'y'">
                                         <div><?php _e('Additional Price', 'web-to-print-online-designer'); ?></div>
                                         <div>
-                                            <input name="options[fields][{{fieldIndex}}][general][attributes][options][{{opIndex}}][sub_attributes][{{sopIndex}}][price][0]" class="nbd-short-ip" type="text" ng-model="sop.price[0]"/>
+                                            <input autocomplete="off" ng-click="initFormulaPrice(sop.price[0], 0, fieldIndex, opIndex, sopIndex)" name="options[fields][{{fieldIndex}}][general][attributes][options][{{opIndex}}][sub_attributes][{{sopIndex}}][price][0]" class="nbd-short-ip" type="text" ng-model="sop.price[0]"/>
                                         </div>
                                     </div>
                                     <div class="nbd-table-wrap" ng-show="field.general.depend_quantity.value == 'y'" >
@@ -474,7 +474,7 @@
                                             <tr>
                                                 <td><?php _e('Additional Price', 'web-to-print-online-designer'); ?></td>
                                                 <td ng-repeat="break in options.quantity_breaks">
-                                                    <input name="options[fields][{{fieldIndex}}][general][attributes][options][{{opIndex}}][sub_attributes][{{sopIndex}}][price][{{$index}}]" class="nbd-short-ip" type="text" ng-model="sop.price[$index]"/>
+                                                    <input autocomplete="off" ng-click="initFormulaPrice(sop.price[$index], $index, fieldIndex, opIndex, sopIndex)" name="options[fields][{{fieldIndex}}][general][attributes][options][{{opIndex}}][sub_attributes][{{sopIndex}}][price][{{$index}}]" class="nbd-short-ip" type="text" ng-model="sop.price[$index]"/>
                                                 </td>
                                             </tr>
                                         </table>

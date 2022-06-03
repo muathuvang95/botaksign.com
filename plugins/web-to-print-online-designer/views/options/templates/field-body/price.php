@@ -6,7 +6,7 @@
         </div>
         <div class="nbd-field-info-2">
             <div>
-                <input class="nbd-short-ip" type="text" name="options[fields][{{fieldIndex}}][general][price]" ng-model="field.general.price.value">
+                <input autocomplete="off" ng-click="initFormulaPrice(field.general.price.value, 0, fieldIndex)"  class="nbd-short-ip" type="text" name="options[fields][{{fieldIndex}}][general][price]" ng-model="field.general.price.value">
             </div>
         </div>
     </div>
