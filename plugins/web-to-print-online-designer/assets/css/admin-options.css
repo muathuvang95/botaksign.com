@@ -1467,3 +1467,90 @@ label.view-config {
     width: 100%;
 }*/
 /*End CS botak calculation option*/
+
+/* Formula price matrix */
+.nbo-formula-popup-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.3);
+    z-index: -1;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s;
+}
+.nbo-formula-popup-wrap.active {
+    z-index: 9999;
+    opacity: 1;
+    pointer-events: all;
+}
+.nbo-formula-popup {
+    width: 600px;
+    height: 80%;
+    margin: 50px auto 0;
+    background: #fff;
+    -webkit-box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);
+    box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);
+    border-radius: 4px;
+}
+.nbo-formula-popup-header, .nbo-formula-popup-footer {
+    height: 50px;
+    line-height: 49px;
+    box-sizing: border-box;
+    padding: 0 15px;
+    font-weight: bold;
+}
+.nbo-formula-popup-header {
+    border-bottom: 1px solid #ddd;
+}
+.nbo-formula-popup-footer {
+    border-top: 1px solid #ddd;
+    justify-content: flex-end;
+    display: flex;
+    align-items: center;
+}
+.nbo-formula-popup-footer .button{
+    margin-left: 10px;
+}
+.nbo-formula-popup-body {
+    height: calc(100% - 100px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 15px;
+    box-sizing: border-box;
+}
+.nbo-formula-popup-body textarea {
+    width: 100%;
+}
+.nbo-formula-popup-body .button {
+    margin: 0 5px 5px 0;
+}
+.nbo-formula-link-field {
+    margin-top: 15px;
+    position: relative;
+}
+.nbo-formula-link-field select{
+    width: 150px;
+}
+.nbo-formula-link-field-variable {
+    position: absolute;
+    top: 0;
+    left: 200px;
+    padding: 10px 10px 5px 10px;
+    border: 1px solid #7e8993;
+    width: calc(100% - 200px);
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+.nbo-formula-link-field-variable:before {
+    display: block;
+    position: absolute;
+    top: 15px;
+    left: -50px;
+    height: 1px;
+    width: 50px;
+    background: #7e8993;
+    content: '';
+}

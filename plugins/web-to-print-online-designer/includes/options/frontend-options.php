@@ -1450,9 +1450,17 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                 );
                 if( $origin_field['general']['data_type'] == 'i' ){
                     if(isset($origin_field['general']['depend_quantity']) && $origin_field['general']['depend_quantity'] == 'n'){
-                        $factor = $origin_field['general']['price'];
+                        if( $origin_field['general']['price_type'] == 'mf' ){
+                            $factor = $this->eval_price( $origin_field['general']['price'], $origin_field, $quantity, $fields, $original_price, $option_fields, $_fields );
+                        }else{
+                            $factor = $origin_field['general']['price'];
+                        }
                     }else{
-                        $factor = isset($origin_field['general']['price_breaks']) ? $origin_field['general']['price_breaks'][$quantity_break['index']] : 0;
+                        if( $origin_field['general']['price_type'] == 'mf' ){
+                            $factor = $this->eval_price( $origin_field['general']['price_breaks'][$quantity_break['index']], $origin_field, $quantity, $fields, $original_price, $option_fields, $_fields );
+                        }else{
+                            $factor = $origin_field['general']['price_breaks'][$quantity_break['index']];
+                        }
                     }
                     if( isset($origin_field['nbd_type']) && $origin_field['nbd_type'] == 'dimension' && $origin_field['general']['measure'] == 'y' /*&& isset($origin_field['general']['measure_range']) && count($origin_field['general']['measure_range']) > 0*/ ){ //CS botak dimention multi component
                         $dimension = explode("x",$val);
@@ -1517,16 +1525,32 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                         }
                     }
                     if(isset($origin_field['general']['depend_quantity']) && $origin_field['general']['depend_quantity'] == 'n'){
-                        $factor = floatval( $option['price'][0] );
+                        if( $origin_field['general']['price_type'] == 'mf' ){
+                            $factor = $this->eval_price( $option['price'][0], $origin_field, $quantity, $fields, $original_price, $option_fields, $_fields );
+                        }else{
+                            $factor = floatval( $option['price'][0] );
+                        }
                     }else{
-                        $factor = floatval( $option['price'][$quantity_break['index']] );
+                        if( $origin_field['general']['price_type'] == 'mf' ){
+                            $factor = $this->eval_price( $option['price'][$quantity_break['index']], $origin_field, $quantity, $fields, $original_price, $option_fields, $_fields );
+                        }else{
+                            $factor = floatval( $option['price'][$quantity_break['index']] );
+                        }
                     }
                     if( $has_subattr ){
                         $soption = $option['sub_attributes'][$val['sub_value']];
                         if($origin_field['general']['depend_quantity'] == 'n'){
-                            $factor += floatval( $soption['price'][0] );
+                            if( $origin_field['general']['price_type'] == 'mf' ){
+                                $factor += $this->eval_price( $soption['price'][0], $origin_field, $quantity, $fields, $original_price, $option_fields, $_fields );
+                            }else{
+                                $factor += floatval( $soption['price'][0] );
+                            }
                         }else{
-                            $factor += floatval( $soption['price'][$quantity_break['index']] );
+                            if( $origin_field['general']['price_type'] == 'mf' ){
+                                $factor += $this->eval_price( $soption['price'][$quantity_break['index']], $origin_field, $quantity, $fields, $original_price, $option_fields, $_fields );
+                            }else{
+                                $factor += floatval( $soption['price'][$quantity_break['index']] );
+                            }
                         }
                     }
                     if(isset($origin_field['appearance']['change_image_product']) && $origin_field['appearance']['change_image_product'] == 'y' && isset($option['product_image']) && $option['product_image'] > 0){
@@ -1548,9 +1572,17 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                         foreach($val as $k => $v){
                             $option = $origin_field['general']['attributes']['options'][$v];
                             if($origin_field['general']['depend_quantity'] == 'n'){
-                                $factor[$k] = $option['price'][0];
+                                if( $origin_field['general']['price_type'] == 'mf' ){
+                                    $factor[$k] = $this->eval_price( $option['price'][0], $origin_field, $quantity, $fields, $original_price, $option_fields, $_fields );
+                                }else{
+                                    $factor[$k] = $option['price'][0];
+                                }
                             }else{
-                                $factor[$k] = $option['price'][$quantity_break['index']];
+                                if( $origin_field['general']['price_type'] == 'mf' ){
+                                    $factor[$k] = $this->eval_price( $option['price'][$quantity_break['index']], $origin_field, $quantity, $fields, $original_price, $option_fields, $_fields );
+                                }else{
+                                    $factor[$k] = $option['price'][$quantity_break['index']];
+                                }
                             }
                         }
                     }
@@ -1578,6 +1610,7 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                         }
                         switch ($origin_field['general']['price_type']){
                             case 'f':
+                            case 'mf':
                                 $_fields[$key]['price'] += $_fac;
                                 $total_price += $fac;
                                 if( $this->is_independent_qty( $origin_field ) ){
@@ -1619,6 +1652,7 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                     }
                     switch ($origin_field['general']['price_type']){
                         case 'f':
+                        case 'mf':
                             $_fields[$key]['price'] = $_factor;
                             $total_price += $factor;
                             if( $this->is_independent_qty( $origin_field ) ){
@@ -1751,6 +1785,74 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
             );
         }
         
+        // custom val eval price
+        public function eval_price( $formula, $origin_field, $qty, $fields, $original_price, $option_fields, $_fields ){
+            require_once NBDESIGNER_PLUGIN_DIR . 'lib/eval-math/EvalMath.php';
+
+            $formula = str_replace( "{quantity}", $qty, $formula );
+            $formula = str_replace( "{price}", $original_price, $formula );
+
+            $value      = 0;
+            $value_len  = 0;
+            if( $origin_field['general']['data_type'] == 'i' ){
+                if( $origin_field['general']['input_type'] == 'n' || $origin_field['general']['input_type'] == 'r' ){
+                    $value = $fields[$origin_field['id']];
+                }
+                if( $origin_field['general']['input_type'] == 't' || $origin_field['general']['input_type'] == 'a' ){
+                    $value_len =  strlen( $fields[$origin_field['id']] );
+                }
+            }
+
+            $formula = str_replace( "{this.value}", $value, $formula );
+            $formula = str_replace( "{this.value_length}", $value_len, $formula );
+
+            preg_match_all( '/\{(\s)*?field\.([^}]*)}/', $formula, $matches );
+            if ( is_array( $matches ) && isset( $matches[2] ) && is_array( $matches[2] ) ) {
+                foreach ( $matches[2] as $matchkey => $match ) {
+                    $val = 0;
+                    $pos = strrpos( $match, "." );
+                    if ( $pos !== FALSE ) {
+                        $field_id   = substr( $match, 0, $pos );
+                        $type       = substr( $match, $pos + 1 );
+
+                        $value          = 0;
+                        $value_len      = 0;
+                        $_origin_field  = $this->get_field_by_id( $option_fields, $field_id );
+
+                        if( $_origin_field['general']['data_type'] == 'i' ){
+                            if( $_origin_field['general']['input_type'] == 'n' || $_origin_field['general']['input_type'] == 'r' ){
+                                $value = $fields[$field_id];
+                            }
+                            if( $_origin_field['general']['input_type'] == 't' || $_origin_field['general']['input_type'] == 'a' ){
+                                $value_len =  strlen( $fields[$field_id] );
+                            }
+                        }
+
+                        switch ( $type ) {
+                            case 'price':
+                                $val = ( isset( $_fields[$field_id] ) && isset( $_fields[$field_id]['price'] ) ) ? $_fields[$field_id]['price'] : 0;
+                                break;
+                            case 'value':
+                                $val = $value;
+                                break;
+                            case 'value_length':
+                                $val = $value_len;
+                                break;
+                        }
+                    }
+
+                    $formula = str_replace( $matches[0][ $matchkey ], $val, $formula );
+                }
+            }
+
+            $formula = preg_replace( '/\s+/', '', $formula );
+            $formula = rtrim( ltrim( $formula, "\t\n\r\0\x0B+*/" ), "\t\n\r\0\x0B+-*/" );
+
+            $eval_math = new EvalMath();
+            $price = $formula ? $eval_math->evaluate( $formula ) : 0;
+            return $price;
+        }
+
         //CS botak gallery option (check condition change gallery
         public static function check_and_get_change_gallery($gallery_options, $fields, $quantity) {
             if($gallery_options) {
