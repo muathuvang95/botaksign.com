@@ -275,6 +275,7 @@
                                     <?php include_once('quantity.php'); ?>
                                     <?php include_once('product-gallery.php'); ?>
                                     <?php include_once('field.php'); ?>
+                                    <?php include_once('formula-popup.php'); ?>
                                 </div>
                                 <div ng-repeat="view in options.views">
                                     <input ng-hide="true" ng-model="view.name" name="options[views][{{$index}}][name]"/>

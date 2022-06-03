@@ -178,6 +178,15 @@ angular.module('optionApp', []).controller('optionCtrl', function( $scope, $time
     $scope.showPreview = false;
     $scope.previewWide = false;
     $scope.jsonFields  = '';
+    $scope.formula     = {
+        active: false,
+        price: '',
+        brIndex: null,
+        fieldIndex: null,
+        opIndex: null,
+        saIndex: null,
+        currentLinkField: '0'
+    };
     /* end init parameters */
     /* quantity */
     $scope.validate_quantity_break = function(){
@@ -3072,6 +3081,64 @@ angular.module('optionApp', []).controller('optionCtrl', function( $scope, $time
             absPath = Snap.path.toAbsolute(path);
             $scope.options.fields[fieldIndex].general.attributes.options[opIndex].shape = $scope.options.fields[fieldIndex].general.attributes.options[opIndex].shape.replace(reg, 'd="' + absPath + '"');
         }
+    };
+    $scope.initFormulaPrice = function(price, brIndex, fieldIndex, opIndex, saIndex){
+        var field = $scope.options.fields[fieldIndex];
+        if( field.general.price_type.value != 'mf' ) return;
+        $scope.formula     = {
+            active: true,
+            price: angular.isDefined( price ) ? price : '',
+            brIndex: brIndex,
+            fieldIndex: angular.isDefined( fieldIndex ) ? fieldIndex : null,
+            opIndex: angular.isDefined( opIndex ) ? opIndex : null,
+            saIndex: angular.isDefined( saIndex ) ? saIndex : null,
+            currentLinkField: '0'
+        };
+    };
+    $scope.saveFormulaPrice = function(){
+        var field = $scope.options.fields[$scope.formula.fieldIndex];
+        if( $scope.formula.saIndex !== null ){
+            field.general.attributes.options[$scope.formula.opIndex].sub_attributes[$scope.formula.saIndex].price[$scope.formula.brIndex] = $scope.formula.price;
+        }else{
+            if( $scope.formula.opIndex !== null ){
+                field.general.attributes.options[$scope.formula.opIndex].price[$scope.formula.brIndex] = $scope.formula.price;
+            }else{
+                if( field.general.depend_quantity.value == 'n' ){
+                    field.general.price.value = $scope.formula.price;
+                }else{
+                    field.general.price_breaks.value[$scope.formula.brIndex] = $scope.formula.price;
+                }
+            }
+        }
+        $scope.cancelFormulaPrice();
+    };
+    $scope.cancelFormulaPrice = function(){
+        $scope.formula     = {
+            active: false,
+            price: '',
+            brIndex: null,
+            fieldIndex: null,
+            opIndex: null,
+            saIndex: null,
+            currentLinkField: '0'
+        };
+    };
+    $scope.addFormulaVariable = function( variable ){
+        var priceInput = jQuery('#nbo-formula-price')[0],
+        caretPos = priceInput.selectionStart,
+        front = $scope.formula.price.substring(0, caretPos),
+        back = $scope.formula.price.substring(priceInput.selectionEnd, $scope.formula.price.length);
+
+        $scope.formula.price = front + variable + back;
+        caretPos = caretPos + variable.length;
+        $timeout(function(){
+            priceInput.selectionStart = caretPos;
+            priceInput.selectionEnd = caretPos;
+            priceInput.focus();
+        });
+    }
+    $scope._cancelFormulaPrice = function($event){
+        if( jQuery($event.target).is( jQuery('.nbo-formula-popup-wrap') ) ) $scope.cancelFormulaPrice();
     };
     $scope.init();
 }).directive('stringToNumber', function() {
