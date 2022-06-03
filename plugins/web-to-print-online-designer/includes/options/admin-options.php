@@ -532,7 +532,7 @@ CREATE TABLE {$wpdb->prefix}nbdesigner_options (
             }
             if( isset($options["fields"]) ){
                 foreach ( $options["fields"] as $f_index => $field ){
-                    $array_price_type = array( 'f', 'p', 'p+', 'c', 'cp', 'cf' );
+                    $array_price_type = array( 'f', 'p', 'p+', 'c', 'cp', 'cf', 'mf' );
                     if( !in_array( $field["general"]['price_type'], $array_price_type ) ){
                         //$options["fields"][$f_index]["general"]['price_type'] = $field["general"]['data_type'] == 'i' ? 'c' : 'f';
                         $options["fields"][$f_index]["general"]['price_type'] = 'f';
@@ -1334,6 +1334,10 @@ CREATE TABLE {$wpdb->prefix}nbdesigner_options (
                                 'value'     => 't'
                             )
                         )
+                    ),
+                    array(
+                        'key'       => 'mf',
+                        'text'      => __( 'Math formula', 'web-to-print-online-designer')
                     )
                 )
             );
