@@ -1218,6 +1218,7 @@ function default_frontend_setting(){
         'nbdesigner_enable_shapes'                  => 'yes',
         'nbdesigner_enable_icons'                   => 'yes',
         'nbdesigner_enable_flaticon'                => 'yes',
+        'nbdesigner_enable_storyset'                => 'yes',
         'nbdesigner_enable_frame'                   => 'yes',
         'nbdesigner_enable_google_maps'             => 'no',
         'nbdesigner_clipart_change_path_color'      => 1,
