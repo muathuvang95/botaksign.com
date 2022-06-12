@@ -5364,6 +5364,7 @@ if( $cart_item_key != ''){ ?>
                                 fixed_amount += field.price;
                                 field.fixed_amount = true;
                             }
+                            field.price_val = field.price * 1;
                             field.price = $scope.convert_to_wc_price( field.price ); 
                             if(origin_field.general.price_type == 'p+'){
                                 xfactor *= (1 + xfac / 100);
@@ -5380,6 +5381,8 @@ if( $cart_item_key != ''){ ?>
                             }
                             switch(origin_field.general.price_type){
                                 case 'f':
+                                case 'mf':
+                                    field.price_val = _factor;
                                     field.price = $scope.convert_to_wc_price( _factor );
                                     if( ! $scope.is_fixed_amount( origin_field ) ) total_price += factor;
                                     if( $scope.is_independent_qty( origin_field ) ){
@@ -5827,9 +5830,17 @@ if( $cart_item_key != ''){ ?>
                         angular.forEach(field.values, function(val, v_index){
                             var option = origin_field.general.attributes.options[val];
                             if(origin_field.general.depend_quantity == 'n'){
-                                factor[v_index] = option.price[0];
+                                if( origin_field.general.price_type == 'mf' ){
+                                    factor[v_index] = $scope.eval_price( option.price[0], origin_field, $scope._qty, $scope.nbd_fields );
+                                }else{
+                                    factor[v_index] = option.price[0];
+                                }
                             }else{
-                                factor[v_index] = option.price[quantity_break.index];
+                                if( origin_field.general.price_type == 'mf' ){
+                                    factor[v_index] = $scope.eval_price( option.price[quantity_break.index], origin_field, $scope._qty, $scope.nbd_fields );
+                                }else{
+                                    factor[v_index] = option.price[quantity_break.index];
+                                }
                             }
                         });
                         field.price = 0;
@@ -5866,11 +5877,19 @@ if( $cart_item_key != ''){ ?>
                                     _xfac                += _fac / 100;
                                     field.is_pp          = 1;
                                     break;
+                                case 'mf':
+                                    field.price          += _fac;
+                                    $scope.total_price   += fac;
+                                    if( $scope.is_independent_qty( origin_field ) ){
+                                        line_price.fixed += _fac;
+                                    }
+                                    break;
                             }
                         });
                         if( $scope.is_fixed_amount( origin_field ) ){
                             field.fixed_amount = true;
                         }
+                        field.price_val = field.price * 1;
                         field.price = $scope.convert_to_wc_price( field.price );
                         if(origin_field.general.price_type == 'p+'){
                             xfactor *= (1 + xfac / 100);
@@ -5895,6 +5914,7 @@ if( $cart_item_key != ''){ ?>
                         }
                         switch(origin_field.general.price_type){
                             case 'f':
+                                field.price_val = _factor;
                                 field.price = $scope.convert_to_wc_price( _factor );
                                 $scope.total_price += factor;
                                 if( $scope.is_independent_qty( origin_field ) ){
@@ -5902,7 +5922,8 @@ if( $cart_item_key != ''){ ?>
                                 }
                                 break;
                             case 'p':
-                                field.price = $scope.convert_to_wc_price( $scope.basePrice * _factor / 100 );
+                                field.price_val = $scope.basePrice * _factor / 100;
+                                field.price = $scope.convert_to_wc_price( field.price_val );
                                 $scope.total_price += ($scope.basePrice * factor / 100);
                                 if( $scope.is_independent_qty( origin_field ) ){
                                     line_price.percent += _factor;
@@ -5928,17 +5949,27 @@ if( $cart_item_key != ''){ ?>
                                     current_value = current_value - default_val;
                                     if( current_value < 0 ) current_value = 0;
                                 }
-                                field.price = $scope.convert_to_wc_price( _factor * current_value );
+                                field.price_val = _factor * current_value;
+                                field.price = $scope.convert_to_wc_price( field.price_val );
                                 $scope.total_price += factor * current_value;
                                 if( $scope.is_independent_qty( origin_field ) ){
                                     line_price.fixed += _factor * current_value;
                                 }
                                 break; 
                             case 'cp':
-                                field.price = $scope.convert_to_wc_price( _factor * $scope.validate_int( field.value.length ) );
+                                field.price_val = _factor * $scope.validate_int( field.value.length );
+                                field.price = $scope.convert_to_wc_price( field.price_val );
                                 $scope.total_price += factor * $scope.validate_int( field.value.length );
                                 if( $scope.is_independent_qty( origin_field ) ){
-                                    line_price.fixed += _factor * $scope.validate_int( field.value.length );
+                                    line_price.fixed += field.price_val;
+                                }
+                                break;
+                            case 'mf':
+                                field.price = $scope.convert_to_wc_price( _factor );
+                                field.price_val = _factor;
+                                $scope.total_price += factor;
+                                if( $scope.is_independent_qty( origin_field ) ){
+                                    line_price.fixed += _factor;
                                 }
                                 break;
                         }
@@ -5951,7 +5982,8 @@ if( $cart_item_key != ''){ ?>
             $scope.total_price += ( ($scope.basePrice + $scope.total_price ) * ( xfactor - 1 ) );
             angular.forEach($scope.nbd_fields, function(field){
                 if( field.is_pp == 1 ){
-                    field.price = $scope.convert_to_wc_price( field.price * ($scope.basePrice + $scope.total_price ) / ( field.price + 1 ) );
+                    field.price_val = field.price * ($scope.basePrice + $scope.total_price ) / ( field.price + 1 );
+                    field.price = $scope.convert_to_wc_price( field.price_val );
                 }
             });
             var qty_factor = null;
@@ -6107,9 +6139,17 @@ if( $cart_item_key != ''){ ?>
                             var factor = null;
                             if( origin_field.general.data_type == 'i' ){
                                 if(origin_field.general.depend_quantity == 'n'){
-                                    factor = origin_field.general.price;
+                                    if( origin_field.general.price_type == 'mf' ){
+                                        factor = $scope.eval_price( origin_field.general.price, origin_field, qty, nbb_fields_arr[index] );
+                                    }else{
+                                        factor = origin_field.general.price;
+                                    }
                                 }else{
-                                    factor = origin_field.general.price_breaks[quantity_break.index];
+                                    if( origin_field.general.price_type == 'mf' ){
+                                        factor = $scope.eval_price( origin_field.general.price_breaks[quantity_break.index], origin_field, qty, nbb_fields_arr[index] );
+                                    }else{
+                                        factor = origin_field.general.price_breaks[quantity_break.index];
+                                    }
                                 }
                                 if( angular.isDefined(origin_field.nbd_type) && origin_field.nbd_type == 'dimension' 
                                         && origin_field.general.measure == 'y' /*&& angular.isDefined(origin_field.general.measure_range) && origin_field.general.measure_range.length > 0 */ ){ //CS botak dimention multi component
@@ -6152,17 +6192,33 @@ if( $cart_item_key != ''){ ?>
                                     if(option){
                                         var option_price =  option.price;
                                         if(origin_field.general.depend_quantity == 'n'){
-                                            factor = $scope.validate_float( option_price[0] );
+                                            if( origin_field.general.price_type == 'mf' ){
+                                                factor = $scope.eval_price( option_price[0], origin_field, qty, nbb_fields_arr[index] );
+                                            }else{
+                                                factor = $scope.validate_float( option_price[0] );
+                                            }
                                         }else{
-                                            factor = $scope.validate_float( option_price[quantity_break.index] );
+                                            if( origin_field.general.price_type == 'mf' ){
+                                                factor = $scope.eval_price( option_price[quantity_break.index], origin_field, qty, nbb_fields_arr[index] );
+                                            }else{
+                                                factor = $scope.validate_float( option_price[quantity_break.index] );
+                                            }
                                         }
                                         if( angular.isDefined(option.enable_subattr) && option.enable_subattr == 'on' ){
                                             if(angular.isDefined(option.sub_attributes) && option.sub_attributes.length > 0){
                                                 soption_price = option.sub_attributes[field.sub_value].price;
                                                 if(origin_field.general.depend_quantity == 'n'){
-                                                    factor += $scope.validate_float( soption_price[0] );
+                                                    if( origin_field.general.price_type == 'mf' ){
+                                                        factor += $scope.eval_price( soption_price[0], origin_field, qty, nbb_fields_arr[index] );
+                                                    }else{
+                                                        factor += $scope.validate_float( soption_price[0] );
+                                                    }
                                                 }else{
-                                                    factor += $scope.validate_float( soption_price[quantity_break.index] );
+                                                    if( origin_field.general.price_type == 'mf' ){
+                                                        factor += $scope.eval_price( soption_price[quantity_break.index], origin_field, qty, nbb_fields_arr[index] );
+                                                    }else{
+                                                        factor += $scope.validate_float( soption_price[quantity_break.index] );
+                                                    }
                                                 }
                                             }
                                         }
@@ -6181,9 +6237,17 @@ if( $cart_item_key != ''){ ?>
                                 angular.forEach(field.values, function(val, v_index){
                                     var option = origin_field.general.attributes.options[val];
                                     if(origin_field.general.depend_quantity == 'n'){
-                                        factor[v_index] = option.price[0];
+                                        if( origin_field.general.price_type == 'mf' ){
+                                            factor[v_index] = $scope.eval_price( option.price[0], origin_field, qty, nbb_fields_arr[index] );
+                                        }else{
+                                            factor[v_index] = option.price[0];
+                                        }
                                     }else{
-                                        factor[v_index] = option.price[quantity_break.index];
+                                        if( origin_field.general.price_type == 'mf' ){
+                                            factor[v_index] = $scope.eval_price( option.price[quantity_break.index], origin_field, qty, nbb_fields_arr[index] );
+                                        }else{
+                                            factor[v_index] = option.price[quantity_break.index];
+                                        }
                                     }
                                 });
                                 field.price = 0;
@@ -6197,6 +6261,7 @@ if( $cart_item_key != ''){ ?>
                                     }
                                     switch(origin_field.general.price_type){
                                         case 'f':
+                                        case 'mf':
                                             field.price          += _fac;
                                             if( ! $scope.is_fixed_amount( origin_field ) ) total_price += fac;
                                             if( $scope.is_independent_qty( origin_field ) ){
@@ -6223,6 +6288,7 @@ if( $cart_item_key != ''){ ?>
                                     fixed_amount += field.price;
                                     field.fixed_amount = true;
                                 }
+                                field.price_val = field.price * 1;
                                 field.price = $scope.convert_to_wc_price( field.price );
                                 if(origin_field.general.price_type == 'p+'){
                                     xfactor *= (1 + xfac / 100);
@@ -6244,6 +6310,8 @@ if( $cart_item_key != ''){ ?>
                                 }
                                 switch(origin_field.general.price_type){
                                     case 'f':
+                                    case 'mf':
+                                        field.price_val = _factor;
                                         field.price = $scope.convert_to_wc_price( _factor );
                                         if( ! $scope.is_fixed_amount( origin_field ) ) total_price += factor;
                                         if( $scope.is_independent_qty( origin_field ) ){
@@ -6251,7 +6319,8 @@ if( $cart_item_key != ''){ ?>
                                         }
                                         break;
                                     case 'p':
-                                        field.price = $scope.convert_to_wc_price( basePrice * _factor / 100 );
+                                        field.price_val = basePrice * _factor / 100;
+                                        field.price = $scope.convert_to_wc_price( field.price_val );
                                         total_price += (basePrice * factor / 100);
                                         if( $scope.is_independent_qty( origin_field ) ){
                                             line_price.percent += _factor;
@@ -6277,17 +6346,19 @@ if( $cart_item_key != ''){ ?>
                                             current_value = current_value - default_val;
                                             if( current_value < 0 ) current_value = 0;
                                         }
-                                        field.price = $scope.convert_to_wc_price( _factor * current_value );
+                                        field.price_val = _factor * current_value;
+                                        field.price = $scope.convert_to_wc_price( field.price_val );
                                         total_price += factor * current_value;
                                         if( $scope.is_independent_qty( origin_field ) ){
                                             line_price.fixed += _factor * current_value;
                                         }
                                         break; 
                                     case 'cp':
-                                        field.price = $scope.convert_to_wc_price( _factor * $scope.validate_int( field.value.length ) );
+                                        field.price_val = _factor * $scope.validate_int( field.value.length );
+                                        field.price = $scope.convert_to_wc_price( field.price_val );
                                         total_price += factor * $scope.validate_int( field.value.length );
                                         if( $scope.is_independent_qty( origin_field ) ){
-                                            line_price.fixed += _factor * $scope.validate_int( field.value.length );
+                                            line_price.fixed += field.price_val;
                                         }
                                         break;
                                 }
@@ -6301,7 +6372,8 @@ if( $cart_item_key != ''){ ?>
                     total_price += ( ( basePrice + total_price ) * ( xfactor - 1 ) );
                     angular.forEach(nbb_fields_arr[index], function(field){
                         if( field.is_pp == 1 ){
-                            field.price = $scope.convert_to_wc_price( field.price * (basePrice + total_price ) / ( field.price + 1 ) );
+                            field.price_val = field.price * (basePrice + total_price ) / ( field.price + 1 );
+                            field.price = $scope.convert_to_wc_price( field.price_val );
                         }
                     });
                     var qty_factor = null;
@@ -6313,7 +6385,7 @@ if( $cart_item_key != ''){ ?>
                     var qty_factor = $scope.validate_float( qty_factor );
                     discount_by_qty = $scope.options.quantity_discount_type == 'f' ? qty_factor : (basePrice + total_price ) * qty_factor / 100;
                     var final_price = total_price + basePrice - discount_by_qty;
-                    final_price = final_price > 0 ? final_price : 0;           
+                    final_price = final_price > 0 ? final_price : 0;
                     total_cart_price = final_price * qty;
                     var _total_cart_price = total_cart_price;
                     if( line_price.fixed != 0 || line_price.xfactor != 1 || line_price.percent != 0 || fixed_amount > 0 ){
@@ -6397,9 +6469,17 @@ if( $cart_item_key != ''){ ?>
                         var factor = null;
                         if( origin_field.general.data_type == 'i' ){
                             if(origin_field.general.depend_quantity == 'n'){
-                                factor = origin_field.general.price;
+                                if( origin_field.general.price_type == 'mf' ){
+                                    factor = $scope.eval_price( origin_field.general.price, origin_field, qty, nbd_fields );
+                                }else{
+                                    factor = origin_field.general.price;
+                                }
                             }else{
-                                factor = origin_field.general.price_breaks[quantity_break.index];
+                                if( origin_field.general.price_type == 'mf' ){
+                                    factor = $scope.eval_price( origin_field.general.price_breaks[quantity_break.index], origin_field, qty, nbd_fields );
+                                }else{
+                                    factor = origin_field.general.price_breaks[quantity_break.index];
+                                }
                             }
                             if( angular.isDefined(origin_field.nbd_type) && origin_field.nbd_type == 'dimension' 
                                     && origin_field.general.measure == 'y' /*&& angular.isDefined(origin_field.general.measure_range) && origin_field.general.measure_range.length > 0 */ ){ //CS botak dimention multi component
@@ -6444,17 +6524,33 @@ if( $cart_item_key != ''){ ?>
 	                            if(option){
 	                                var option_price =  option.price;
 	                                if(origin_field.general.depend_quantity == 'n'){
-	                                    factor = $scope.validate_float( option_price[0] );
+	                                    if( origin_field.general.price_type == 'mf' ){
+                                            factor = $scope.eval_price( option_price[0], origin_field, qty, nbd_fields );
+                                        }else{
+                                            factor = $scope.validate_float( option_price[0] );
+                                        }
 	                                }else{
-	                                    factor = $scope.validate_float( option_price[quantity_break.index] );
+	                                    if( origin_field.general.price_type == 'mf' ){
+                                            factor = $scope.eval_price( option_price[quantity_break.index], origin_field, qty, nbd_fields );
+                                        }else{
+                                            factor = $scope.validate_float( option_price[quantity_break.index] );
+                                        }
 	                                }
 	                                if( angular.isDefined(option.enable_subattr) && option.enable_subattr == 'on' ){
 	                                    if(angular.isDefined(option.sub_attributes) && option.sub_attributes.length > 0){
 	                                        soption_price = option.sub_attributes[field.sub_value].price;
 	                                        if(origin_field.general.depend_quantity == 'n'){
-	                                            factor += $scope.validate_float( soption_price[0] );
+	                                            if( origin_field.general.price_type == 'mf' ){
+                                                    factor += $scope.eval_price( soption_price[0], origin_field, qty, nbd_fields );
+                                                }else{
+                                                    factor += $scope.validate_float( soption_price[0] );
+                                                }
 	                                        }else{
-	                                            factor += $scope.validate_float( soption_price[quantity_break.index] );
+	                                            if( origin_field.general.price_type == 'mf' ){
+                                                    factor += $scope.eval_price( soption_price[quantity_break.index], origin_field, qty, nbd_fields );
+                                                }else{
+                                                    factor += $scope.validate_float( soption_price[quantity_break.index] );
+                                                }
 	                                        }
 	                                    }
 	                                }
@@ -6473,9 +6569,17 @@ if( $cart_item_key != ''){ ?>
                             angular.forEach(field.values, function(val, v_index){
                                 var option = origin_field.general.attributes.options[val];
                                 if(origin_field.general.depend_quantity == 'n'){
-                                    factor[v_index] = option.price[0];
+                                    if( origin_field.general.price_type == 'mf' ){
+                                        factor[v_index] = $scope.eval_price( option.price[0], origin_field, qty, nbd_fields );
+                                    }else{
+                                        factor[v_index] = option.price[0];
+                                    }
                                 }else{
-                                    factor[v_index] = option.price[quantity_break.index];
+                                    if( origin_field.general.price_type == 'mf' ){
+                                        factor[v_index] = $scope.eval_price( option.price[quantity_break.index], origin_field, qty, nbd_fields );
+                                    }else{
+                                        factor[v_index] = option.price[quantity_break.index];
+                                    }
                                 }
                             });
                             field.price = 0;
@@ -6489,6 +6593,7 @@ if( $cart_item_key != ''){ ?>
                                 }
                                 switch(origin_field.general.price_type){
                                     case 'f':
+                                    case 'mf':
                                         field.price          += _fac;
                                         if( ! $scope.is_fixed_amount( origin_field ) ) total_price += fac;
                                         if( $scope.is_independent_qty( origin_field ) ){
@@ -6515,6 +6620,7 @@ if( $cart_item_key != ''){ ?>
                                 fixed_amount += field.price;
                                 field.fixed_amount = true;
                             }
+                            field.price_val = field.price * 1;
                             field.price = $scope.convert_to_wc_price( field.price );
                             if(origin_field.general.price_type == 'p+'){
                                 xfactor *= (1 + xfac / 100);
@@ -6536,6 +6642,8 @@ if( $cart_item_key != ''){ ?>
                             }
                             switch(origin_field.general.price_type){
                                 case 'f':
+                                case 'mf':
+                                    field.price_val = _factor;
                                     field.price = $scope.convert_to_wc_price( _factor );
                                     if( ! $scope.is_fixed_amount( origin_field ) ) total_price += factor;
                                     if( $scope.is_independent_qty( origin_field ) ){
@@ -6543,6 +6651,7 @@ if( $cart_item_key != ''){ ?>
                                     }
                                     break;
                                 case 'p':
+                                    field.price_val = basePrice * _factor / 100;
                                     field.price = $scope.convert_to_wc_price( basePrice * _factor / 100 );
                                     total_price += (basePrice * factor / 100);
                                     if( $scope.is_independent_qty( origin_field ) ){
@@ -6569,17 +6678,19 @@ if( $cart_item_key != ''){ ?>
                                         current_value = current_value - default_val;
                                         if( current_value < 0 ) current_value = 0;
                                     }
-                                    field.price = $scope.convert_to_wc_price( _factor * current_value );
+                                    field.price_val = _factor * current_value;
+                                    field.price = $scope.convert_to_wc_price( field.price_val );
                                     total_price += factor * current_value;
                                     if( $scope.is_independent_qty( origin_field ) ){
-                                        line_price.fixed += _factor * current_value;
+                                        line_price.fixed += field.price_val;
                                     }
                                     break; 
                                 case 'cp':
-                                    field.price = $scope.convert_to_wc_price( _factor * $scope.validate_int( field.value.length ) );
+                                    field.price_val = _factor * $scope.validate_int( field.value.length );
+                                    field.price = $scope.convert_to_wc_price( field.price_val );
                                     total_price += factor * $scope.validate_int( field.value.length );
                                     if( $scope.is_independent_qty( origin_field ) ){
-                                        line_price.fixed += _factor * $scope.validate_int( field.value.length );
+                                        line_price.fixed += field.price_val;
                                     }
                                     break;
                             }
@@ -6593,7 +6704,8 @@ if( $cart_item_key != ''){ ?>
                 total_price += ( ( basePrice + total_price ) * ( xfactor - 1 ) );
                 angular.forEach(nbd_fields, function(field){
                     if( field.is_pp == 1 ){
-                        field.price = $scope.convert_to_wc_price( field.price * (basePrice + total_price ) / ( field.price + 1 ) );
+                        field.price_val = field.price * (basePrice + total_price ) / ( field.price + 1 );
+                        field.price = $scope.convert_to_wc_price( field.price_val );
                     }
                 });
                 var qty_factor = $scope.validate_float( _break.dis );
@@ -6709,9 +6821,17 @@ if( $cart_item_key != ''){ ?>
                         var factor = null;
                         if( origin_field.general.data_type == 'i' ){
                             if(origin_field.general.depend_quantity == 'n'){
-                                factor = origin_field.general.price;
+                                if( origin_field.general.price_type == 'mf' ){
+                                    factor = $scope.eval_price( origin_field.general.price, origin_field, pt.from, pt.nbd_fields );
+                                }else{
+                                    factor = origin_field.general.price;
+                                }
                             }else{
-                                factor = origin_field.general.price_breaks[pt.quantity_break.index];
+                                if( origin_field.general.price_type == 'mf' ){
+                                    factor = $scope.eval_price( origin_field.general.price_breaks[pt.quantity_break.index], origin_field, pt.from, pt.nbd_fields );
+                                }else{
+                                    factor = origin_field.general.price_breaks[pt.quantity_break.index];
+                                }
                             }
                             if( angular.isDefined(origin_field.nbd_type) && origin_field.nbd_type == 'dimension' 
                                     && origin_field.general.measure == 'y' /*&& angular.isDefined(origin_field.general.measure_range) && origin_field.general.measure_range.length > 0 */ ){ //CS botak dimention multi component
@@ -6750,17 +6870,33 @@ if( $cart_item_key != ''){ ?>
 	                            var option = origin_field.general.attributes.options[field.value];
 	                            if(option){
 	                                if(origin_field.general.depend_quantity == 'n'){
-	                                    factor = $scope.validate_float( option.price[0] );
+	                                    if( origin_field.general.price_type == 'mf' ){
+                                            factor = $scope.eval_price( option.price[0], origin_field, pt.from, pt.nbd_fields );
+                                        }else{
+                                            factor = $scope.validate_float( option.price[0] );
+                                        }
 	                                }else{
-	                                    factor = $scope.validate_float( option.price[pt.quantity_break.index] );
+	                                    if( origin_field.general.price_type == 'mf' ){
+                                            factor = $scope.eval_price( option.price[pt.quantity_break.index], origin_field, pt.from, pt.nbd_fields );
+                                        }else{
+                                            factor = $scope.validate_float( option.price[pt.quantity_break.index] );
+                                        }
 	                                }
 	                                if( angular.isDefined(option.enable_subattr) && option.enable_subattr == 'on' ){
 	                                    if(angular.isDefined(option.sub_attributes) && option.sub_attributes.length > 0){
 	                                        soption_price = option.sub_attributes[field.sub_value].price;
 	                                        if(origin_field.general.depend_quantity == 'n'){
-	                                            factor += $scope.validate_float( soption_price[0] );
+	                                            if( origin_field.general.price_type == 'mf' ){
+                                                    factor += $scope.eval_price( soption_price[0], origin_field, pt.from, pt.nbd_fields );
+                                                }else{
+                                                    factor += $scope.validate_float( soption_price[0] );
+                                                }
 	                                        }else{
-	                                            factor += $scope.validate_float( soption_price[pt.quantity_break.index] );
+	                                            if( origin_field.general.price_type == 'mf' ){
+                                                    factor += $scope.eval_price( soption_price[pt.quantity_break.index], origin_field, pt.from, pt.nbd_fields );
+                                                }else{
+                                                    factor += $scope.validate_float( soption_price[pt.quantity_break.index] );
+                                                }
 	                                        }
 	                                    }
 	                                }
@@ -6772,9 +6908,17 @@ if( $cart_item_key != ''){ ?>
                             angular.forEach(field.values, function(val, v_index){
                                 var option = origin_field.general.attributes.options[val];
                                 if(origin_field.general.depend_quantity == 'n'){
-                                    factor[v_index] = option.price[0];
+                                    if( origin_field.general.price_type == 'mf' ){
+                                        factor[v_index] = $scope.eval_price( option.price[0], origin_field, pt.from, pt.nbd_fields );
+                                    }else{
+                                        factor[v_index] = option.price[0];
+                                    }
                                 }else{
-                                    factor[v_index] = option.price[pt.quantity_break.index];
+                                    if( origin_field.general.price_type == 'mf' ){
+                                        factor[v_index] = $scope.eval_price( option.price[pt.quantity_break.index], origin_field, pt.from, pt.nbd_fields );
+                                    }else{
+                                        factor[v_index] = option.price[pt.quantity_break.index];
+                                    }
                                 }
                             });
                             field.price = 0;
@@ -6787,6 +6931,7 @@ if( $cart_item_key != ''){ ?>
                                 }
                                 switch(origin_field.general.price_type){
                                     case 'f':
+                                    case 'mf':
                                         field.price += _fac;
                                         if( ! $scope.is_fixed_amount( origin_field ) ) pt.total_price += fac;
                                         break;
@@ -6805,6 +6950,7 @@ if( $cart_item_key != ''){ ?>
                                 fixed_amount += field.price;
                                 field.fixed_amount = true;
                             }
+                            field.price_val = field.price * 1;
                             field.price = $scope.convert_to_wc_price( field.price ); 
                             if(origin_field.general.price_type == 'p+'){
                                 xfactor *= (1 + xfac / 100);
@@ -6822,11 +6968,14 @@ if( $cart_item_key != ''){ ?>
                             }
                             switch(origin_field.general.price_type){
                                 case 'f':
+                                case 'mf':
+                                    field.price_val = _factor;
                                     field.price = $scope.convert_to_wc_price( _factor );
                                     if( ! $scope.is_fixed_amount( origin_field ) ) pt.total_price += factor;
                                     break;
                                 case 'p':
-                                    field.price = $scope.convert_to_wc_price( $scope.basePrice * _factor / 100 );
+                                    field.price_val = $scope.basePrice * _factor / 100;
+                                    field.price = $scope.convert_to_wc_price(field.price_val );
                                     pt.total_price += ($scope.basePrice * factor / 100);
                                     break;
                                 case 'p+':
@@ -6845,11 +6994,13 @@ if( $cart_item_key != ''){ ?>
                                         current_value = current_value - default_val;
                                         if( current_value < 0 ) current_value = 0;
                                     }
-                                    field.price = $scope.convert_to_wc_price( _factor * current_value );
+                                    field.price_val = _factor * current_value;
+                                    field.price = $scope.convert_to_wc_price( field.price_val );
                                     pt.total_price += factor * current_value;
                                     break; 
                                 case 'cp':
-                                    field.price = $scope.convert_to_wc_price( _factor * $scope.validate_int( field.value.length ) );
+                                    field.price_val = _factor * $scope.validate_int( field.value.length );
+                                    field.price = $scope.convert_to_wc_price( field.price_val );
                                     pt.total_price += factor * $scope.validate_int( field.value.length );
                                     break;
                             }
@@ -6863,7 +7014,8 @@ if( $cart_item_key != ''){ ?>
                 pt.total_price += ( ($scope.basePrice + pt.total_price ) * (xfactor - 1 ) );
                 angular.forEach(pt.nbd_fields, function(field){
                     if( field.is_pp == 1 ){
-                        field.price = $scope.convert_to_wc_price( field.price * ($scope.basePrice + pt.total_price ) / ( field.price + 1 ) );
+                        field.price_val = field.price * ($scope.basePrice + pt.total_price ) / ( field.price + 1 );
+                        field.price = $scope.convert_to_wc_price( field.price_val );
                     }
                 });
                 var qty_factor = null;
@@ -7201,6 +7353,54 @@ if( $cart_item_key != ''){ ?>
             }
             return origin_field;
             //End CS botak dimention break
+        };
+        $scope.eval_price = function( formula, origin_field, qty, fields ){
+            price = 0;
+
+            formula = formula.replace(/{quantity}/g, qty);
+            formula = formula.replace(/{price}/g, $scope.basePrice);
+            formula = formula.replace(/{this.value}/g, fields[origin_field.id].value);
+            formula = formula.replace(/{this.value_length}/g, fields[origin_field.id].value.length);
+
+            if (formula.match(/\{(\s)*?field\.([^}]*)}/)) {
+                var matches = formula.match(/\{(\s)*?field\.([^}]*)}/g),
+                pos, reg, field_id, type, val;
+                matches.forEach(function (field) {
+                    match = field.match(/\{(\s)*?field\.([^}]*)}/);
+                    if (undefined !== match[2] && "string" == typeof match[2]) {
+                        pos = match[2].lastIndexOf(".");
+                        val = 0;
+
+                        if (pos !== -1) {
+                            field_id = match[2].substr(0, pos);
+                            type = match[2].substr(pos + 1);
+
+                            switch (type) {
+                                case 'price':
+                                    val = angular.isDefined( fields[field_id].price_val ) ? fields[field_id].price_val : 0;
+                                    break;
+                                case 'value':
+                                    val = fields[field_id].value;
+                                    break;
+                                case 'value_length':
+                                    val = fields[field_id].value.length;
+                                    break;
+                            }
+                        }
+
+                        reg = new RegExp(match[0]);
+                        formula = formula.replace(reg, val + '');
+                    }
+                });
+            }
+
+            try {
+                price = mexp.eval(formula);
+            } catch (e) {
+                price = 0;
+            }
+
+            return price;
         };
         $scope.toggle_group = function( $event ){
             jQuery($event.target).parents( '.nbo-group-body' ).toggleClass('nbo-collapse');
