@@ -3,10 +3,45 @@
 }
 
 .nb-form-login-wrap {
-	padding: 15px;
+	padding: 15px 30px;
 	border: 1px solid #ebebeb;
     width: 100%;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(23,24,24,.05),0 1px 2px rgba(0,0,0,.15);
     margin-bottom: 60px;
+}
+
+.nb-social-log {
+    position: absolute;
+    height: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+}
+
+.nb-social-log span:before {
+    position: absolute;
+    height: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    content: '';
+    width: 1px;
+    background: #CBD4E6;
+    display: block;
+    top: 0;
+}
+.nb-social-log span:after {
+    position: absolute;
+    height: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    content: '';
+    width: 1px;
+    background: #CBD4E6;
+    display: block;
+    bottom: 0;
+}
+.nb-social-login .nsl-container-buttons {
+    width: 100%;
 }
