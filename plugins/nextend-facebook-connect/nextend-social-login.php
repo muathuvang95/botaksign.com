@@ -875,7 +875,6 @@ class NextendSocialLogin {
     }
 
     public static function addLoginFormButtons() {
-        echo 'muath uvang';
         echo self::getRenderedLoginButtons();
     }
 
