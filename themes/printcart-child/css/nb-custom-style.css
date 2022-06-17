@@ -45,3 +45,48 @@
 .nb-social-login .nsl-container-buttons {
     width: 100%;
 }
+
+.nb-social-login .nsl-container-buttons>a {
+    margin-bottom: 20px!important;
+}
+
+.nb-social-login .nb-sign-up-now a {
+    color: #f00;
+    display: inline-block!important;
+    width: auto!important;
+}
+
+@media screen and (max-width: 768px) {
+    .nb-social-log {
+        position: absolute;
+        width: 100%;
+        left: 0;
+        transform:  initial;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .nb-social-log span:before {
+        position: absolute;
+        height: 1px;
+        width: calc(45% - 15px);
+        left: 15px;
+        transform: translateY(-50%);
+        content: '';
+        background: #CBD4E6;
+        display: block;
+        top: 50%;
+    }
+    .nb-social-log span:after {
+        position: absolute;
+        height: 1px;
+        width: calc(45% - 15px);
+        right: 15px;
+        left: initial;
+        transform: translateY(-50%);
+        content: '';
+        background: #CBD4E6;
+        display: block;
+        top: 50%;
+    }
+}
