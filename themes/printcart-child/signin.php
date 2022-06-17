@@ -173,7 +173,7 @@ if (function_exists('yoast_breadcrumb')) { ?>
 								            <div class="nsl-button-label-container">Continue with Google</div>
 								          </div>
 								        </a>
-								        <div>
+								        <div class="nb-sign-up-now">
 								        	<span>Don't have an account </span><a href="<?php echo esc_url(home_url().'sign-up'); ?>">Sign in now</a>
 								        </div>
 								      </div>
