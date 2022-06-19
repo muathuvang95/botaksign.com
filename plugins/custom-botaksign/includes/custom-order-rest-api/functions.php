@@ -2026,6 +2026,10 @@ function v3_convert_time($time) {
     $time = date('h:i (a)' , strtotime($time));
     return $time;
 }
+function v3_convert_time_adv($time) {
+    $time = date('h:i a' , strtotime($time));
+    return $time;
+}
 function v3_delivery_plotter_settings() {
     $shipping_methods = v3_get_shipping_method();
     $period_calc_options = unserialize(get_option('period_calc_options'));
@@ -2602,4 +2606,17 @@ function v3_get_size_link_file($link = '') {
         curl_close($ch);
         return  round($size/(1024*1024) , 2). ' Mb';
     endif;
+}
+
+function botak_convert_format_time($time) {
+    $_time= explode(':' , $time );
+    $hourse = (int)$_time[0];
+    if( $hourse < 12 ) {
+        return $time.'am';
+    } elseif( $hourse == 12 ) {
+        return $time.'pm';
+    } else {
+        $hourse = $hourse - 12;
+        return $hourse.':'.$_time[1].'pm';
+    }
 }
