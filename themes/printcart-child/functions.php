@@ -799,3 +799,5 @@ function botak_cancel_unpaid_orders() {
     }
 }
 add_action( 'woocommerce_cancel_unpaid_orders', 'botak_cancel_unpaid_orders' );
+
+add_action('woocommerce_register_form_end', 'NextendSocialLogin::addLoginFormButtons');
