@@ -4662,7 +4662,7 @@ function botak_show_production_time()
 
                     }
                 }
-                if(strtotime($cacl_time_holiday[$count_holiday]['end-holiday']) + 86399 <= $_calc_production_date) {
+                if( isset($cacl_time_holiday[$count_holiday]) && strtotime($cacl_time_holiday[$count_holiday]['end-holiday']) + 86399 <= $_calc_production_date) {
                    $count_holiday++; 
                    $condition = true;
                 }
@@ -4678,9 +4678,9 @@ function botak_show_production_time()
     ?>
 
     <div class="order-time-info">
-        <div class="title"><b>Your order will be completed by:</b></div>
+        <div class="title"><b>YOUR ORDER WILL BE READY BY :</b></div>
         <?php if ($max_shipping_time == 0) : ?>
-            <div class="time"><?= $production_datetime_completed; ?></div>
+            <div class="time"><b><?= $production_datetime_completed; ?></b></div>
         <?php else: ?>
             <div class="time"><?= $production_date_completed; ?> - <?= $shipping_date_completed ?></div>
         <?php endif; ?>
