@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 ?>
-<div class="cart_totals <?php if (WC()->customer->has_calculated_shipping()) echo 'calculated_shipping'; ?>">
+<div class="cart_totals btk-cart_totals <?php if (WC()->customer->has_calculated_shipping()) echo 'calculated_shipping'; ?>">
 
     <?php do_action('woocommerce_before_cart_totals'); ?>
 
@@ -45,7 +45,7 @@ if (!defined('ABSPATH')) {
                     </tr>
                 <?php endforeach; ?>
 
-                <?php if (WC()->cart->needs_shipping() && WC()->cart->show_shipping()) : ?>
+               <!--  <?php if (WC()->cart->needs_shipping() && WC()->cart->show_shipping()) : ?>
 
                     <?php do_action('woocommerce_cart_totals_before_shipping'); ?>
 
@@ -67,7 +67,7 @@ if (!defined('ABSPATH')) {
                         <th><?php echo esc_html($fee->name); ?></th>
                         <td data-title="<?php echo esc_attr($fee->name); ?>"><?php wc_cart_totals_fee_html($fee); ?></td>
                     </tr>
-                <?php endforeach; ?>
+                <?php endforeach; ?> -->
 
                 <?php
                 if (wc_tax_enabled() && 'excl' === WC()->cart->tax_display_cart) :
@@ -100,6 +100,8 @@ if (!defined('ABSPATH')) {
                 <?php do_action('woocommerce_cart_totals_after_order_total'); ?>
 
             </table>
+
+            <?php botak_show_production_time(); ?>
 
             <?php if (is_user_logged_in()) { ?>
                 <div class="wc-proceed-to-checkout">

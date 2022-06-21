@@ -478,22 +478,38 @@ $keys = array('a5598861647590597', '823a7891647591076', '6d590391647620413', '7f
 
 
 //check File image in design template
-$resources  = (array)json_decode( file_get_contents( 'https://bts-design-template.s3.ap-southeast-1.amazonaws.com/all-file-design-templates-27-04-2022.json' ) );
+// $resources  = (array)json_decode( file_get_contents( 'https://bts-design-template.s3.ap-southeast-1.amazonaws.com/all-file-design-templates-27-04-2022.json' ) );
 
-$newUrlList = [];
-foreach ($resources as $key => $url) {
-    if( strpos( $url, '//botaksign.com/wp-content/uploads/nbdesigner/') ) {
-        $newurl = str_replace('https://botaksign.com/wp-content/uploads/nbdesigner/', 'https://botaksignorder.s3.ap-southeast-1.amazonaws.com/', $url);
-        $newUrlList[] = $newurl;
-    } else if( strpos( $url, '//botaksignorder.s3.ap-southeast-1.amazonaws.com/') ) {
-        $newUrlList[] = $url;
-    } else {
-        if( strpos( $url, '2020/') ) {
-            $newUrlList[] = 'https://botaksignorder.s3.ap-southeast-1.amazonaws.com/temp'.$url;
-        } else {
-            $newUrlList[] = 'https://botaksignorder.s3.ap-southeast-1.amazonaws.com/design-templates'.$url;
-        }
-    }
-}
+// $newUrlList = [];
+// foreach ($resources as $key => $url) {
+//     if( strpos( $url, '//botaksign.com/wp-content/uploads/nbdesigner/') ) {
+//         $newurl = str_replace('https://botaksign.com/wp-content/uploads/nbdesigner/', 'https://botaksignorder.s3.ap-southeast-1.amazonaws.com/', $url);
+//         $newUrlList[] = $newurl;
+//     } else if( strpos( $url, '//botaksignorder.s3.ap-southeast-1.amazonaws.com/') ) {
+//         $newUrlList[] = $url;
+//     } else {
+//         if( strpos( $url, '2020/') ) {
+//             $newUrlList[] = 'https://botaksignorder.s3.ap-southeast-1.amazonaws.com/temp'.$url;
+//         } else {
+//             $newUrlList[] = 'https://botaksignorder.s3.ap-southeast-1.amazonaws.com/design-templates'.$url;
+//         }
+//     }
+// }
+// echo '<pre>';
+// var_dump($newUrlList);
+// 
+
+
+
+//Test 
+//
+
+$order = wc_get_order('44208');
+
+$items = $order->get_items();
+
 echo '<pre>';
-var_dump($newUrlList);
+
+var_dump($items);
+
+echo '</pre>';
