@@ -1,13 +1,8 @@
-.nb-tabs-wrapper {
-	width: 100%;
-	display: block;
-	margin: 0 auto;
-}
-
 .nb-tabs-wrapper .nb-tabs-list {
-	background: #f9f9f9;
-	margin: 0;
-	padding: 0 !important;
+	display: flex;
+	justify-content: space-evenly;
+	max-width: 800px;
+	margin: 0 auto;
 }
 
 .nb-tabs-wrapper .nb-tab-item {
@@ -23,47 +18,14 @@
 	-webkit-transition: all 0.3s ease 0s;
 	-o-transition: all 0.3s ease 0s;
 	transition: all 0.3s ease 0s;
-	width: 25%;
 	margin-left: 0;
 	margin-right: 0;
+	cursor: pointer;
 }
 
-.nb-1-tabs .nb-tab-item {
-	width: 100%;
-}
-
-.nb-tabs-list.nb-2-tabs .nb-tab-item {
-	width: 50%;
-}
-
-.nb-tabs-list.nb-3-tabs .nb-tab-item {
-	width: 33%;
-}
-
-.nb-tabs-list.nb-4-tabs .nb-tab-item {
-	width: 25%;
-}
-
-.nb-tabs-list.nb-5-tabs .nb-tab-item {
-	width: 20%;
-}
-
-.nb-tabs-list.nb-6-tabs .nb-tab-item {
-	width: 16.6%;
-}
-
-.nb-tabs-wrapper .nb-tab-item:before {
-	display: block;
-	content: "";
-	border-bottom: 2px solid transparent;
-	height: 0;
-	position: absolute;
-	top: 0px;
-	left: 0;
-	right: 0;
-	-webkit-transition: border-color 0.3s;
-	-o-transition: border-color 0.3s;
-	transition: border-color 0.3s;
+.nb-tabs-wrapper .nb-tab-line {
+	width: 200px;
+	border-top: 1px #cccccc solid;
 }
 
 .nb-tabs-wrapper .nb-tab-item .nb-tab-number {
@@ -86,6 +48,10 @@
 	font-size: 16px;
 	font-weight: 400;
 	font-family: Arial, Helvetica, sans-serif;
+}
+.nb-tabs-wrapper .nb-tab-item.current .nb-tab-number {
+	background: transparent linear-gradient(180deg, #1BCB3F 0%, #45D242 33%, #7BDB46 78%, #91DF48 100%) 0% 0% no-repeat padding-box;
+	color: #ffffff;
 }
 
 .nb-tabs-wrapper .nb-tab-item .number-text {
@@ -124,7 +90,7 @@
 @media screen and (min-width: 767px) {
 
 	.nb-tabs-wrapper .nb-tabs-list {
-		display: block;
+	/*	display: block;*/
 	}
 
 	.nb-tabs-wrapper .nb-tab-item {
@@ -187,22 +153,8 @@
 	color: #000;
 }
 
-.nb-tabs-wrapper .nb-tab-item.current .nb-tab-number {
-	color: #000;
-	background: #fff;
-	border: 2px solid #ccc;
-}
-
 .nb-tabs-wrapper .nb-tab-item.current .nb-tab-text {
 	display: block;
-}
-
-.nb-tabs-wrapper .nb-tab-item:before {
-	border-bottom-color: #c9c9c9;
-}
-
-.nb-tabs-wrapper .nb-tab-item.visited:before {
-	border-bottom-color: #000;
 }
 
 .nb-tabs-wrapper .nb-tab-item .number-text {
@@ -243,7 +195,7 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 }
 
 .nb-step-item {
-	/*display: none !important;*/
+	display: none !important;
 }
 
 .nb-step-item.current {
@@ -269,6 +221,7 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 	margin-bottom: 20px;
 	text-align: center;
 	cursor: pointer;
+	height: calc(100% - 20px);
 }
 
 .nb-shipping-methods .nb-shipping-method .shipping-method.active {
@@ -281,4 +234,88 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 .nb-shipping-methods .nb-shipping-method .shipping-method-title .nb-price {
 	font-weight: 400;
 	color: #848484;
+}
+
+.nb-footer-action {
+	width: 100%;
+	display: flex;
+	justify-content: flex-end;
+	padding: 20px;
+}
+
+.nb-footer-action .btn-generate-quotation {
+	cursor: pointer;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 60px;
+    border: 1px #45D242 solid;
+    border-radius: 10px;
+    width: auto;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+	box-shadow: 0px 20px 50px #00000029;
+	margin-right: 20px;
+}
+
+.nb-footer-action .nb-button-check-out {
+	cursor: pointer;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 60px;
+    border: 0px;
+    border-radius: 10px;
+    width: auto;
+    background: transparent linear-gradient(180deg, #1BCB3F 0%, #45D242 33%, #7BDB46 78%, #91DF48 100%) 0% 0% no-repeat padding-box;
+	box-shadow: 0px 20px 50px #00000029;
+	margin-right: 20px;
+}
+
+.nb-footer-action .btn-generate-quotation span{
+	color: #000000;
+}
+
+.nb-step-item-billing {
+	background: transparent linear-gradient(179deg, #FFFFFF 0%, #F6F8F7 100%) 0% 0% no-repeat padding-box;
+	border: 1px solid #1BCB3F;
+	border-radius: 10px;
+	padding: 20px;
+}
+.nb-step-item-billing .woocommerce-billing-fields h3 {
+	text-align: center;
+	font-weight: 600;
+}
+.nb-step-item-billing .woocommerce-shipping-fields h3 {
+	text-align: left;
+	font-weight: 600;
+}
+.nb-step-item-billing .woocommerce-billing-fields .form-row label,
+.nb-step-item-billing .woocommerce-shipping-fields .form-row label {
+	display: block;
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+.nb-step-item-billing .woocommerce-billing-fields .form-row .woocommerce-input-wrapper input.input-text,
+.nb-step-item-billing .woocommerce-shipping-fields .form-row .woocommerce-input-wrapper input.input-text {
+	border: 0.28346458077430725px solid #B5B5B5;
+	border-radius: 5px;
+	height: 45px;
+    line-height: 45px;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 100%;
+}
+.nb-step-item-billing .woocommerce-billing-fields .form-row.form-row-first,
+.nb-step-item-billing .woocommerce-shipping-fields .form-row.form-row-first {
+	width: 50%;
+    float: left;
+    padding-right: 15px;
+}
+.nb-step-item-billing .woocommerce-billing-fields .form-row.form-row-last,
+.nb-step-item-billing .woocommerce-shipping-fields .form-row.form-row-last {
+	padding-left: 15px;
+	width: 50%;
+    float: left;
+}
+.nb-step-item-billing .woocommerce-billing-fields .form-row.form-row-wide,
+.nb-step-item-billing .woocommerce-shipping-fields .form-row.form-row-wide {
+	width: 100%%;
 }
