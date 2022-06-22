@@ -4,6 +4,7 @@
 add_action( 'nb_step_content_login', 'nb_step_content_login', 10 );
 add_action( 'nb_step_content_shipping', 'nb_step_content_shipping', 10 );
 add_action( 'nb_step_content_billing', 'nb_step_content_billing', 10 );
+add_action( 'nb_step_content_payment', 'nb_step_content_payment', 10 );
 
 if ( ! function_exists( 'nb_step_content_shipping' ) ) {
 
@@ -50,9 +51,40 @@ if ( ! function_exists( 'nb_step_content_payment' ) ) {
 	 * The content of the Order Payment step.
 	 */
 	function nb_step_content_payment() {
-		echo '<h3 id="payment_heading">' . esc_html__( 'Payment', 'woocommerce' ) . '</h3>';
-		do_action( 'nb-woocommerce_checkout_payment' );
-		do_action( 'woocommerce_checkout_after_order_review' );
+		if ( WC()->cart->needs_payment() ) {
+			$available_gateways = WC()->payment_gateways()->get_available_payment_gateways();
+			WC()->payment_gateways()->set_current_gateway( $available_gateways );
+		} else {
+			$available_gateways = array();
+		}
+
+		$checkout = WC()->checkout();
+
+		?>
+		<div id="payment" class="woocommerce-checkout-payment nb-woocommerce-checkout-payment">
+			<?php if ( WC()->cart->needs_payment() ) : ?>
+				<ul class="wc_payment_methods payment_methods methods">
+					<?php
+					if ( ! empty( $available_gateways ) ) {
+						foreach ( $available_gateways as $gateway ) {
+							?>
+							<li class="wc_payment_method payment_method_<?php echo esc_attr( $gateway->id ); $gateway->chosen ? 'active' : ''  ?>">
+								<input id="payment_method_<?php echo esc_attr( $gateway->id ); ?>" type="radio" class="input-radio" name="payment_method" value="<?php echo esc_attr( $gateway->id ); ?>" <?php checked( $gateway->chosen, true ); ?> data-order_button_text="<?php echo esc_attr( $gateway->order_button_text ); ?>" />
+
+								<label for="payment_method_<?php echo esc_attr( $gateway->id ); ?>">
+									<img src="<?php echo get_stylesheet_directory_uri(). '/woocommerce/checkout/nb-step-checkout/assets/logo/' . $gateway->id . '.jpg'; ?>">
+								</label>
+							</li>
+							<?php
+						}
+					} else {
+						echo '<li class="woocommerce-notice woocommerce-notice--info woocommerce-info">' . apply_filters( 'woocommerce_no_available_payment_methods_message', WC()->customer->get_billing_country() ? esc_html__( 'Sorry, it seems that there are no available payment methods for your state. Please contact us if you require assistance or wish to make alternate arrangements.', 'woocommerce' ) : esc_html__( 'Please fill in your details above to see available payment methods.', 'woocommerce' ) ) . '</li>'; // @codingStandardsIgnoreLine
+					}
+					?>
+				</ul>
+			<?php endif; ?>
+		</div>
+		<?php
 	}
 }
 
@@ -64,6 +96,9 @@ if ( ! function_exists( 'nb_step_content_billing' ) ) {
 	function nb_step_content_billing() {
 		do_action( 'woocommerce_checkout_before_customer_details' );
 		do_action( 'woocommerce_checkout_billing' );
+
+		do_action( 'woocommerce_checkout_shipping' );
+		do_action( 'woocommerce_checkout_after_customer_details' );
 	}
 }
 
