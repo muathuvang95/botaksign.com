@@ -201,6 +201,13 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 .nb-step-item.current {
 	display: block !important;
 }
+.nb-step-item-inner {
+	display: none !important;
+}
+
+.nb-step-item-inner.current {
+	display: block !important;
+}
 
 .woocommerce-checkout form.login .wc-social-login {
 	display: block !important;
@@ -212,15 +219,12 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 }
 
 .nb-shipping-methods .nb-shipping-method .shipping-method {
-	padding-top: 40px;
-	padding-bottom: 40px;
 	background: transparent linear-gradient(176deg, #FFFFFF 0%, #F6F8F7 100%) 0% 0% no-repeat padding-box;
 	box-shadow: 0px 0px 12px #0000001F;
 	border: 1px solid #DEDEDE;
 	border-radius: 10px;
 	margin-bottom: 20px;
 	text-align: center;
-	cursor: pointer;
 	height: calc(100% - 20px);
 }
 
@@ -228,8 +232,18 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 	border: 1px solid #1BCB3F;
 }
 
+.nb-shipping-methods .nb-shipping-method .shipping-method input {
+	margin: 0;
+}
+
 .nb-shipping-methods .nb-shipping-method .shipping-method-title {
 	font-weight: 700;
+	width: 100%;
+    height: 140px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .nb-shipping-methods .nb-shipping-method .shipping-method-title .nb-price {
 	font-weight: 400;
@@ -318,4 +332,27 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 .nb-step-item-billing .woocommerce-billing-fields .form-row.form-row-wide,
 .nb-step-item-billing .woocommerce-shipping-fields .form-row.form-row-wide {
 	width: 100%%;
+}
+
+.nb-woocommerce-checkout-payment .wc_payment_method_wrap {
+	background: transparent linear-gradient(177deg, #FFFFFF 0%, #F6F8F7 100%) 0% 0% no-repeat padding-box;
+	box-shadow: 0px 0px 12px #0000001F;
+	border: 1px solid #EEECEC;
+	border-radius: 10px;
+	margin-bottom: 20px;
+	overflow: hidden;
+	cursor: pointer;
+}
+.nb-woocommerce-checkout-payment .wc_payment_method_wrap.active {
+	border: 1px solid #1BCB3F;
+}
+.nb-woocommerce-checkout-payment .wc_payment_method_wrap img{
+	width: 100%;
+	height: 100%;
+	cursor: pointer;
+}
+.nb-woocommerce-checkout-payment .wc_payment_method_wrap label{
+	width: 100%;
+	height: 100%;
+	cursor: pointer;
 }

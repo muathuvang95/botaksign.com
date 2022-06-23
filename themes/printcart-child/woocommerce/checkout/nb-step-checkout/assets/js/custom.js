@@ -4,6 +4,9 @@ jQuery(window).ready(function($){
 	var nb_checkout = {
 		$tabs			: $( '.nb-tab-item' ),
 		$sections		: $( '.nb-step-item' ),
+		$payment_method	: $( '.nb-woocommerce-checkout-payment .wc_payment_method_wrap' ),
+		$shipping_method	: $( '.nb-shipping-methods .shipping-method' ),
+		$step_inner		: $( '.nb-step-item-inner' ),
 		$buttons		: $( '.nb-nav-button' ),
 		$checkout_form	: $( 'form.woocommerce-checkout' ),
 		$coupon_form	: $( '#checkout_coupon' ),
@@ -20,14 +23,52 @@ jQuery(window).ready(function($){
 
 			$( '.nb-step-item:first' ).addClass( 'current' );
 
+			$( '.nb-step-item-inner:first' ).addClass( 'current' );
+
 			// Click on "next" button
 			$( '#nb-next, #nb-skip-login').on( 'click', function() {
-				self.switch_tab( self.current_index() + 1);
+				if(self.current_tab() === "payment") {
+					$( 'form.checkout' ).submit();
+				} else if (self.current_tab() === "shipping") {
+					var shipping_method = $( self.$shipping_method.filter( '.active' ) ).data('shipping-method');
+					var cur_step_inner = self.$step_inner.index( self.$step_inner.filter( '.current' ) ) ? self.$step_inner.index( self.$step_inner.filter( '.current' ) ) : 0;
+
+					if(shipping_method !== 'Self-collection' && cur_step_inner < self.$step_inner.length - 1 ) {
+						self.$step_inner.removeClass( 'current' );
+						self.$step_inner.eq( cur_step_inner + 1 ).addClass( 'current' );
+					} else {
+						self.switch_tab( self.current_index() + 1);
+					}
+				} else {
+					self.switch_tab( self.current_index() + 1);
+				}
 			});
 
 			// Click on "previous" button
 			$( '#nb-prev' ).on( 'click', function() {
+				if (self.current_tab() === "shipping") {
+					var shipping_method = $( self.$shipping_method.filter( '.active' ) ).data('shipping-method');
+					var cur_step_inner = self.$step_inner.index( self.$step_inner.filter( '.current' ) ) ? self.$step_inner.index( self.$step_inner.filter( '.current' ) ) : 0;
+
+					if(shipping_method !== 'Self-collection' && cur_step_inner > 0 ) {
+						self.$step_inner.removeClass( 'current' );
+						self.$step_inner.eq( cur_step_inner - 1 ).addClass( 'current' );
+					} else {
+						self.switch_tab( self.current_index() + 1);
+					}
+				}
 				self.switch_tab( self.current_index() - 1);
+			});
+
+
+			$( '.nb-woocommerce-checkout-payment .wc_payment_method_wrap').on( 'click', function() {
+				self.$payment_method.removeClass('active');
+				$(this).addClass('active');
+			});
+
+			$( '.nb-shipping-methods .shipping-method').on( 'click', function() {
+				self.$shipping_method.removeClass('active');
+				$(this).addClass('active');
 			});
 
 			// After submit, switch tabs where the invalid fields are
@@ -96,6 +137,10 @@ jQuery(window).ready(function($){
 		current_index: function() {
 
 			return this.$sections.index( this.$sections.filter( '.current' ) );
+		},
+		current_tab: function() {
+
+			return $( this.$tabs.filter( '.current' ) ).data('step-title');
 		},
 		scroll_top: function() {
 			// scroll to top
