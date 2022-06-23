@@ -25,17 +25,21 @@ if ( ! function_exists( 'nb_step_content_shipping' ) ) {
 				<div id="nb_shipping_method" class="row nb-shipping-methods">
 					<?php foreach ( $available_methods as $method ) : ?>
 						<div class="col-md-6 nb-shipping-method">
-							<div class="shipping-method <?php echo $method->id == $chosen_method ? 'active' : ''; ?>">
+							<div class="shipping-method <?php echo $method->id == $chosen_method ? 'active' : ''; ?>" data-shipping-method="<?php echo esc_attr($method->get_label()); ?>">
 
 							<?php
-								printf( '<input type="hidden" name="shipping_method[%1$d]" data-index="%1$d" id="shipping_method_%1$d_%2$s" value="%3$s"/>', $index, esc_attr( sanitize_title( $method->id ) ), esc_attr( $method->id ) ); // WPCS: XSS ok.
-								printf( '<div class="shipping-method-title">%1$s</div>', nb_cart_totals_shipping_method_label( $method ) ); // WPCS: XSS ok.
+								printf( '<input type="radio" hidden name="shipping_method[%1$d]" data-index="%1$d" id="shipping_method_%1$d_%2$s" value="%3$s" %4$s />', $index, esc_attr( sanitize_title( $method->id ) ), esc_attr( $method->id ), checked( $method->id, $chosen_method, false ) ); // WPCS: XSS ok.
+								printf( '<label class="shipping-method-title" for="shipping_method_%1$s_%2$s">%3$s</label>', $index, esc_attr( sanitize_title( $method->id ) ), nb_cart_totals_shipping_method_label( $method ) ); // 
 								do_action( 'woocommerce_after_shipping_rate', $method, $index );
 							?>
 
 							</div>
 						</div>
 					<?php endforeach; ?>
+				</div>
+				<div class="form-row place-order">
+
+					<?php botak_show_production_time(); ?>
 				</div>
 			<?php 
 			}
@@ -61,28 +65,29 @@ if ( ! function_exists( 'nb_step_content_payment' ) ) {
 		$checkout = WC()->checkout();
 
 		?>
-		<div id="payment" class="woocommerce-checkout-payment nb-woocommerce-checkout-payment">
+		<div class="nb-woocommerce-checkout-payment">
 			<?php if ( WC()->cart->needs_payment() ) : ?>
-				<ul class="wc_payment_methods payment_methods methods">
+				<div class="row wc_payment_methods payment_methods methods">
 					<?php
 					if ( ! empty( $available_gateways ) ) {
 						foreach ( $available_gateways as $gateway ) {
 							?>
-							<li class="wc_payment_method payment_method_<?php echo esc_attr( $gateway->id ); $gateway->chosen ? 'active' : ''  ?>">
-								<input id="payment_method_<?php echo esc_attr( $gateway->id ); ?>" type="radio" class="input-radio" name="payment_method" value="<?php echo esc_attr( $gateway->id ); ?>" <?php checked( $gateway->chosen, true ); ?> data-order_button_text="<?php echo esc_attr( $gateway->order_button_text ); ?>" />
+							<div class="col-md-6 wc_payment_method payment_method_<?php echo esc_attr( $gateway->id );   ?>">
+								<div class="wc_payment_method_wrap<?php echo $gateway->chosen ? ' active' : '';  ?>">
+									<input hidden id="payment_method_<?php echo esc_attr( $gateway->id ); ?>" type="radio" class="input-radio" name="payment_method" value="<?php echo esc_attr( $gateway->id ); ?>" data-order_button_text="<?php echo esc_attr( $gateway->order_button_text ); ?>" <?php checked( $gateway->chosen, true ); ?> />
 
-								<label for="payment_method_<?php echo esc_attr( $gateway->id ); ?>">
-									<img src="<?php echo get_stylesheet_directory_uri(). '/woocommerce/checkout/nb-step-checkout/assets/logo/' . $gateway->id . '.jpg'; ?>">
-								</label>
-							</li>
+									<label for="payment_method_<?php echo esc_attr( $gateway->id ); ?>">
+										<img src="<?php echo get_stylesheet_directory_uri(). '/woocommerce/checkout/nb-step-checkout/assets/logo/' . $gateway->id . '.jpg'; ?>">
+									</label>
+								</div>
+							</div>
 							<?php
 						}
-					} else {
-						echo '<li class="woocommerce-notice woocommerce-notice--info woocommerce-info">' . apply_filters( 'woocommerce_no_available_payment_methods_message', WC()->customer->get_billing_country() ? esc_html__( 'Sorry, it seems that there are no available payment methods for your state. Please contact us if you require assistance or wish to make alternate arrangements.', 'woocommerce' ) : esc_html__( 'Please fill in your details above to see available payment methods.', 'woocommerce' ) ) . '</li>'; // @codingStandardsIgnoreLine
-					}
+					} 
 					?>
-				</ul>
+				</div>
 			<?php endif; ?>
+			<?php wp_nonce_field( 'woocommerce-process_checkout', 'woocommerce-process-checkout-nonce' ); ?>
 		</div>
 		<?php
 	}
