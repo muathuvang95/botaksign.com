@@ -801,3 +801,49 @@ function botak_cancel_unpaid_orders() {
 add_action( 'woocommerce_cancel_unpaid_orders', 'botak_cancel_unpaid_orders' );
 
 add_action('woocommerce_register_form_end', 'NextendSocialLogin::addLoginFormButtons');
+
+add_action( 'wp_ajax_nb_update_order_review' , 'nb_update_order_review' );
+add_action( 'wp_ajax_nopriv_nb_update_order_review' , 'nb_update_order_review' );
+
+function nb_update_order_review() {
+
+    $chosen_shipping_methods = WC()->session->get( 'chosen_shipping_methods' );
+
+    $posted_shipping_methods = isset( $_POST['shipping_method'] ) ? wc_clean( wp_unslash( $_POST['shipping_method'] ) ) : array();
+
+    if ( is_array( $posted_shipping_methods ) ) {
+        foreach ( $posted_shipping_methods as $i => $value ) {
+            $chosen_shipping_methods[ $i ] = $value;
+        }
+    }
+
+    $rate = WC()->session->get('shipping_for_package_0')['rates'];
+
+    $shipping_method_label = '';
+    if ( isset($posted_shipping_methods[0]) && isset($rate[$posted_shipping_methods[0]]) && $rate[$posted_shipping_methods[0]]->label ) {
+        $shipping_method_label = $rate[$posted_shipping_methods[0]]->label;
+    }
+
+    WC()->session->set( 'chosen_shipping_methods', $chosen_shipping_methods );
+
+    WC()->customer->save();
+
+    // Calculate shipping before totals. This will ensure any shipping methods that affect things like taxes are chosen prior to final totals being calculated. Ref: #22708.
+    WC()->cart->calculate_shipping();
+    WC()->cart->calculate_totals();
+
+    ob_start();
+    botak_show_production_time($shipping_method_label);
+    $botak_show_production_time = ob_get_clean();
+
+    wp_send_json(
+        array(
+            'result'    => count( $posted_shipping_methods ) > 0 ? 'success' : 'failure',
+            'totals_price' => WC()->cart->get_total(),
+            'time_delivery' => $botak_show_production_time,
+        )
+    );
+
+    wp_die();
+
+}

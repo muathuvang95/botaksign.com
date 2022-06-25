@@ -25,8 +25,14 @@ jQuery(window).ready(function($){
 
 			$( '.nb-step-item-inner:first' ).addClass( 'current' );
 
+			if(self.current_tab() === "shipping") {
+				$('#nb-prev').hide();
+			}
+
 			// Click on "next" button
 			$( '#nb-next, #nb-skip-login').on( 'click', function() {
+				$('#nb-prev').show();
+
 				if(self.current_tab() === "payment") {
 					$( 'form.checkout' ).submit();
 				} else if (self.current_tab() === "shipping") {
@@ -42,13 +48,19 @@ jQuery(window).ready(function($){
 				} else {
 					self.switch_tab( self.current_index() + 1);
 				}
+				
 			});
+
+			// Change shipping method
+			
+			this.$checkout_form.on( 'change', 'input[name^="shipping_method"]', this.trigger_update_checkout );
 
 			// Click on "previous" button
 			$( '#nb-prev' ).on( 'click', function() {
+				var cur_step_inner = self.$step_inner.index( self.$step_inner.filter( '.current' ) ) ? self.$step_inner.index( self.$step_inner.filter( '.current' ) ) : 0;
+
 				if (self.current_tab() === "shipping") {
 					var shipping_method = $( self.$shipping_method.filter( '.active' ) ).data('shipping-method');
-					var cur_step_inner = self.$step_inner.index( self.$step_inner.filter( '.current' ) ) ? self.$step_inner.index( self.$step_inner.filter( '.current' ) ) : 0;
 
 					if(shipping_method !== 'Self-collection' && cur_step_inner > 0 ) {
 						self.$step_inner.removeClass( 'current' );
@@ -132,6 +144,43 @@ jQuery(window).ready(function($){
 					self.wc_country_select_select2();
 				});
 			}
+
+		},
+		trigger_update_checkout: function() {
+			var shipping_methods = {};
+			// eslint-disable-next-line max-len
+			$( 'select.shipping_method, input[name^="shipping_method"][type="radio"]:checked, input[name^="shipping_method"][type="hidden"]' ).each( function() {
+				shipping_methods[ $( this ).data( 'index' ) ] = $( this ).val();
+			} );
+
+			$( '.woocommerce-checkout' ).addClass( 'processing' ).block({
+				message: null,
+				overlayCSS: {
+					background: '#fff',
+					opacity: 0.6
+				}
+			});
+
+			$.ajax({
+				type:		'POST',
+				url:		window.ajax_url,
+				data : {
+                    action: 'nb_update_order_review',
+                    shipping_method : shipping_methods,
+                },
+				success:	function( data ) {
+
+					$( '.woocommerce-checkout' ).removeClass( 'processing' ).unblock();
+
+					if(data.totals_price) {
+						$('.nb-shipping-order-details .nb-price').html(data.totals_price)
+					}
+					if(data.time_delivery) {
+						$('.nb-shipping-order-details .nb-delivery-detail').html(data.time_delivery)
+					}
+				}
+
+			});
 
 		},
 		current_index: function() {
