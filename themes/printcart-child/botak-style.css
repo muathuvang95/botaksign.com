@@ -2996,6 +2996,9 @@ footer.site-footer .footer-top-section .form .submit_b {
     font-size: 16px;
     line-height: 16px;
 }
+.woocommerce-cart-form .btk-action-table span.btk-title-action{
+    display: block;
+}
 .woocommerce-cart-form .product-item .btk-product-name .product-link {
     font-size: 18px;
     line-height: 24px;
@@ -3018,6 +3021,7 @@ footer.site-footer .footer-top-section .form .submit_b {
     border: none;
     padding: 0;
 }
+
 /*End Custom cart 19/06/2022*/
 
 
@@ -3161,6 +3165,13 @@ footer.site-footer .footer-top-section .form .submit_b {
         padding: 7px 8px;
         background-color: #F3F3F3;
         border-radius: 5px;
+    }
+    .woocommerce-cart-form .btk-action-table span.btk-title-action{
+        display: none;
+    }
+    .woocommerce-cart-form .btk-action-table .btk-product-edit:hover span.btk-title-action,
+    .woocommerce-cart-form .btk-action-table .btk-product-remove:hover span.btk-title-action{
+        display: inline-block;
     }
     /*End Custom cart 19/06/2022*/
 
