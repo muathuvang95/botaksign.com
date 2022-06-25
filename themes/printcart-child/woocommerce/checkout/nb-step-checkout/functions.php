@@ -38,8 +38,23 @@ if ( ! function_exists( 'nb_step_content_shipping' ) ) {
 					<?php endforeach; ?>
 				</div>
 				<div class="form-row place-order">
-
-					<?php botak_show_production_time(); ?>
+					<div class="row nb-shipping-order-details">
+						<div class="col-md-6"></div>
+						<div class="col-md-6">
+							<div class="nb-delivery-detail">
+								<?php botak_show_production_time(); ?>
+							</div>
+							<div class="nb-total-price">
+								<div class="nb-title">
+									TOTAL
+								</div>
+								<div class="nb-price">
+									<?php echo WC()->cart->get_total(); ?>
+								</div>
+							</div>
+						</div>				
+					</div>
+					
 				</div>
 			<?php 
 			}
@@ -158,93 +173,4 @@ function nb_cart_totals_shipping_method_label( $method ) {
 
 	return apply_filters( 'woocommerce_cart_shipping_method_full_label', $label, $method );
 }
-
-// function nb_update_order_shipping_methob() {
-// 	check_ajax_referer( 'update-order-review', 'security' );
-
-// 	wc_maybe_define_constant( 'WOOCOMMERCE_CHECKOUT', true );
-
-// 	if ( WC()->cart->is_empty() && ! is_customize_preview() && apply_filters( 'woocommerce_checkout_update_order_review_expired', true ) ) {
-// 		self::update_order_review_expired();
-// 	}
-
-// 	do_action( 'woocommerce_checkout_update_order_review', isset( $_POST['post_data'] ) ? wp_unslash( $_POST['post_data'] ) : '' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-
-// 	$chosen_shipping_methods = WC()->session->get( 'chosen_shipping_methods' );
-// 	$posted_shipping_methods = isset( $_POST['shipping_method'] ) ? wc_clean( wp_unslash( $_POST['shipping_method'] ) ) : array();
-
-// 	if ( is_array( $posted_shipping_methods ) ) {
-// 		foreach ( $posted_shipping_methods as $i => $value ) {
-// 			$chosen_shipping_methods[ $i ] = $value;
-// 		}
-// 	}
-
-// 	WC()->session->set( 'chosen_shipping_methods', $chosen_shipping_methods );
-// 	WC()->session->set( 'chosen_payment_method', empty( $_POST['payment_method'] ) ? '' : wc_clean( wp_unslash( $_POST['payment_method'] ) ) );
-// 	WC()->customer->set_props(
-// 		array(
-// 			'billing_country'   => isset( $_POST['country'] ) ? wc_clean( wp_unslash( $_POST['country'] ) ) : null,
-// 			'billing_state'     => isset( $_POST['state'] ) ? wc_clean( wp_unslash( $_POST['state'] ) ) : null,
-// 			'billing_postcode'  => isset( $_POST['postcode'] ) ? wc_clean( wp_unslash( $_POST['postcode'] ) ) : null,
-// 			'billing_city'      => isset( $_POST['city'] ) ? wc_clean( wp_unslash( $_POST['city'] ) ) : null,
-// 			'billing_address_1' => isset( $_POST['address'] ) ? wc_clean( wp_unslash( $_POST['address'] ) ) : null,
-// 			'billing_address_2' => isset( $_POST['address_2'] ) ? wc_clean( wp_unslash( $_POST['address_2'] ) ) : null,
-// 		)
-// 	);
-
-// 	if ( wc_ship_to_billing_address_only() ) {
-// 		WC()->customer->set_props(
-// 			array(
-// 				'shipping_country'   => isset( $_POST['country'] ) ? wc_clean( wp_unslash( $_POST['country'] ) ) : null,
-// 				'shipping_state'     => isset( $_POST['state'] ) ? wc_clean( wp_unslash( $_POST['state'] ) ) : null,
-// 				'shipping_postcode'  => isset( $_POST['postcode'] ) ? wc_clean( wp_unslash( $_POST['postcode'] ) ) : null,
-// 				'shipping_city'      => isset( $_POST['city'] ) ? wc_clean( wp_unslash( $_POST['city'] ) ) : null,
-// 				'shipping_address_1' => isset( $_POST['address'] ) ? wc_clean( wp_unslash( $_POST['address'] ) ) : null,
-// 				'shipping_address_2' => isset( $_POST['address_2'] ) ? wc_clean( wp_unslash( $_POST['address_2'] ) ) : null,
-// 			)
-// 		);
-// 	} else {
-// 		WC()->customer->set_props(
-// 			array(
-// 				'shipping_country'   => isset( $_POST['s_country'] ) ? wc_clean( wp_unslash( $_POST['s_country'] ) ) : null,
-// 				'shipping_state'     => isset( $_POST['s_state'] ) ? wc_clean( wp_unslash( $_POST['s_state'] ) ) : null,
-// 				'shipping_postcode'  => isset( $_POST['s_postcode'] ) ? wc_clean( wp_unslash( $_POST['s_postcode'] ) ) : null,
-// 				'shipping_city'      => isset( $_POST['s_city'] ) ? wc_clean( wp_unslash( $_POST['s_city'] ) ) : null,
-// 				'shipping_address_1' => isset( $_POST['s_address'] ) ? wc_clean( wp_unslash( $_POST['s_address'] ) ) : null,
-// 				'shipping_address_2' => isset( $_POST['s_address_2'] ) ? wc_clean( wp_unslash( $_POST['s_address_2'] ) ) : null,
-// 			)
-// 		);
-// 	}
-
-// 	if ( isset( $_POST['has_full_address'] ) && wc_string_to_bool( wc_clean( wp_unslash( $_POST['has_full_address'] ) ) ) ) {
-// 		WC()->customer->set_calculated_shipping( true );
-// 	} else {
-// 		WC()->customer->set_calculated_shipping( false );
-// 	}
-
-// 	WC()->customer->save();
-
-// 	// Calculate shipping before totals. This will ensure any shipping methods that affect things like taxes are chosen prior to final totals being calculated. Ref: #22708.
-// 	WC()->cart->calculate_shipping();
-// 	WC()->cart->calculate_totals();
-
-// 	// Get messages if reload checkout is not true.
-// 	$reload_checkout = isset( WC()->session->reload_checkout ) ? true : false;
-// 	if ( ! $reload_checkout ) {
-// 		$messages = wc_print_notices( true );
-// 	} else {
-// 		$messages = '';
-// 	}
-
-// 	unset( WC()->session->refresh_totals, WC()->session->reload_checkout );
-
-// 	wp_send_json(
-// 		array(
-// 			'result'    => empty( $messages ) ? 'success' : 'failure',
-// 			'messages'  => $messages,
-// 		)
-// 	);
-// }
-
-?>
 

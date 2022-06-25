@@ -4364,7 +4364,7 @@ function botak_get_chosen_shipping_instance_id()
 }
 
 add_action('woocommerce_checkout_after_terms_and_conditions', 'botak_show_production_time');
-function botak_show_production_time()
+function botak_show_production_time($shipping_method_label = '')
 {
     //Get shipping duration of order
     $shipping_duration = maybe_unserialize(get_option('woocommerce_shipping_duration'));
@@ -4669,6 +4669,7 @@ function botak_show_production_time()
             }
         }
     }
+
     $calc_production_date = date('H:i Y/m/d', $_calc_production_date);
     $time_delivered = $max_shipping_time * 60 + strtotime($calc_production_date);
     $calc_shipping_date = date("H:i Y/m/d", $time_delivered);
@@ -4678,7 +4679,7 @@ function botak_show_production_time()
     ?>
 
     <div class="order-time-info">
-        <div class="title"><b>YOUR ORDER WILL BE READY BY :</b></div>
+        <div class="title"><b>YOUR ORDER WILL BE <?php echo $shipping_method_label && $shipping_method_label !== 'Self-collection' ? 'DELIVER' : 'READY'; ?> BY :</b></div>
         <?php if ($max_shipping_time == 0) : ?>
             <div class="time"><b><?= $production_datetime_completed; ?></b></div>
         <?php else: ?>
