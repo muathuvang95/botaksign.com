@@ -4364,7 +4364,7 @@ function botak_get_chosen_shipping_instance_id()
 }
 
 add_action('woocommerce_checkout_after_terms_and_conditions', 'botak_show_production_time');
-function botak_show_production_time()
+function botak_show_production_time($shipping_method_label = '')
 {
     //Get shipping duration of order
     $shipping_duration = maybe_unserialize(get_option('woocommerce_shipping_duration'));
@@ -4662,13 +4662,14 @@ function botak_show_production_time()
 
                     }
                 }
-                if(strtotime($cacl_time_holiday[$count_holiday]['end-holiday']) + 86399 <= $_calc_production_date) {
+                if( isset($cacl_time_holiday[$count_holiday]) && strtotime($cacl_time_holiday[$count_holiday]['end-holiday']) + 86399 <= $_calc_production_date) {
                    $count_holiday++; 
                    $condition = true;
                 }
             }
         }
     }
+
     $calc_production_date = date('H:i Y/m/d', $_calc_production_date);
     $time_delivered = $max_shipping_time * 60 + strtotime($calc_production_date);
     $calc_shipping_date = date("H:i Y/m/d", $time_delivered);
@@ -4678,9 +4679,9 @@ function botak_show_production_time()
     ?>
 
     <div class="order-time-info">
-        <div class="title"><b>Your order will be completed by:</b></div>
+        <div class="title"><b>YOUR ORDER WILL BE <?php echo $shipping_method_label && $shipping_method_label !== 'Self-collection' ? 'DELIVER' : 'READY'; ?> BY :</b></div>
         <?php if ($max_shipping_time == 0) : ?>
-            <div class="time"><?= $production_datetime_completed; ?></div>
+            <div class="time"><b><?= $production_datetime_completed; ?></b></div>
         <?php else: ?>
             <div class="time"><?= $production_date_completed; ?> - <?= $shipping_date_completed ?></div>
         <?php endif; ?>

@@ -1156,7 +1156,7 @@ function calc_production_date($order_created_at, $max_production_time)
 
                     }
                 }
-                if(strtotime($cacl_time_holiday[$count_holiday]['end-holiday']) + 86399 <= $_calc_production_date) {
+                if(isset($cacl_time_holiday[$count_holiday]) && strtotime($cacl_time_holiday[$count_holiday]['end-holiday']) + 86399 <= $_calc_production_date) {
                    $count_holiday++; 
                    $condition = true;
                 }
