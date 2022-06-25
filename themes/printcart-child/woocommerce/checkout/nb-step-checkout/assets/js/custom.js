@@ -14,6 +14,7 @@ jQuery(window).ready(function($){
 		current_step	: $( 'ul.nb-tabs-list' ).data( 'current-title' ),
 
 		init: function() {
+			var cout_step = 0;
 			var self = this;
 
 			// add the "nb_switch_tab" trigger
@@ -25,14 +26,17 @@ jQuery(window).ready(function($){
 
 			$( '.nb-step-item-inner:first' ).addClass( 'current' );
 
-			if(self.current_tab() === "shipping") {
-				$('#nb-prev').hide();
-			}
-
 			// Click on "next" button
 			$( '#nb-next, #nb-skip-login').on( 'click', function() {
-				$('#nb-prev').show();
-
+				if(cout_step < 4) {
+					cout_step++;
+				} else {
+					cout_step = 4;
+				}
+				if(cout_step > 1) {
+					$('#nb-prev').removeClass('hidden');
+					$('.btn-generate-quotation').addClass('hidden');
+				}
 				if(self.current_tab() === "payment") {
 					$( 'form.checkout' ).submit();
 				} else if (self.current_tab() === "shipping") {
@@ -57,6 +61,15 @@ jQuery(window).ready(function($){
 
 			// Click on "previous" button
 			$( '#nb-prev' ).on( 'click', function() {
+				if(cout_step > 0) {
+					cout_step--;
+				} else {
+					cout_step = 0;
+				}
+				if(cout_step < 2) {
+					$('#nb-prev').addClass('hidden');
+					$('.btn-generate-quotation').removeClass('hidden');
+				}
 				var cur_step_inner = self.$step_inner.index( self.$step_inner.filter( '.current' ) ) ? self.$step_inner.index( self.$step_inner.filter( '.current' ) ) : 0;
 
 				if (self.current_tab() === "shipping") {
