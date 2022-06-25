@@ -20,6 +20,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <dl class="variation">
 	<?php foreach ( $item_data as $data ) : ?>
-		<dd class="<?php echo sanitize_html_class( 'variation-' . $data['key'] ); ?>"><?php echo wp_kses_post( $data['key'] ); ?>: <?php echo wp_kses_post( $data['display'] ); ?></dd>
+		<dd class="<?php echo sanitize_html_class( 'variation-' . $data['key'] ); ?>"><?php echo wp_kses_post( $data['key'] ); ?>: <span class="variation-value"><?php echo wp_kses_post( $data['display'] ); ?><span></dd>
 	<?php endforeach; ?>
 </dl>
