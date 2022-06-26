@@ -1584,9 +1584,9 @@ function print_footer_botaksign()
                 });
             }
             $(".item-quotation-cart .btn-view-detail-cart").click(function () {
-                $(this).toggleClass('active');
-                $(this).find('span').text(($(this).hasClass('active') ? 'Hide' : 'View'));
-                $(this).parents('.item-quotation-cart').find('.wrap-detail-cart').toggle();
+                $('.nb-hidden.nb-action-accordion').toggleClass('hidden');
+                $('.nb-show.nb-action-accordion').toggleClass('hidden');
+                $('.nb-accordion-quotation .accordion-button').trigger( "click" );
             });
             $(".submit-upload-design").click(function () {
                 $('.single-product .single-product-wrap .wrap-price-pro').css('margin-top', '30px');
@@ -3776,166 +3776,8 @@ function iconic_add_my_account_endpoint()
 add_action('init', 'iconic_add_my_account_endpoint');
 
 function iconic_quotations_endpoint_content()
-{
-    global $wpdb, $cxecrt, $cxecrt_options;
-    $user_ID = get_current_user_id();
-    $arr_object = $wpdb->get_results("SELECT ID, post_date FROM $wpdb->posts WHERE (post_author = " . $user_ID . " AND post_status = 'publish' AND post_type = 'stored-carts') order by ID desc");
-    if (count($arr_object) > 0) {
-        $expiration_days = $cxecrt_options['cxecrt_cart_expiration_time'];
-        $opt_in_settings = $cxecrt_options['cxecrt_cart_expiration_active'];
-        echo '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css" />';
-        echo '<style>'
-            . '.item-quotation-cart svg {position: relative; top: 5px;}'
-            . '.item-quotation-cart .btn {color: rgb(105,105,105); cursor: pointer;}'
-            . '.item-quotation-cart .col-right .btn:not(:last-child) {margin-right: 15px;}'
-            . '.item-quotation-cart .woocommerce-orders-table__cell-order-status, .item-quotation-cart .woocommerce-orders-table__cell-order-total {font-size: 22px; font-weight: bolder;}'
-            . '.item-quotation-cart .wrap-detail-cart {display: none;}'
-            . '.item-quotation-cart .btn-view-detail-cart.active svg {transform: rotate(180deg);}'
-            . '.item-quotation-cart .wrap-detail-cart .cart_list {list-style: none; padding: 0px;}'
-            . '.item-quotation-cart .wrap-detail-cart .cart_list .minicart-pd-meta {display: inline-block; width: calc(100% - 283px); margin-left: 10px; vertical-align: top;}'
-            . '.item-quotation-cart .wrap-detail-cart .cart_list .minicart-pd-meta dl dt {display: inline-block; font-weight: bold;}'
-            . '.item-quotation-cart .wrap-detail-cart .cart_list .minicart-pd-meta dl dd {display: inline-block; margin: 0px;}'
-            . '.item-quotation-cart .wrap-detail-cart .cart_list .minicart-pd-meta dl dd p {margin: 0px;}'
-            . '.item-quotation-cart .wrap-detail-cart .mini_cart_item .mini-cart-pd-image img {width: 150px;}'
-            . '.item-quotation-cart .wrap-detail-cart .mini_cart_item {border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;}'
-            . '.item-quotation-cart .wrap-detail-cart .cart_list .minicart-pd-meta h6 {font-size: 20px; font-weight: bold;}'
-            . '.item-quotation-cart .total-item-cart {display: inline-block; vertical-align: top;}'
-            . '.item-quotation-cart .total-item-cart .price {font-size: 20px; font-weight: bold;}'
-            . '</style>';
-        foreach ($arr_object as $item) {
-            $col_date = '';
-            $cart_retrieved = $item->post_date;
-            $cart_status = get_post_meta($item->ID, '_cxecrt_status', true);
-            $col_status = '<span>' . ($cart_status == 1 ? 'Approved' : 'Pending') . '</span>';
-            if (!is_array($cart_retrieved) && !empty($cart_retrieved)) {
-                $full_date = date('d / m / Y', strtotime($cart_retrieved));
-                $col_date .= '<span>Created : ' . $full_date . '</span>';
-                if ($expiration_days && $expiration_days > 0 && $opt_in_settings) {
-                    $date = date('Y-m-d', strtotime($cart_retrieved));
-                    $exp_date = date('d / m / Y', strtotime($date . ' + ' . $expiration_days . ' days'));
-                    $col_date .= '<br/><span>Valid Till : ' . $exp_date . '</span>';
-                }
-            }
-            echo '<div class="item-quotation-cart" rel="' . $item->ID . '" style="border: 1px solid #d7d7d7; padding: 10px; margin-bottom: 20px;">
-        <table class="woocommerce-orders-table woocommerce-MyAccount-orders shop_table shop_table_responsive my_account_orders account-orders-table" style="margin-bottom: 0px;">
-        <thead>
-        <tr>
-        <th class="woocommerce-orders-table__header woocommerce-orders-table__header-order-number"><span class="nobr">Quotation #' . $item->ID . '</span></th>
-        <th class="woocommerce-orders-table__header woocommerce-orders-table__header-order-status"><span class="nobr">Status</span></th>
-        <th class="woocommerce-orders-table__header woocommerce-orders-table__header-order-total"><span class="nobr">Total</span></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr class="woocommerce-orders-table__row woocommerce-orders-table__row--status-processing order">
-        <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-order-number" data-title="Order">' . $col_date . '</td>
-        <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-order-status" data-title="Status">' . $col_status . '</td>
-        <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-order-total" data-title="Total">0</td>
-        </tr>
-        </tbody>
-        </table>';
-            echo '<div class="wrap-detail-cart"><h4 style="font-weight: bold; padding:10px 0;">Items</h4>';
-            $cxecrt->backup_current_cart();
-            $cxecrt->load_cart_from_post($item->ID);
-            if (0 !== sizeof(WC()->cart->get_cart())) {
-                ?>
-                <div class="cxecrt-mini-cart">
-                    <?php woocommerce_mini_cart(); ?>
-                    <a href="" class="button cxecrt-button cart-edit-button">
-                        <?php _e('Edit Cart', 'email-cart'); ?>
-                    </a>
-                </div>
-                <?php
-            } else {
-                ?>
-                <div class="cxecrt-mini-cart cxecrt-mini-cart-empty">
-                    <p><?php _e('Your cart is empty.', 'email-cart') ?></p>
-                </div>
-                <?php
-            }
-            $cxecrt->restore_current_cart();
-            echo '</div>';
-            echo '<div class="wrap-action-quotation">'
-                . '<div class="col-left" style="display: inline-block;"><a class="btn btn-view-detail-cart"><span>View</span> Quotation <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-        width="18.000000pt" height="18.000000pt" viewBox="0 0 135.000000 108.000000"
-        preserveAspectRatio="xMidYMid meet">
-        <g transform="translate(0.000000,108.000000) scale(0.100000,-0.100000)"
-        fill="#696969" stroke="none">
-        <path d="M560 995 c-14 -8 -33 -14 -43 -15 -35 0 -136 -67 -190 -125 -38 -41
-        -97 -138 -97 -161 -1 -11 -7 -30 -15 -44 -20 -35 -20 -218 0 -244 8 -11 15
-        -30 15 -42 0 -12 7 -27 15 -34 8 -7 15 -19 15 -27 0 -35 110 -150 175 -184 22
-        -11 47 -24 55 -28 74 -41 229 -53 313 -26 29 10 59 21 67 26 8 4 34 17 56 29
-        54 27 137 110 164 164 12 22 25 48 29 56 39 72 54 240 27 305 -9 21 -16 45
-        -16 55 0 10 -7 23 -15 30 -8 7 -15 19 -15 27 0 35 -110 150 -175 184 -22 11
-        -47 24 -55 28 -70 38 -262 54 -310 26z m240 -94 c19 -8 42 -18 50 -22 8 -5 25
-        -13 37 -18 28 -13 111 -96 124 -124 5 -12 13 -29 18 -37 49 -85 49 -255 0
-        -340 -5 -8 -13 -25 -18 -37 -13 -28 -96 -111 -124 -124 -12 -5 -29 -13 -37
-        -18 -85 -49 -255 -49 -340 0 -8 5 -25 13 -37 18 -28 13 -111 96 -124 124 -5
-        12 -13 29 -18 37 -49 85 -49 255 0 340 5 8 13 25 19 37 12 29 108 123 125 123
-        7 0 18 7 25 15 7 8 22 15 34 15 11 1 32 7 46 15 31 18 167 15 220 -4z"/>
-        <path d="M446 639 c-21 -22 -37 -42 -35 -44 25 -30 264 -265 269 -265 5 0 243
-        234 269 265 2 2 -15 23 -37 45 -28 29 -45 39 -55 33 -8 -4 -47 -45 -88 -90
-        -40 -46 -81 -83 -90 -83 -10 0 -27 12 -39 28 -36 45 -139 152 -147 152 -5 -1
-        -25 -19 -47 -41z"/>
-        </g>
-        </svg></a></div>'
-                . '<div class="col-right" style="float: right;">';
-            if ($cart_status == 1) {
-                echo '<a href="#" rel="' . $item->ID . '" class="btn btn-load-cart"><svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-        width="19.000000pt" height="19.000000pt" viewBox="0 0 114.000000 90.000000"
-        preserveAspectRatio="xMidYMid meet">
-        <g transform="translate(0.000000,90.000000) scale(0.100000,-0.100000)"
-        fill="#696969" stroke="none">
-        <path d="M166 755 c-12 -33 4 -45 65 -45 58 0 59 0 74 -36 8 -20 15 -49 15
-        -64 0 -15 6 -50 14 -76 14 -48 32 -128 42 -190 4 -20 1 -34 -10 -43 -21 -18
-        -20 -57 2 -70 16 -10 16 -12 0 -25 -39 -30 -9 -96 44 -96 45 0 81 72 43 86 -8
-        4 -15 12 -15 20 0 11 33 14 180 14 147 0 180 -3 180 -14 0 -8 -7 -16 -15 -20
-        -8 -3 -15 -16 -15 -29 0 -50 70 -76 103 -39 22 24 22 68 1 76 -16 6 -16 8 0
-        24 9 10 16 28 16 40 0 22 -1 22 -224 22 -147 0 -227 4 -231 11 -4 5 -4 21 -1
-        33 6 26 29 31 181 41 44 3 114 12 155 20 41 8 98 16 125 17 l50 3 3 147 3 148
-        -298 2 -298 3 -3 28 -3 27 -89 0 c-69 0 -89 -3 -94 -15z m482 -152 c3 -81 15
-        -92 47 -43 32 48 85 53 85 8 0 -24 -136 -157 -160 -157 -24 -1 -160 132 -160
-        157 0 45 53 40 85 -8 33 -49 45 -39 45 38 0 75 4 84 35 80 18 -3 20 -11 23
-        -75z"/>
-        </g>
-        </svg> Load To Cart</a>'
-                    . '<a class="btn btn-download"><svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-        width="16.000000pt" height="16.000000pt" viewBox="0 0 26.000000 34.000000"
-        preserveAspectRatio="xMidYMid meet">
-        <g transform="translate(0.000000,34.000000) scale(0.050000,-0.050000)"
-        fill="#696969" stroke="none">
-        <path d="M69 594 c-6 -15 -8 -134 -5 -265 l6 -239 180 0 180 0 6 185 6 185
-        -71 0 c-69 0 -71 2 -71 80 l0 80 -111 0 c-72 0 -114 -9 -120 -26z m217 -379
-        c9 14 26 25 39 25 12 0 1 -23 -25 -50 l-47 -50 -47 43 c-49 47 -47 79 4 37 26
-        -22 30 -11 33 83 l4 107 11 -110 c7 -67 18 -100 28 -85z"/>
-        <path d="M320 553 c0 -69 4 -73 64 -73 l63 0 -58 65 c-33 36 -61 69 -64 73 -3
-        5 -5 -24 -5 -65z"/>
-        </g>
-        </svg> Download</a>';
-            }
-            echo '<a class="btn btn-remove"><svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-        width="17.000000pt" height="17.000000pt" viewBox="0 0 60.000000 87.000000"
-        preserveAspectRatio="xMidYMid meet">
-        <g transform="translate(0.000000,87.000000) scale(0.100000,-0.100000)"
-        fill="#696969" stroke="none">
-        <path d="M200 725 l0 -45 -59 0 c-43 0 -60 -4 -65 -15 -14 -38 -2 -40 214 -40
-        192 0 211 1 216 17 9 30 -5 38 -67 38 l-59 0 0 45 0 45 -90 0 -90 0 0 -45z
-        m118 -17 c15 -15 -2 -38 -28 -38 -10 0 -22 6 -29 13 -22 27 31 51 57 25z"/>
-        <path d="M80 355 c0 -296 -16 -275 207 -275 l160 0 26 30 27 30 0 222 0 223
-        -210 0 -210 0 0 -230z m358 175 c1 0 2 -7 2 -15 0 -12 -22 -15 -127 -17 -179
-        -2 -180 -2 -169 27 5 15 23 16 149 11 78 -3 143 -5 145 -6z m-268 -225 c0
-        -138 -2 -165 -15 -165 -11 0 -15 28 -17 155 -2 85 -1 160 0 165 2 6 10 10 18
-        10 11 0 14 -29 14 -165z m60 0 c0 -140 -2 -165 -15 -165 -13 0 -15 25 -15 165
-        0 140 2 165 15 165 13 0 15 -25 15 -165z m60 0 c0 -140 -2 -165 -15 -165 -13
-        0 -15 25 -15 165 0 140 2 165 15 165 13 0 15 -25 15 -165z m148 3 l-3 -163
-        -57 -3 -58 -3 0 159 c0 87 3 162 7 165 3 4 30 7 60 7 l53 0 -2 -162z"/>
-        </g>
-        </svg> Remove</a>'
-                . '</div>'
-                . '</div>'
-                . '</div>';
-        }
-        echo '<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.js"></script>';
-    }
+{   
+    wc_get_template('myaccount/quotations.php');
 }
 
 add_action('woocommerce_account_quotations_endpoint', 'iconic_quotations_endpoint_content');
