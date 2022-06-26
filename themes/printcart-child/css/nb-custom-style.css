@@ -1,16 +1,22 @@
 .nb-button-register {
 	width: 50%;
 }
-
+.nb-form-login-wrap.nb-sign-in {
+    display: block;
+}
 .nb-form-login-wrap {
 	padding: 15px 30px;
 	border: 1px solid #ebebeb;
     width: 100%;
-    border-radius: 5px;
+    border-radius: 10px;
     box-shadow: 0 0 5px rgba(23,24,24,.05),0 1px 2px rgba(0,0,0,.15);
     margin-bottom: 60px;
 }
-
+.nb-form-login .woocommerce-button, .nb-button-register {
+    border-radius: 10px;
+    background: transparent linear-gradient(180deg, #1BCB3F 0%, #45D242 33%, #7BDB46 78%, #91DF48 100%) 0% 0% no-repeat padding-box;
+    border: none;
+}
 .nb-social-log {
     position: absolute;
     height: 100%;
