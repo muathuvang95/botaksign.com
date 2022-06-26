@@ -3624,12 +3624,15 @@ footer.site-footer .footer-top-section .form .submit_b {
 }
 .nb-custom-my-account .nb-woocommerce-MyAccount-navigation .nb-navigation-menu {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     list-style: none;
+}
+.nb-custom-my-account .nb-woocommerce-MyAccount-navigation .nb-navigation-item {
+    padding: 10px 15px;
 }
 .nb-custom-my-account .nb-woocommerce-MyAccount-navigation .nb-navigation-item >a{
     padding: 20px 0;
-    width: 200px;
+    width: 250px;
     font-size: 17px;
     line-height: 20px;
     color: #000000;
@@ -3666,7 +3669,7 @@ footer.site-footer .footer-top-section .form .submit_b {
     box-shadow: 0px 0px 12px #0000001F;
     border: 1px solid #DEDEDE;
     border-radius: 10px;
-    padding: 20px 30px;
+    padding: 40px 20px;
     margin-bottom: 35px;
 }
 .nb-custom-my-account .nb-woocommerce-MyAccount-content .nb-dashboard-header .nb-dashboard-header-title {
@@ -3785,8 +3788,7 @@ footer.site-footer .footer-top-section .form .submit_b {
     border: none!important;
 }
 .nb-woocommerce-MyAccount-content .nb-orders {
-    width: 60%;
-    margin: 0 auto;
+    width: 100%;
 }
 .nb-woocommerce-MyAccount-content .nb-orders-table {
     background: transparent linear-gradient(178deg, #FFFFFF 0%, #F6F8F7 100%) 0% 0% no-repeat padding-box;
@@ -3854,8 +3856,7 @@ footer.site-footer .footer-top-section .form .submit_b {
     background: transparent linear-gradient(180deg, #ef0000 0%, #f54961 33%, #ff3636 78%, #ff7979 100%) 0% 0% no-repeat padding-box;
 }
 .nb-item-quotation-cart {
-    width: 60%;
-    margin: 0 auto;
+    width: 100%;
     box-shadow: 0px 0px 12px #0000001F;
     border: 2px solid #DEDEDE;
     border-radius: 10px;
@@ -3998,5 +3999,8 @@ footer.site-footer .footer-top-section .form .submit_b {
 @media screen and (max-width: 786px) {
     .nb-item-quotation-cart .wrap-action-quotation .col-right .btn .nb-action {
         display: none;
+    }
+    .nb-custom-my-account .nb-woocommerce-MyAccount-navigation .nb-navigation-item >a{
+        width: 100px;
     }
 }

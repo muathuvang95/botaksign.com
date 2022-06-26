@@ -69,20 +69,22 @@ foreach ( WC()->cart->get_cart() as $order_item_id => $cart_item ) {
         		</div>
         	</div>
         	<div class="col-md-9">
-        		<div class="nb-quotation-items row">
-                	<?php
-                    if(count($item_data) > 0) {
-                        foreach ($item_data as $k => $v) {
-                            if($v['key'] == "Quantity Discount" || $v['key'] == "Production Time" || $v['key'] == "SKU" || $v['key'] == "item_status") {
-                                if($v['key'] == "Production Time") {
-                                    $production_time = $v['display'];
+                <div class="nb-quotation-items">
+            		<div class="row">
+                    	<?php
+                        if(count($item_data) > 0) {
+                            foreach ($item_data as $k => $v) {
+                                if($v['key'] == "Quantity Discount" || $v['key'] == "Production Time" || $v['key'] == "SKU" || $v['key'] == "item_status") {
+                                    if($v['key'] == "Production Time") {
+                                        $production_time = $v['display'];
+                                    }
+                                    continue;
                                 }
-                                continue;
+                                echo '<div class="item-meta col-md-6"><span class="item-key">' . $v['key'] . ':</span> <span class="item-value">' . preg_replace( '/&nbsp;&nbsp;(.*)/' , '' , $v['display']) . '</span></div>';
                             }
-                            echo '<div class="item-meta col-md-6"><span class="item-key">' . $v['key'] . ':</span> <span class="item-value">' . preg_replace( '/&nbsp;&nbsp;(.*)/' , '' , $v['display']) . '</span></div>';
                         }
-                    }
-	                ?>
+    	                ?>
+                    </div>
                 </div>
         	</div>
         </div>
