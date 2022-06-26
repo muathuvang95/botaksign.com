@@ -41,7 +41,8 @@ if (function_exists('yoast_breadcrumb')) { ?>
 
 							<div class="nb-form-login">
 
-								<h2><?php esc_html_e( 'Login', 'woocommerce' ); ?></h2>
+								<h2><?php esc_html_e( 'Sign In', 'woocommerce' ); ?></h2>
+								<p>Continue where you left off</p>
 
 								<form class="woocommerce-form woocommerce-form-login login" method="post">
 
@@ -63,6 +64,7 @@ if (function_exists('yoast_breadcrumb')) { ?>
 									 </div>
 									<p class="form-row">
 										<?php wp_nonce_field( 'woocommerce-login', 'woocommerce-login-nonce' ); ?>
+										<input type="hidden" name="redirect" value="<?php echo esc_attr(wc_get_page_permalink( 'myaccount' )); ?>">
 										<button type="submit" class="woocommerce-button btn btn-success w-100" name="login" value="<?php esc_attr_e( 'Log in', 'woocommerce' ); ?>"><?php esc_html_e( 'Log in', 'woocommerce' ); ?></button>
 									</p>
 									<p class="woocommerce-LostPassword lost_password">
@@ -129,7 +131,7 @@ if (function_exists('yoast_breadcrumb')) { ?>
 								          </div>
 								        </a>
 								        <a
-								          href="http://kita.loc/wp-login.php?loginSocial=google&amp;redirect=http%3A%2F%2Fkita.loc%2F"
+								          href="http://botaksign.loc/wp-login.php?loginSocial=google&amp;redirect=http%3A%2F%2Fkita.loc%2F"
 								          rel="nofollow"
 								          aria-label="Continue with Google"
 								          data-plugin="nsl"
@@ -174,7 +176,7 @@ if (function_exists('yoast_breadcrumb')) { ?>
 								          </div>
 								        </a>
 								        <div class="nb-sign-up-now">
-								        	<span>Don't have an account </span><a href="<?php echo esc_url(home_url().'sign-up'); ?>">Sign in now</a>
+								        	<span>Don’t have account yet? </span><a href="<?php echo esc_url(home_url().'sign-up'); ?>">Sign up</a>
 								        </div>
 								      </div>
 								    </div>
