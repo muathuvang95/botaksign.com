@@ -343,7 +343,7 @@
 // echo '<pre>';
 // var_dump(test_get_delivery_plotter());
 // echo '</pre>';
-echo 'Check link s3';
+
 // $order_id = 63199;
 // $order = wc_get_order($order_id);
 // if($order ) {
@@ -504,12 +504,5 @@ $keys = array('a5598861647590597', '823a7891647591076', '6d590391647620413', '7f
 //Test 
 //
 
-$order = wc_get_order('44208');
 
-$items = $order->get_items();
-
-echo '<pre>';
-
-var_dump($items);
-
-echo '</pre>';
+echo v3_generate_order_detail_pdf1(44736);
