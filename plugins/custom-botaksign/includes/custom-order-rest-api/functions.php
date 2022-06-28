@@ -1253,6 +1253,612 @@ function v3_generate_order_detail_pdf($order_id)
     return $html;
 }
 */
+function btk_render_template( $file, $args = array() ) {
+
+    if ( ! empty( $args ) && is_array( $args ) ) {
+        extract( $args );
+    }
+    ob_start();
+    if (file_exists($file)) {
+        include($file);
+    }
+    return ob_get_clean();
+}
+function v3_generate_order_detail_pdf1($quote_id)
+{
+    global $wpdb;
+    $html = '';
+    $order = wc_get_order($order_id);
+    ob_start();
+    ?>
+    <style>
+        ul{
+            padding-left: 0;
+            list-style-type: none;
+        }
+        table thead th, table thead td, table tbody th, table tbody td, table tfoot th, table tfoot td {
+            border: none;
+        }
+        .header-invoice {
+            margin: 20px 0;
+            font-family: roboto;
+        }
+        .order-number {
+            font-size: 22px;
+            line-height: 25px;
+            font-family: robotom;
+        } 
+        .content-customer-detail {
+            width: 100%;
+        }
+        .re-order {
+            color: #EC1E24;
+            font-size: 18px;
+            font-family: roboto;
+        }
+        .order-status-paid {
+            padding: 8px 30px;
+            border-radius: 10px;
+            background: transparent linear-gradient(0deg, #1BCB3F 0%, #55D443 51%, #91DF48 100%) 0% 0% no-repeat padding-box;
+            color: #fff;
+            font-size: 23px;
+            width: 70px;
+            display: inline-block;
+            float: right;
+            font-family: robotom;
+            text-align: center;
+        }
+        .title {
+            width: 100%;
+            margin: 15px 0;
+            clear: both;
+        }
+        .title .text {
+            font-size: 18px;
+            line-height: 21px;
+            color: #231F20;
+            width: 33%;
+            text-align: center;
+            display: inline-block!important;
+            float: left;
+            font-family: robotom;
+        }
+        .title .line{
+            height: 2px;
+            background: #1BCB3F;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .title .left{
+            float: left;
+            display: inline-block!important;
+            width: 33%;
+        }
+        .title .right{
+            float: left;
+            display: inline-block!important;
+            width: 33%;
+        }
+        .li.name span {
+            font-size: 11px;
+            line-height: 14px;
+            color: #221F1F;
+            font-family: roboto;
+        }
+        span.key {
+            font-size: 14px;
+            line-height: 17px;
+            font-family: roboto;
+        }
+        span.value {
+            font-size: 14px;
+            line-height: 17px;
+            font-family: robotol;
+        }
+        span.address-title {
+            font-size: 14px;
+            line-height: 17px;
+            font-family: roboto;
+            color:  #221F1F;
+        }
+        div.ul div.li {
+            display: block;
+            padding-bottom: 5px!!important;
+        }
+        .product-name {
+            font-size: 14px;
+            line-height: 17px;
+            color: #000000;
+            margin-bottom: 10px;
+            font-family: roboto;
+        }
+        .wrap-order-detail {
+            padding: 0 auto;
+            border-radius: 10px;
+            border: 1px solid #EEECEC;
+            background: transparent linear-gradient(177deg, #FFFFFF 0%, #F6F8F7 100%) 0% 0% no-repeat padding-box;
+        }
+        span.item-key {
+            font-size: 13px;
+            line-height: 17px;
+            font-family: robotom;
+        }
+        span.item-value {
+            font-size: 13px;
+            line-height: 17px;
+            font-family: robotol;
+        }
+        table.order-detail a.thumbnail>img {
+            width: 100px;
+            height:100px;
+        }
+        .list-thumbnail a.thumbnail {
+             width: 100px;
+            height:100px;
+            display: block; 
+            overflow: hidden;
+            vertical-align: middle;
+        }
+        .list-thumbnail a.thumbnail>img {
+            width: 100px;
+            height: 100px;
+        }
+        img {
+            width: 120px;
+            height: auto;
+        }
+        .sub-order-detail {
+            padding: 15px 0;
+        }
+        .sub-order-detail span.value .amount{
+            color: #333!important;
+            font-size: 11px;
+            line-height: 14px;
+            font-family: robotom!important;
+        }
+        .sub-order-detail span.value {
+            font-size: 14px;
+            line-height: 17px;
+            font-family: robotom;
+        }
+        .sub-order-detail span.key {
+            font-size: 14px;
+            line-height: 17px;
+            font-family: roboto;
+        }
+        .list-thumbnail {
+            margin: 10px;
+        }
+        .subtotal {
+            font-size: 14px;
+            color: #333!important;
+            font-family: roboto!important;
+        }
+        .amount {
+            display: inline-block!!important;
+            font-size: 14px;
+            color: #333!important;
+            font-family: roboto;
+        }
+        .gst {
+            font-size: 14px;
+            color: #333!important;
+            font-family: roboto!important;
+        }
+        .subtotal-price {
+            font-size: 14px;
+            color: #333!important;
+            font-family: roboto!important;
+        }
+        .total {
+            font-size: 14px;
+            color: #333!important;
+            font-family: robotom!important;
+        }
+        .total-price {
+            font-family: robotom!important;
+            font-size: 14px;
+            color: #333!important;
+        }
+        .wrap-line {
+            width: 680px;
+            height: 2px;
+            background: #a0a0a0;
+        }
+        .wrap-total {
+            margin-top: 5px;
+            width: 310px;
+            padding: 10px 0;
+            display: inline-block;
+            float: right;
+        }
+        div.hidden {
+            display: none;
+        }
+        #total-price td {
+            padding-top: 10px;
+        }
+    </style>
+    <?php
+    $css = ob_get_clean();
+    $cart_status = get_post_meta($quote_id, '_cxecrt_status', true);
+    if ($cart_status == 1 || isset($_POST['noauth'])) {
+        $cart = new WCEC_Saved_Cart();
+        $cart->load_saved_cart($quote_id);
+
+        $country = get_user_meta($cart->cart_author_id, 'billing_country', '')[0];
+        if ($country != '') {
+            $country = WC()->countries->countries[get_user_meta($cart->cart_author_id, 'billing_country', '')[0]];
+        }
+        $shiping_country = get_user_meta($cart->cart_author_id, 'shipping_country', '')[0];
+        if ($shiping_country != '') {
+            $shiping_country = WC()->countries->countries[get_user_meta($cart->cart_author_id, 'shipping_country', '')[0]];
+        }
+        
+        $quote_text_01 = '<table class="order-data-addresses">
+            <tr>
+                <td style="width:65%" align="left" class="address billing-address">
+                    <h3>BILL TO :</h3>
+                    <div class="billing-name">'.  $cart->cart_author_fullname .'</div>
+                    <div class="billing-address">
+                    <span class="tex-sub" >' . get_user_meta($cart->cart_author_id, 'billing_address_1', '')[0] . '</span>
+                    <span class="tex-sub" >' . get_user_meta($cart->cart_author_id, 'billing_address_2', '')[0] . '</span>
+                    </div>
+                    <div class="billing-country">' . $country . ' ' . get_user_meta($cart->cart_author_id, 'billing_postcode', '')[0] . '</div>
+                    <div class="billing-email">' . get_user_meta($cart->cart_author_id, 'billing_email', '')[0] . '</div>
+                    <div class="billing-phone">' . get_user_meta($cart->cart_author_id, 'billing_phone', '')[0] . '</div>
+                    <?php } ?>
+                </td>
+                <td style="width:65%" align="right" class="order-data">
+                    <table>
+                        <tr class="quote-number">
+                            <th><h3>Quotation No : </h3></th>
+                            <td><h3 style="text-align: center">'. $quote_id .'</h3></td>
+                        </tr>
+                        <tr class="quote-date">
+                            <th><strong>Quotation Date : </strong></th>
+                            <td>' . date('d M Y', strtotime($cart->cart_date)) . '</td>
+                        </tr>
+                        <tr class="quote-shipping-address">
+                            <th><h3></h3></th>
+                            <td><h3 style="text-align: center">Shipping Address :</h3></td>
+                        </tr>
+                        <tr class="quote-shipping-address1">
+                            <th></th>
+                            <td>
+                                <span class="tex-sub" >' . get_user_meta($cart->cart_author_id, 'shipping_address_1', '')[0] . '</span>
+                            </td>
+                        </tr>
+                        <tr class="quote-shipping-address2">
+                            <th></th>
+                            <td>
+                                <span class="tex-sub" >' . get_user_meta($cart->cart_author_id, 'shipping_address_2', '')[0] . '</span>
+                            </td>
+                        </tr>
+                        <tr class="quote-shipping-country">
+                            <th></th>
+                            <td>
+                                <span class="tex-sub" >' . $country . ' ' . get_user_meta($cart->cart_author_id, 'shipping_postcode', '')[0] . '</span>
+                            </td>
+                        </tr>
+                    </table>            
+                </td>
+            </tr>
+        </table>';
+        // $invoice_product_page_01 = '<div class="title"><div class="line line-left"></div><div class="text">ORDER DETAILS</div><div class="line line-right"></div></div>';
+         $pmt = $wpdb->get_row("SELECT meta_value FROM {$wpdb->prefix}postmeta WHERE post_id = {$quote_id} AND meta_key = '_cxecrt_cart_data'");
+        if ($pmt) {
+            $cartitems = $pmt->meta_value;
+        }
+
+        $items_arr = str_replace(array('O:17:"WC_Product_Simple"', 'O:10:"WC_Product"'), 'O:8:"stdClass"', $cartitems);
+            if (isset($cartitems) && $cartitems != false) {
+                preg_match('/^s\:\d+\:\"(.*?)\"\;$/', $items_arr, $output_array);
+                if (count($output_array) == 2) {
+                    //$order_items = (array) maybe_unserialize($items_arr);
+                    $order_items = maybe_unserialize($output_array[1]);
+                }
+            }
+            $loop = 0;
+            $arr_variation = cxecrt_get_variation_product_cart($quote_id);
+            $strlength = 0;
+            if (sizeof($order_items) > 0 && $order_items != false) {
+
+                $subtotal = 0;
+                $loop = 1;
+                $invoice_product_page_02 = '<div class="items-detail">';
+                $info_1s = '';
+                $total_elements = 0;
+
+                foreach ($order_items as $item) {
+                    $info_1 = '';
+                    $subtotal += $item['line_total'];
+                    if (isset($item['variation_id']) && $item['variation_id'] > 0) :
+                        $_product = wc_get_product($item['variation_id']);
+                    else :
+                        $_product = wc_get_product($item['product_id']);
+                    endif;
+                    $file = '';
+                    $thumbnail = '';
+                    $add_thumb_bottom = false;
+                    $element = 2;
+                    $nbu_files = array();
+                    $nbd_files = array();
+                    if (isset($_product) && $_product != false) {
+                        $total_elements ++;
+                        $info_1 .= '<div class="product-name">'.$loop.'. '.$_product->get_title().'</div><div class="product-meta"><div class="order-detail" style="width: 100%;">';
+                        $style_right = 'style="width: 670px; margin-left: 0; height: 130px;padding: 10px"';
+                        if( $file ) {
+                            $info_1 .= '<div style="width: 150px;height: 150px;display: inline-block; float: left; margin-right: 10px"><a href="'.$file.'" class="thumbnail" target="_blank"><img style="width: 150px;height: 150px;" src="'.$src.'"></a></div>';
+                            $style_right = 'style="width: 500px; height: 130px; display: inline-block; float: right; padding: 10px; margin-left: 10px"';
+                        }
+                        $sub_infor = '';
+                        $formatted_meta_data = $item->get_formatted_meta_data('_', true);
+                        $max_row = 5;
+                        $number_meta = 0;
+                        foreach ($formatted_meta_data as $k => $v) {
+                            if($v->key != "Quantity Discount" && $v->key != "Production time" && $v->key != "SKU" && $v->key != "item_status" ) {
+                                $number_meta++;
+                            } 
+
+                        }
+                        if(is_array($formatted_meta_data)) {
+                            if( $max_row < (int) ($number_meta/2) + ($number_meta%2) ) {
+                                $max_row = (int) ($number_meta/2) + ($number_meta%2);
+                            }
+                        }
+                        $info_1 .='<div '.$style_right.' class="wrap-order-detail">';
+                        $count_item = 1;
+                        $sub_infor_left = '';
+                        $sub_infor_right = '';
+                        foreach ($formatted_meta_data as $k => $v) {
+                            if($v->key == "Quantity Discount" || $v->key == "Production Time" || $v->key == "SKU" || $v->key == "item_status") {
+                                continue;
+                            }
+                            if( $count_item <= $max_row) {
+                                $sub_infor_left .= '<div class="item-meta"><span class="item-key">' . $v->key . ':</span> <span class="item-value">' . preg_replace( '/&nbsp;&nbsp;(.*)/' , '' , $v->value) . '</span></div><div style="display: block;font-size: 6px">&nbsp;</div>';
+                            } else {
+                                $sub_infor_right .= '<div class="item-meta"><span class="item-key">' . $v->key . ':</span> <span class="item-value">' . preg_replace( '/&nbsp;&nbsp;(.*)/' , '' , $v->value) . '</span></div><div style="display: block;font-size: 6px">&nbsp;</div>';
+                            }
+                            if($v->key != "Quantity Discount" && $v->key != "Production time" && $v->key != "SKU" && $v->key != "item_status" ) {
+                                $count_item ++;
+                            } 
+
+                        }
+                        if( $count_item == 1 ) {
+                            $info_1 = str_replace( 'class="wrap-order-detail' , 'class="wrap-order-detail hidden '. $_product->get_title() , $info_1);
+                        }
+                        if( $sub_infor_left ) $sub_infor_left = '<td style="vertical-align: top">'.$sub_infor_left.'</td>';
+                        if( $sub_infor_right ) $sub_infor_right = '<td style="vertical-align: top">'.$sub_infor_right.'</td>';
+                        $info_1 .= '<div class="item-order-detail"><table><tbody><tr>' . $sub_infor_left . $sub_infor_right . '</tr></tbody></table></div></div>';
+                        // if($total_elements == 4 || $total_elements == 10) $info_1 .= '<div class="minh-phan-trang"></div>';
+                        $total_elements ++;
+                        $sub_infor .= '<div class="sub-order-detail">';
+                        if(!$formatted_meta_data) {
+                            $sub_infor .= '<div style="margin-bottom: 4px"><span class="key">SKU : </span><span class="value">' . $_product->get_sku(). '</span></div>';
+                        } else {
+                            $sub_infor .= '<div style="margin-bottom: 4px"><span class="key">SKU : </span><span class="value">' . wc_get_order_item_meta($order_item_id, 'SKU') . '</span></div>';
+                        }
+                        $sub_infor .= '<div style="margin-bottom: 4px"><span class="key">Quantity : </span><span class="value">' . $item['quantity'] . '</span></div>';
+                        $sub_infor .= '<div style="margin-bottom: 4px"><span class="key">Price : </span><span class="value">SGD $' . number_format($item['line_total'] , 2) . '</span></div>';
+                        $sub_infor .= '<div style="margin-bottom: 4px"><span class="key">Production Time : </span><span class="value">' . wc_get_order_item_meta($order_item_id, 'Production Time') . '</span></div>';
+                        $sub_infor .= '<div style="margin-bottom: 4px"><span class="key">Estimated Completion Time : </span><span class="value">123123</span></div>';
+                        $sub_infor .= '</div>';
+                        $info_1 .= '</div></div>'.$sub_infor;
+
+                        $info_1s .= $info_1;
+                    }
+                    $loop ++;
+                }
+            }
+
+        $gst = $subtotal * 7 / 100;
+        if ($order_data['shipping_total'] > 0) {
+            $gst += ($order_data['shipping_total'] * 7/100 );
+        }
+        // fix Làm tròn giá
+        $gst_1 = ($subtotal + $gst) - number_format( $subtotal, 2 );
+        $invoice_product_page_02 .= $info_1s.'</div>'; // close div item
+        $total_price = '<div class="title"><div class="left"><div class="line line-left"></div></div><div class="text">SUMMARY</div><div class="right"><div class="line line-right"></div></div></div><div class="wrap-line"></div><table id="total-price" style="width:100%">
+            <tr><td style="width:50%; padding-top:5px"></td>
+            <td style="width:50%; padding-top:5px; padding-left:30px" align="left"><table><tbody><tr>
+            <td style="width:20%;padding-top:5px" class="subtotal" align="left">Subtotal</td>
+            <td style="width:50%;text-align: right;padding-top:5px" class="subtotal-price" >' . wc_price($subtotal) . '</td>
+            </tr>
+            <tr><td style="width:20%;padding-top:5px" class="subtotal" align="left">Shipping</td>
+            <td style="width:80%;padding-top:5px;text-align: right; ư" class="subtotal-price">' . $order->get_payment_method_title() . ' (' . wc_price($order_data['shipping_total']) . ')</td>
+            </tr>
+            <tr><td style="width:20%" class="gst" align="left">GST (7%)</td>
+            <td style="width:50%;text-align: right;" class="gst-price">' . wc_price($gst_1) . '</td>
+            </tr>
+            </tbody></table>
+            </td></tr>
+            </table>
+            <div class="wrap-total"><div style="width: 310px; height: 1px; background: #a0a0a0"></div><div style="height:5px"></div><div style="width: 50%; display:inline-block;float: left" class="total" align="left">Total</div>
+            <div style="width: 50%; display:inline-block;float:right;text-align:right" class="total-price">SGD $' . number_format($subtotal + $order_data['shipping_total'] + $gst , 2 ) . '</div><div style="height:5px"></div><div style="width: 310px; height: 1px; background: #a0a0a0"></div>
+            </div>';
+        $html = $css.$invoice_header.$invoice_text_01 . $invoice_text_02 . $invoice_product_page_01 . $invoice_product_page_02 . $total_price;
+    }
+    return $html;
+}
+
+function v3_generate_order_detail_pdf2($order_id)
+{
+    global $wpdb;
+    $order = wc_get_order($order_id);
+    $html = '';
+    if ($order) {
+        $cart_status = get_post_meta($quote_id, '_cxecrt_status', true);
+        if ($cart_status == 1 || isset($_POST['noauth'])) {
+            $cart = new WCEC_Saved_Cart();
+            $cart->load_saved_cart($quote_id);
+            $invoice_text_01 = '<table id="header-infor" style="width:100%">
+                <tr>
+                <td style="width:50%; padding-top:5px;" class="bill-to-th" align="left"><h2 class="bill-to">Bill To:</h2></td>
+                <td style="width:50%;" class="cash-invoice-no-th" align="right"><h2 class="cash-invoice-no">Invoice No.: ' . $quote_id . '</h2></td>
+                </tr>
+                </table>';
+            $country = get_user_meta($cart->cart_author_id, 'billing_country', '')[0];
+            if ($country != '') {
+                $country = WC()->countries->countries[get_user_meta($cart->cart_author_id, 'billing_country', '')[0]];
+            }
+            $invoice_text_02 = '<table style="width:100%">
+                <tr>
+                <td style="width:65%" align="left"><span class="tex-bol" >' . $cart->cart_author_fullname . '</span></td>
+                <td style="width:20%" align="right"><span class="tex-bol" >Quotation Date:</span></td>
+                <td style="width:15%" align="right"><span class="tex-sub" >' . date('d M Y', strtotime($cart->cart_date)) . '</span></td>
+                </tr>
+                <tr>
+                <td style="width:50%" align="left">
+                <span class="tex-sub" >' . get_user_meta($cart->cart_author_id, 'billing_address_1', '')[0] . '</span>
+                <span class="tex-sub" >' . get_user_meta($cart->cart_author_id, 'billing_address_2', '')[0] . '</span>
+                <br>
+                <span class="tex-sub" >' . $country . ' ' . get_user_meta($cart->cart_author_id, 'billing_postcode', '')[0] . '</span>
+                <br>
+                <span class="tex-sub" >' . get_user_meta($cart->cart_author_id, 'billing_email', '')[0] . '</span>
+                <br>
+                <span class="tex-sub" >' . get_user_meta($cart->cart_author_id, 'billing_phone', '')[0] . '</span>
+                <br>
+                <span class="tex-sub" >' . get_user_meta($cart->cart_author_id, 'billing_company', '')[0] . '</span>
+                </td>
+                </tr>
+                </table>';
+            $head_table_pro = '<table class="product" style="width:100%">
+                <tr>
+                <td class="page-invoice" style="width:30px;padding-bottom:5px;padding-top: 50px" class="stt" align="left">No.</td>
+                <td class="page-invoice" style="width:400px;padding-bottom:5px;padding-top: 50px" class="description" align="left">Description</td>
+                <td class="page-invoice" style="width:80px;padding-bottom:5px;padding-top: 50px" class="qty" align="center">Qty</td>
+                <td class="page-invoice" style="width:80px;padding-bottom:5px;padding-top: 50px" class="unit_price" align="right">Unit Price</td>
+                <td class="page-invoice" style="width:80px;padding-bottom:5px;padding-top: 50px" class="amount" align="right">Amount</td>
+                </tr>';
+            $invoice_product_page_02 = $head_table_pro;
+            //$cartitems = get_post_meta($quote_id, '_cxecrt_cart_data', true);
+            $pmt = $wpdb->get_row("SELECT meta_value FROM {$wpdb->prefix}postmeta WHERE post_id = {$quote_id} AND meta_key = '_cxecrt_cart_data'");
+            if ($pmt) {
+                $cartitems = $pmt->meta_value;
+            }
+            $items_arr = str_replace(array('O:17:"WC_Product_Simple"', 'O:10:"WC_Product"'), 'O:8:"stdClass"', $cartitems);
+            if (isset($cartitems) && $cartitems != false) {
+                preg_match('/^s\:\d+\:\"(.*?)\"\;$/', $items_arr, $output_array);
+                if (count($output_array) == 2) {
+                    //$order_items = (array) maybe_unserialize($items_arr);
+                    $order_items = maybe_unserialize($output_array[1]);
+                }
+            }
+            $loop = 0;
+            $arr_variation = cxecrt_get_variation_product_cart($quote_id);
+            $strlength = 0;
+            if (sizeof($order_items) > 0 && $order_items != false) {
+                $subtotal = 0;
+                foreach ($order_items as $item) {
+                    $subtotal += $item['line_total'];
+                    if (function_exists('wc_get_product')) {
+                        if (isset($item['variation_id']) && $item['variation_id'] > 0) :
+                            $_product = wc_get_product($item['variation_id']);
+                        else :
+                            $_product = wc_get_product($item['product_id']);
+                        endif;
+                    } else {
+                        if (isset($item['variation_id']) && $item['variation_id'] > 0) :
+                            $_product = new WC_Product_Variation($item['variation_id']);
+                        else :
+                            $_product = new WC_Product($item['product_id']);
+                        endif;
+                    }
+                    if (isset($_product) && $_product != false) {
+                        //write_log($_product->attributes['pa_color']['options']);
+                        $invoice_product_page_02 .= '<tr>
+                            <td style="width:30px;" class="stt-text" align="left">' . ($loop + 1) . '</td>
+                            <td style="width:400px" align="left">
+                            <span class="description-text">' . $_product->get_title() . '</span>' . (isset($arr_variation[$loop]) ? '<br/>' . $arr_variation[$loop] : '')
+                            . '</td>
+                            <td style="width:80px" class="qty-text" align="center">' . ($item['quantity'] > 0 ? $item['quantity'] : 0) . '</td>
+                            <td style="width:80px" class="unit_price-text" align="right">' . wc_price($item['line_total'] / $item['quantity']) . '</td>
+                            <td style="width:80px" class="amount-text" align="right">' . wc_price($item['line_total']) . '</td>
+                            </tr>';
+                        /* if(isset($arr_variation[$loop])) {
+                            $strlength+=strlen($arr_variation[$loop]);
+                            $invoice_product_page_02 .= ($loop+1!=count($arr_variation) && $strlength>1882?'</table><div class="minh-phan-trang"></div>'.$head_table_pro:'');
+                            if($strlength>1882) {
+                            $strlength = 0;
+                            }
+                        } */
+                    }
+                    $loop++;
+                }
+                $gst = $subtotal * 7 / 100;
+                $fee_ship = 0;
+                foreach (WC()->cart->get_shipping_packages() as $package_id => $package) {
+                    // Check if a shipping for the current package exist
+                    if (WC()->session->__isset('shipping_for_package_' . $package_id)) {
+                        // Loop through shipping rates for the current package
+                        $ship_method = get_post_meta($quote_id, '_cxecrt_ship_method', true);
+                        foreach (WC()->session->get('shipping_for_package_' . $package_id)['rates'] as $shipping_rate_id => $shipping_rate) {
+                            if ($shipping_rate->get_id() == $ship_method) {
+                                $fee_ship = $shipping_rate->get_cost();
+                                $invoice_product_page_02 .= '<tr>
+                            <td style="width:30px;" class="stt-text" align="left"></td>
+                            <td style="width:400px" align="left">
+                            <span class="description-text">Delivery</span><br/>' . $shipping_rate->get_label() . '
+                            </td>
+                            <td style="width:80px" class="qty-text" align="center">-</td>
+                            <td style="width:80px" class="unit_price-text" align="right">-</td>
+                            <td style="width:80px" class="amount-text" align="right">' . wc_price($shipping_rate->get_cost()) . '</td>
+                            </tr>';
+                                break;
+                            }
+                        }
+                    }
+                }
+                if ($fee_ship > 0) {
+                    $gst += ($fee_ship * 7/100 );
+                }
+            }
+            $invoice_product_page_02 .= '</table>';
+            $total_price = '<table id="total-price" style="width:100%">
+                <tr>
+                <td style="width:510px; padding-top:10px;" align="left">
+                <span class="disclaimer">ITEMS NOT INCLUDED:</span>
+                </td>
+                <td style="width:80px;padding-top:10px;" class="subtotal" align="right">Subtotal</td>
+                <td style="width:80px;padding-top:10px;" class="subtotal-price" align="right">' . wc_price($subtotal) . '</td>
+                </tr>
+                <tr>
+                <td style="width:510px; padding-top:10px;" align="left">
+                </td>
+                <td style="width:80px;padding-top:10px;" class="subtotal" align="right">Shipping</td>
+                <td style="width:80px;padding-top:10px;" class="subtotal-price" align="right">' . wc_price($fee_ship) . '</td>
+                </tr>
+                <tr>
+                <td align="left" rowspan="2" style="width:510px;padding-top:-30px;" >
+                <span class="text-number">1.</span><span class="text-val"> Design & artwork (Artwork Services must be included in your order if required)</span><br>
+                </td>
+                <td style="width:80px" class="gst" align="right">7% GST</td>
+                <td style="width:80px" class="gst-price" align="right">' . wc_price($gst) . '</td>
+                </tr>
+                <tr>
+                <td style="width:80px" class="total" align="right">Total</td>
+                <td style="width:80px" class="total-price" align="right">' . wc_price($subtotal + $gst + $fee_ship) . '</td>
+                </tr>
+                </table>';
+            $total_price .= '<table style="width:100%">
+                <tr>
+                <td align="left"><span class="disclaimer">VALIDATION:</span></td>
+                </tr>';
+            if (cxecrt_get_option('cxecrt_cart_expiration_active') && cxecrt_get_option('cxecrt_cart_expiration_time')) {
+                $total_price .= '<tr>
+                    <td align="left"><span class="total-price">This price quote is valid for a period of ' . cxecrt_get_option('cxecrt_cart_expiration_time') . ' days from the issuing date of the quotation.</span></td>
+                    </tr>';
+            }
+            $total_price .= '<tr>
+                    <td align="left"><span class="total-price">* Items in this quotation are subject to stock availability</span></td>
+                    </tr>';
+            $total_price .= '</table>';
+            $html = $invoice_text_01 . $invoice_text_02 . $invoice_product_page_02 . $total_price;
+        }
+    }
+    return $html;
+}
 function v3_generate_order_detail_pdf($order_id)
 {
     global $wpdb;
