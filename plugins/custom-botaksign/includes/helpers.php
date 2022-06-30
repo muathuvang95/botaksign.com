@@ -438,7 +438,6 @@ function generate_quote_pdf($quote_id)
             if ( $_product && $_product->exists() && $cart_item['quantity'] > 0) {
                 $product_image = wp_get_attachment_image_src( get_post_thumbnail_id( $product_id ), 'single-post-thumbnail' );
                 $src = $product_image && isset($product_image[0]) && $product_image[0] ? $product_image[0] : '';
-                $src = 'https://botaksign-library.s3.ap-southeast-1.amazonaws.com/2021/10/hs-3t-ft2s-guidline.jpg';
                 
                 if(count($item_data) > 0) {
 
