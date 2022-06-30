@@ -349,123 +349,6 @@ function custom_status_order() {
 
     <?php
 }
-/*function custom_status_order() {
-    $custom_status_order_df = array(
-        'pending_payment'       => 'Pending Payment',
-        'order_received'        => 'Order Received',
-        'processing'            => 'Processing',
-        'artwork_amendment'     => 'Artwork Amendment',
-        'collection_point'      => 'Collection Point',
-        'collected'             => 'Collected',
-        'cancelled'             => 'Cancelled',
-    );
-    $custom_status_order_cs = array(
-        'out_source'            => array(
-            'label'    => 'Outsource',
-            'check'    => '',
-        ),
-        'printing'              => array(
-            'label'    => 'Printing',
-            'check'    => '',
-        ),
-        'finishing_1'           => array(
-            'label'    => 'Finishing 1',
-            'check'    => '',
-        ),
-        'finishing_2'           => array(
-            'label'    => 'Finishing 2',
-            'check'    => '',
-        ),
-        'qc_packing'            => array(
-            'label'    => 'QC / Packing',
-            'check'    => '',
-        ),
-        'delivery'              => array(
-            'label'    => 'Delivery',
-            'check'    => '',
-        ),
-    );
-
-    $save_status_order = $custom_status_order_df;
-    if( isset($_POST['status-updated']) ) {
-        $add_order_status = isset($_POST['custom_status_order']) ? $_POST['custom_status_order'] : '';
-        foreach ($custom_status_order_cs as $key => $value) {
-            if($add_order_status[$key] == 'on') {
-                $save_status_order[$key] = $value['label'];
-            }
-            update_option('custom_status_order' , serialize($save_status_order));
-        }
-    }
-    $get_status_order = unserialize(get_option('custom_status_order'));
-    if($get_status_order) {
-        foreach ($custom_status_order_cs as $key => $value) {
-            if ($get_status_order[$key]) {
-                $custom_status_order_cs[$key]['check'] = 'on';
-            }
-        }
-    } else {
-        $get_status_order = $custom_status_order_cs;
-    }
-    ?>
-    <style type="text/css">
-        .remove_row {
-            cursor: pointer;
-            text-align: center;
-        }
-    </style>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
-    <div id="custom-status-order">
-        <form method='post' action=''>
-            <table class="table table-striped table-bordered" style="width: 500px;">
-                <thead>
-                    <tr>
-                        <td><b>No.</b></td>
-                        <td><b>Status</b></td>
-                        <td colspan="2"></td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php 
-                    $count1 = count($custom_status_order_df);
-                    $no = 1;
-                    foreach ($custom_status_order_df as $key => $value) {
-                    ?>
-                        <tr class="row-status">
-                            <td><?php echo $no; ?></td>
-                            <td>
-                                <div class="label-order-status"><?php echo $value; ?></div>
-                            </td>
-                            <td></td>
-                        </tr>
-                    <?php
-                    $no ++;
-                    } 
-                    $no = $count1 + 1;
-                    foreach ($custom_status_order_cs as $key => $value) {
-                    ?>
-                        <tr class="row-status">
-                            <td><?php echo $no; ?></td>
-                            <td>
-                                <div class="label-order-status"><?php echo $value['label']; ?></div>
-                            </td>
-                            <td><input type="checkbox" name="custom_status_order[<?php echo $key; ?>]" <?php if($value['check'] == 'on') { echo 'checked'; } ?> ></td>
-                        </tr>
-                    <?php
-                    $no ++;
-                    } 
-                    ?>
-                    
-                </tbody>
-            </table>
-            <p class='submit'>
-                <input type='submit' name='Submit' class='button-primary' value='<?php echo 'Save Changes'; ?>' />
-                <input type='hidden' name='status-updated' value='true'/>
-            </p>
-        </form>
-    </div>
-
-    <?php
-}*/
 
 function v3_recalc_production_date($order_created_at, $max_production_time)
 {
@@ -827,432 +710,67 @@ function v3_nbd_save_customer_design($result) {
         }
     }
 }
-/*
-function v3_generate_order_detail_pdf($order_id)
+
+function nb_get_product_sku_quotation($cart_item)
 {
-    global $wpdb;
-    $html = '';
-    $order = wc_get_order($order_id);
-    ob_start();
-    ?>
-    <style>
-        ul{
-            padding-left: 0;
-            list-style-type: none;
-        }
-        table thead th, table thead td, table tbody th, table tbody td, table tfoot th, table tfoot td {
-            border: none;
-        }
-        .header-invoice {
-            margin: 20px 0;
-            font-family: roboto;
-        }
-        .order-number {
-            font-size: 22px;
-            line-height: 25px;
-            font-family: robotom;
-        } 
-        .content-customer-detail {
-            width: 100%;
-        }
-        .re-order {
-            color: #EC1E24;
-            font-size: 18px;
-            font-family: roboto;
-        }
-        .order-status-paid {
-            padding: 8px 30px;
-            border-radius: 10px;
-            background: transparent linear-gradient(0deg, #1BCB3F 0%, #55D443 51%, #91DF48 100%) 0% 0% no-repeat padding-box;
-            color: #fff;
-            font-size: 23px;
-            width: 70px;
-            display: inline-block;
-            float: right;
-            font-family: robotom;
-            text-align: center;
-        }
-        .title {
-            width: 100%;
-            margin: 15px 0;
-            clear: both;
-        }
-        .title .text {
-            font-size: 18px;
-            line-height: 21px;
-            color: #231F20;
-            width: 33%;
-            text-align: center;
-            display: inline-block!important;
-            float: left;
-            font-family: robotom;
-        }
-        .title .line{
-            height: 2px;
-            background: #1BCB3F;
-            width: 100%;
-            margin-top: 10px;
-        }
-        .title .left{
-            float: left;
-            display: inline-block!important;
-            width: 33%;
-        }
-        .title .right{
-            float: left;
-            display: inline-block!important;
-            width: 33%;
-        }
-        .li.name span {
-            font-size: 11px;
-            line-height: 14px;
-            color: #221F1F;
-            font-family: roboto;
-        }
-        span.key {
-            font-size: 14px;
-            line-height: 17px;
-            font-family: roboto;
-        }
-        span.value {
-            font-size: 14px;
-            line-height: 17px;
-            font-family: robotol;
-        }
-        span.address-title {
-            font-size: 14px;
-            line-height: 17px;
-            font-family: roboto;
-            color:  #221F1F;
-        }
-        div.ul div.li {
-            display: block;
-            padding-bottom: 5px!!important;
-        }
-        .product-name {
-            font-size: 14px;
-            line-height: 17px;
-            color: #000000;
-            margin-bottom: 10px;
-            font-family: roboto;
-        }
-        .wrap-order-detail {
-            padding: 0 auto;
-            border-radius: 10px;
-            border: 1px solid #EEECEC;
-            background: transparent linear-gradient(177deg, #FFFFFF 0%, #F6F8F7 100%) 0% 0% no-repeat padding-box;
-        }
-        span.item-key {
-            font-size: 13px;
-            line-height: 17px;
-            font-family: robotom;
-        }
-        span.item-value {
-            font-size: 13px;
-            line-height: 17px;
-            font-family: robotol;
-        }
-        table.order-detail a.thumbnail>img {
-            width: 100px;
-            height:100px;
-        }
-        .list-thumbnail a.thumbnail {
-             width: 100px;
-            height:100px;
-            display: block; 
-            overflow: hidden;
-            vertical-align: middle;
-        }
-        .list-thumbnail a.thumbnail>img {
-            width: 100px;
-            height: 100px;
-        }
-        img {
-            width: 120px;
-            height: auto;
-        }
-        .sub-order-detail {
-            padding: 15px 0;
-        }
-        .sub-order-detail span.value .amount{
-            color: #333!important;
-            font-size: 11px;
-            line-height: 14px;
-            font-family: robotom!important;
-        }
-        .sub-order-detail span.value {
-            font-size: 14px;
-            line-height: 17px;
-            font-family: robotom;
-        }
-        .sub-order-detail span.key {
-            font-size: 14px;
-            line-height: 17px;
-            font-family: roboto;
-        }
-        .list-thumbnail {
-            margin: 10px;
-        }
-        .subtotal {
-            font-size: 14px;
-            color: #333!important;
-            font-family: roboto!important;
-        }
-        .amount {
-            display: inline-block!!important;
-            font-size: 14px;
-            color: #333!important;
-            font-family: roboto;
-        }
-        .gst {
-            font-size: 14px;
-            color: #333!important;
-            font-family: roboto!important;
-        }
-        .subtotal-price {
-            font-size: 14px;
-            color: #333!important;
-            font-family: roboto!important;
-        }
-        .total {
-            font-size: 14px;
-            color: #333!important;
-            font-family: robotom!important;
-        }
-        .total-price {
-            font-family: robotom!important;
-            font-size: 14px;
-            color: #333!important;
-        }
-        .wrap-line {
-            width: 680px;
-            height: 2px;
-            background: #a0a0a0;
-        }
-        .wrap-total {
-            margin-top: 5px;
-            width: 310px;
-            padding: 10px 0;
-            display: inline-block;
-            float: right;
-        }
-        div.hidden {
-            display: none;
-        }
-        #total-price td {
-            padding-top: 10px;
-        }
-    </style>
-    <?php
-    $css = ob_get_clean();
-    if ($order) {
-        $order_data = $order->get_data();
-        $user = $order->get_user();
-        $user_id = $order->get_user_id();
-        $items = $order->get_items();
-        $order_again = '';
-        if(is_array($items)) {
-            $item_key_0 = array_keys($items)[0];
-            if( wc_get_order_item_meta( $item_key_0 , '_order_again') ) $order_again = '(Re-Order #'.wc_get_order_item_meta( $item_key_0 , '_order_again').')';
-        }
-        $paid = '';
-        if( get_post_meta( $order_id , '_payment_status' , true ) == 'paid' ) {
-            $paid =  '<div class="order-status-paid">PAID</div>';
-        }
-        $id_specialist = get_user_meta( $user_id , 'specialist' ,true);
-        $specialist = get_userdata($id_specialist)->display_name;
-        // $invoice_header = '<div class="header-invoice"><table style="width: 100%"><tbody><tr><td style="width: 50%"><div class="order-number"><span>Order: '.$order_id.' </span><span class="specialist">('.$specialist.')</span></div><div class="re-order">'.$order_again.'</div></td><td style="width: 50%">'.$paid.'</td></tr></tbody></table>';
-        $invoice_header = '<div><div style="width: 50%; display:inline-block;float:left"><div class="order-number"><span>Order: '.$order_id.' </span><span class="specialist">('.$specialist.')</span></div><div class="re-order">'.$order_again.'</div></div><div style="width: 50%; display:inline-block; float:right">'.$paid.'</div></div>';
-        $invoice_text_01 = '<div class="title"><div class="left"><div class="line line-left"></div></div><div class="text">CUSTOMER DETAILS</div><div class="right"><div class="line line-right"></div></div></div>';
-        $invoice_text_02 = '<table class="content-customer-detail"><tbody><tr><td style="width: 50%; padding-bottom: 20px;"><div class="ul"><div class="li name"><span>' . $order_data['billing']['first_name'] . ' ' . $order_data['billing']['last_name'] . '</span></div><div style="display: block;font-size: 4px">&nbsp;</div><div class="li"><span class="key">Email: </span><span class="value">' . $order->get_billing_email() . '</span></div><div style="display: block;font-size: 4px">&nbsp;</div><div class="li"><span class="key">Tel: </span><span class="value">' . $order->get_billing_phone() . '</span></div></div></td><td style="width: 50%;padding-bottom: 20px; padding-left: 65px"><div class="ul"><div class="li"><span class="key">Payment: </span><span class="value">' . $order->get_payment_method_title() . '</span></div><div style="display: block;font-size: 4px">&nbsp;</div><div class="li"><span class="key">Order date: </span><span class="value">'.date_format($order->get_date_created() , "d/m/Y").'</span></div><div style="display: block;font-size: 4px">&nbsp;</div><div class="li"><span class="key">Shipping Method: </span><span class="value">' . $order->get_shipping_method() . '</span></div></div></td></tr><tr><td style="width: 50%"><span class="address-title">Billing Address: </span><div class="ul address-detail"><div style="display: block;font-size: 4px">&nbsp;</div><div class="li"><span class="value">' . $order->get_billing_address_1() . '</span></div><div style="display: block;font-size: 4px">&nbsp;</div><div class="li"><span class="value">' . $order->get_billing_address_2() . '</span></div><div style="display: block;font-size: 4px">&nbsp;</div><div class="li"><span class="value">' . $order->get_billing_country() . ' ' . $order->get_billing_postcode() . '</span></div></div></td><td style="width: 50%;padding-left: 60px"><span class="address-title">Shipping Address: </span><div class="ul address-detail"><div style="display: block;font-size: 4px">&nbsp;</div><div class="li"><span class="value">' . $order->get_shipping_address_1() . '</span></div><div style="display: block;font-size: 4px">&nbsp;</div><div class="li"><span class="value">' . $order->get_shipping_address_2() . '</span><div style="display: block;font-size: 4px">&nbsp;</div></div><div class="li"><span class="value">' . $order->get_shipping_country() . ' ' . $order->get_shipping_postcode() . '</span></div></div></td></tr></tbody></table>';
-        $invoice_product_page_01 = '<div class="title"><div class="left"><div class="line line-left"></div></div><div class="text">ORDER DETAILS</div><div class="right"><div class="line line-right"></div></div></div>';
-        // $invoice_product_page_01 = '<div class="title"><div class="line line-left"></div><div class="text">ORDER DETAILS</div><div class="line line-right"></div></div>';
-        $subtotal = 0;
-        $loop = 1;
-        $invoice_product_page_02 = '<div class="items-detail">';
-        $info_1 = '';
-        $total_elements = 0;
-        foreach ($items as $order_item_id => $item) {
-            $subtotal += $item['line_total'];
-            if (isset($item['variation_id']) && $item['variation_id'] > 0) :
-                $_product = wc_get_product($item['variation_id']);
-            else :
-                $_product = wc_get_product($item['product_id']);
-            endif;
-            $file = '';
-            $thumbnail = '';
-            $add_thumb_button = false;
-            $element = 2;
-            if (isset($_product) && $_product != false) {
-                if (wc_get_order_item_meta($order_item_id, '_nbu')) {
-                    $files = botak_get_list_file_s3('reupload-design/'. wc_get_order_item_meta($order_item_id, '_nbu'));
-                    if(count($files) > 0 ) {
-                        $file = $files[0];
-                        $ext        = pathinfo( $file, PATHINFO_EXTENSION );
-                        $src        = Nbdesigner_IO::get_thumb_file( pathinfo( $file, PATHINFO_EXTENSION ), '');
-                        $file_url   = $file;
-                        $create_preview     = nbdesigner_get_option('nbdesigner_create_preview_image_file_upload');
-                        if(  $create_preview == 'yes' && ( $ext == 'png' || $ext == 'jpg' || $ext == 'pdf' ) ){
-                            $dir        = pathinfo( $file, PATHINFO_DIRNAME );
-                            $filename   = pathinfo( $file, PATHINFO_BASENAME );
-                            $file_headers = @get_headers($dir.'_preview/'.$filename);
-                            if(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found' || $file_headers[0] == 'HTTP/1.1 403 Forbidden') {
-                                $exists = false;
-                            }
-                            else {
-                                $exists = true;
-                            }
-                            if( $exists && ( $ext == 'png' || $ext == 'jpg' ) ){
-                                $src = $dir.'_preview/'.$filename;
-                            }else if( $ext == 'pdf' && botak_check_link_exists_s3($dir.'_preview/'.$filename.'.jpg') ){
-                                $src = $dir.'_preview/'.$filename.'.jpg';
-                            }else{
-                                $src = Nbdesigner_IO::get_thumb_file( $ext, '' );
-                            }
-                        }else {
-                            $src = Nbdesigner_IO::get_thumb_file( $ext, '' );
-                        }
-                        if( count($files) > 1 ) {
-                            $add_thumb_button = true;
-                        }
-                    }
-                }
-                $total_elements ++;
-                $info_1 .= '<div class="product-name">'.$loop.'. '.$_product->get_title().'</div><div class="product-meta"><div class="order-detail" style="width: 100%;">';
-                $style_right = 'style="width: 670px; margin-left: 0; height: 130px;padding: 10px"';
-                if( $file ) {
-                    $info_1 .= '<div style="width: 150px;height: 150px;display: inline-block; float: left; margin-right: 10px"><a href="'.$file.'" class="thumbnail" target="_blank"><img style="width: 150px;height: 150px;" src="'.$src.'"></a></div>';
-                    $style_right = 'style="width: 500px; height: 130px; display: inline-block; float: right; padding: 10px; margin-left: 10px"';
-                }
-                $sub_infor = '';
-                $formatted_meta_data = $item->get_formatted_meta_data('_', true);
-                $max_row = 5;
-                $number_meta = 0;
-                foreach ($formatted_meta_data as $k => $v) {
-                    if($v->key != "Quantity Discount" && $v->key != "Production time" && $v->key != "SKU" && $v->key != "item_status" ) {
-                        $number_meta++;
-                    } 
+    // The WC_Product object
+    $product = $cart_item['data'];
 
-                }
-                if(is_array($formatted_meta_data)) {
-                    if( $max_row < (int) ($number_meta/2) + ($number_meta%2) ) {
-                        $max_row = (int) ($number_meta/2) + ($number_meta%2);
-                    }
-                }
-                $info_1 .='<div '.$style_right.' class="wrap-order-detail">';
-                $count_item = 1;
-                $sub_infor_left = '';
-                $sub_infor_right = '';
-                foreach ($formatted_meta_data as $k => $v) {
-                    if($v->key == "Quantity Discount" || $v->key == "Production Time" || $v->key == "SKU" || $v->key == "item_status") {
-                        continue;
-                    }
-                    if( $count_item <= $max_row) {
-                        $sub_infor_left .= '<div class="item-meta"><span class="item-key">' . $v->key . ':</span> <span class="item-value">' . preg_replace( '/&nbsp;&nbsp;(.*)/' , '' , $v->value) . '</span></div><div style="display: block;font-size: 6px">&nbsp;</div>';
-                    } else {
-                        $sub_infor_right .= '<div class="item-meta"><span class="item-key">' . $v->key . ':</span> <span class="item-value">' . preg_replace( '/&nbsp;&nbsp;(.*)/' , '' , $v->value) . '</span></div><div style="display: block;font-size: 6px">&nbsp;</div>';
-                    }
-                    if($v->key != "Quantity Discount" && $v->key != "Production time" && $v->key != "SKU" && $v->key != "item_status" ) {
-                        $count_item ++;
-                    } 
-
-                }
-                if( $count_item == 1 ) {
-                    $info_1 = str_replace( 'class="wrap-order-detail' , 'class="wrap-order-detail hidden' , $info_1);
-                }
-                if( $sub_infor_left ) $sub_infor_left = '<td style="vertical-align: top">'.$sub_infor_left.'</td>';
-                if( $sub_infor_right ) $sub_infor_right = '<td style="vertical-align: top">'.$sub_infor_right.'</td>';
-                $info_1 .= '<div class="item-order-detail"><table><tbody><tr>' . $sub_infor_left . $sub_infor_right . '</tr></tbody></table></div></div>';
-                // if($total_elements == 4 || $total_elements == 10) $info_1 .= '<div class="minh-phan-trang"></div>';
-                $total_elements ++;
-                $sub_infor .= '<div class="sub-order-detail">';
-                if(!$formatted_meta_data) {
-                    $sub_infor .= '<div style="margin-bottom: 4px"><span class="key">SKU : </span><span class="value">' . $_product->get_sku(). '</span></div>';
-                } else {
-                    $sub_infor .= '<div style="margin-bottom: 4px"><span class="key">SKU : </span><span class="value">' . wc_get_order_item_meta($order_item_id, 'SKU') . '</span></div>';
-                }
-                $sub_infor .= '<div style="margin-bottom: 4px"><span class="key">Quantity : </span><span class="value">' . $item['quantity'] . '</span></div>';
-                $sub_infor .= '<div style="margin-bottom: 4px"><span class="key">Price : </span><span class="value">SGD $' . number_format($item['line_total'] , 2) . '</span></div>';
-                $sub_infor .= '<div style="margin-bottom: 4px"><span class="key">Production Time : </span><span class="value">' . wc_get_order_item_meta($order_item_id, 'Production Time') . '</span></div>';
-                $sub_infor .= '<div style="margin-bottom: 4px"><span class="key">Estimated Completion Time : </span><span class="value">' . wc_get_order_item_meta($order_item_id, '_item_time_completed') . '</span></div>';
-                $sub_infor .= '</div>';
-                $info_1 .= '</div></div>'.$sub_infor;
-                // if($total_elements == 4 || $total_elements == 10) $info_1 .= '<div class="minh-phan-trang"></div>';
-                if($add_thumb_button) {
-                    $total_elements ++;
-                    $info_1 .= '<div class="list-thumbnail"><table style="width:100%"><tbody><tr>';
-                    $thumbnail_item = '';
-                    $count_file = count($files);
-                    $thumbnail_item_fake = '';
-                    if($count_file < 6) {
-                        for($i = 0; $i < (6-$count_file); $i++) {
-                           $thumbnail_item_fake .= '<td style="width:16%;padding-right: 10px;"><a href="" class="thumbnail"  target="_blank"><img src="" style="display:none"></a></td>'; 
+    //CS botak check condition to change gallery
+    $sku = '';
+    if (isset($cart_item['nbo_meta'])) {
+         if( nbd_is_base64_string( $cart_item['nbo_meta']['options']['fields'] )) {
+            $cart_item['nbo_meta']['options']['fields'] = base64_decode( $cart_item['nbo_meta']['options']['fields'] ); // custom botak fix lose the sku when update base64_decode
+        }
+        $option_fields = maybe_unserialize($cart_item['nbo_meta']['options']['fields']);
+        try {
+            $check = NBD_FRONTEND_PRINTING_OPTIONS::check_and_get_change_gallery($option_fields['gallery_options'], maybe_unserialize($cart_item['nbo_meta'])['field'], $cart_item['quantity']);
+            if ($check['change'] === true && $check['option']['sku']) {
+                $sku = $check['option']['sku'];
+            }
+            foreach ($cart_item['nbo_meta']['field'] as $f_id => $fvalue) {
+                $select = !is_array($fvalue) ? $fvalue : $fvalue['value'];
+                foreach ($option_fields['fields'] as $data) {
+                    if ($f_id === $data['id']) {
+                        $option = $data['general']['attributes']['options'][$select];
+                        if (isset($option['sku']) && $option['sku'] != '') {
+                            $sku .= $option['sku'];
                         }
-                        
                     }
-                    foreach ($files as $file) {
-                        $ext        = pathinfo( $file, PATHINFO_EXTENSION );
-                        $src        = Nbdesigner_IO::get_thumb_file( pathinfo( $file, PATHINFO_EXTENSION ), '');
-                        $file_url   = $file;
-                        $create_preview     = nbdesigner_get_option('nbdesigner_create_preview_image_file_upload');
-                        if(  $create_preview == 'yes' && ( $ext == 'png' || $ext == 'jpg' || $ext == 'pdf' ) ){
-                            $dir        = pathinfo( $file, PATHINFO_DIRNAME );
-                            $filename   = pathinfo( $file, PATHINFO_BASENAME );
-                            $file_headers = @get_headers($dir.'_preview/'.$filename);
-                            if(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found' || $file_headers[0] == 'HTTP/1.1 403 Forbidden') {
-                                $exists = false;
-                            }
-                            else {
-                                $exists = true;
-                            }
-                            if( $exists && ( $ext == 'png' || $ext == 'jpg' ) ){
-                                $src = $dir.'_preview/'.$filename;
-                            }else if( $ext == 'pdf' && botak_check_link_exists_s3($dir.'_preview/'.$filename.'.jpg') ){
-                                $src = $dir.'_preview/'.$filename.'.jpg';
-                            }else{
-                                $src = Nbdesigner_IO::get_thumb_file( $ext, '' );
-                            }
-                        }else {
-                            $src = Nbdesigner_IO::get_thumb_file( $ext, '' );
-                        }
-                        $thumbnail_item .= '<td style="padding-right: 10px;"><a href="'.$file.'" class="thumbnail"  target="_blank"><img style="width:100px;height:100px" src="'.$src.'"></a></td>';
-                    }
-                    $info_1 .= $thumbnail_item.$thumbnail_item_fake.'</tr></tbody></table></div>';
-                    // if($total_elements == 4 || $total_elements == 10) $info_1 .= '<div class="minh-phan-trang"></div>';
                 }
             }
-            $loop ++;
+        } catch (Exception $e) {
+            write_log($e->getMessage());
         }
-        $gst = $subtotal * 7 / 100;
-        if ($order_data['shipping_total'] > 0) {
-            $gst += ($order_data['shipping_total'] * 7/100 );
-        }
-        // fix Làm tròn giá
-        $gst_1 = ($subtotal + $gst) - number_format( $subtotal, 2 );
-        $invoice_product_page_02 .= $info_1.'</div>'; // close div item
-        $total_price = '<div class="title"><div class="left"><div class="line line-left"></div></div><div class="text">SUMMARY</div><div class="right"><div class="line line-right"></div></div></div><div class="wrap-line"></div><table id="total-price" style="width:100%">
-            <tr><td style="width:50%; padding-top:5px"></td>
-            <td style="width:50%; padding-top:5px; padding-left:30px" align="left"><table><tbody><tr>
-            <td style="width:20%;padding-top:5px" class="subtotal" align="left">Subtotal</td>
-            <td style="width:50%;text-align: right;padding-top:5px" class="subtotal-price" >' . wc_price($subtotal) . '</td>
-            </tr>
-            <tr><td style="width:20%;padding-top:5px" class="subtotal" align="left">Shipping</td>
-            <td style="width:80%;padding-top:5px;text-align: right; ư" class="subtotal-price">' . $order->get_payment_method_title() . ' (' . wc_price($order_data['shipping_total']) . ')</td>
-            </tr>
-            <tr><td style="width:20%" class="gst" align="left">GST (7%)</td>
-            <td style="width:50%;text-align: right;" class="gst-price">' . wc_price($gst_1) . '</td>
-            </tr>
-            </tbody></table>
-            </td></tr>
-            </table>
-            <div class="wrap-total"><div style="width: 310px; height: 1px; background: #a0a0a0"></div><div style="height:5px"></div><div style="width: 50%; display:inline-block;float: left" class="total" align="left">Total</div>
-            <div style="width: 50%; display:inline-block;float:right;text-align:right" class="total-price">SGD $' . number_format($subtotal + $order_data['shipping_total'] + $gst , 2 ) . '</div><div style="height:5px"></div><div style="width: 310px; height: 1px; background: #a0a0a0"></div>
-            </div>';
-        $html = $css.$invoice_header.$invoice_text_01 . $invoice_text_02 . $invoice_product_page_01 . $invoice_product_page_02 . $total_price;
     }
-    return $html;
+    //End CS botak check condition to change gallery
+
+    // Get the  SKU
+    if ($sku == '') {
+        $sku = $product->get_sku();
+    }
+
+    // When sku doesn't exist
+    if (empty($sku) || $sku == '') {
+        return $item_name;
+    }
+
+    return $sku;
 }
-*/
+
+
+function btk_render_template( $file, $args = array() ) {
+
+    if ( ! empty( $args ) && is_array( $args ) ) {
+        extract( $args );
+    }
+    ob_start();
+    if (file_exists($file)) {
+        include($file);
+    }
+    return ob_get_clean();
+}
+
 function v3_generate_order_detail_pdf($order_id)
 {
     global $wpdb;
@@ -1686,7 +1204,7 @@ function v3_generate_order_detail_pdf($order_id)
             <td style="width:50%;text-align: right;padding-top:5px" class="subtotal-price" >' . wc_price($subtotal) . '</td>
             </tr>
             <tr><td style="width:20%;padding-top:5px" class="subtotal" align="left">Shipping</td>
-            <td style="width:80%;padding-top:5px;text-align: right; ư" class="subtotal-price">' . $order->get_payment_method_title() . ' (' . wc_price($order_data['shipping_total']) . ')</td>
+            <td style="width:80%;padding-top:5px;text-align: right;" class="subtotal-price">' . $order->get_payment_method_title() . ' (' . wc_price($order_data['shipping_total']) . ')</td>
             </tr>
             <tr><td style="width:20%" class="gst" align="left">GST (7%)</td>
             <td style="width:50%;text-align: right;" class="gst-price">' . wc_price($gst_1) . '</td>
