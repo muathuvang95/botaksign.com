@@ -37,7 +37,7 @@ wp_enqueue_style('nb-custom-style', get_stylesheet_directory_uri().'/css/nb-cust
 
 <div class="nb-form-login-wrap nb-sign-in <?php echo esc_attr($login_wrap_class);?>">
 	<div class="row">
-		<div class="col-md-5">
+		<div class="col-md-5" style="padding-left: 6%;">
 
 			<div class="nb-form-login">
 
@@ -85,7 +85,7 @@ wp_enqueue_style('nb-custom-style', get_stylesheet_directory_uri().'/css/nb-cust
 				<span>Or</span>
 			</div>
 		</div>
-		<div class="col-md-5">
+		<div class="col-md-5" style="padding-right: 6%;">
 			<div class="nb-social-login">
 				<div id="nsl-custom-login-form-1">
 				    <div
@@ -95,7 +95,7 @@ wp_enqueue_style('nb-custom-style', get_stylesheet_directory_uri().'/css/nb-cust
 				    >
 				      <div class="nsl-container-buttons">
 				        <a
-				          href="http://kita.loc/wp-login.php?loginSocial=facebook&amp;redirect=http%3A%2F%2Fkita.loc%2F"
+				          href="http://botaksign.com/wp-login.php?loginSocial=google&amp;redirect=http%3A%2F%botaksign.com%2F"
 				          rel="nofollow"
 				          aria-label="Continue with Facebook"
 				          data-plugin="nsl"
@@ -130,7 +130,7 @@ wp_enqueue_style('nb-custom-style', get_stylesheet_directory_uri().'/css/nb-cust
 				          </div>
 				        </a>
 				        <a
-				          href="http://botaksign.loc/wp-login.php?loginSocial=google&amp;redirect=http%3A%2F%2Fkita.loc%2F"
+				          href="http://botaksign.com/wp-login.php?loginSocial=google&amp;redirect=http%3A%2F%botaksign.com%2F"
 				          rel="nofollow"
 				          aria-label="Continue with Google"
 				          data-plugin="nsl"

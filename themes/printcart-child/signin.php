@@ -37,7 +37,7 @@ if (function_exists('yoast_breadcrumb')) { ?>
 					<div class="woocommerce-notices-wrapper"></div>
 
 					<div class="row">
-						<div class="col-md-5">
+						<div class="col-md-5" style="padding-left: 6%;">
 
 							<div class="nb-form-login">
 
@@ -86,7 +86,7 @@ if (function_exists('yoast_breadcrumb')) { ?>
 								<span>Or</span>
 							</div>
 						</div>
-						<div class="col-md-5">
+						<div class="col-md-5" style="padding-right: 6%;">
 							<div class="nb-social-login">
 								<div id="nsl-custom-login-form-1">
 								    <div
@@ -96,7 +96,7 @@ if (function_exists('yoast_breadcrumb')) { ?>
 								    >
 								      <div class="nsl-container-buttons">
 								        <a
-								          href="http://kita.loc/wp-login.php?loginSocial=facebook&amp;redirect=http%3A%2F%2Fkita.loc%2F"
+								          href="http://botaksign.com/wp-login.php?loginSocial=google&amp;redirect=http%3A%2F%botaksign.com%2F"
 								          rel="nofollow"
 								          aria-label="Continue with Facebook"
 								          data-plugin="nsl"
@@ -131,7 +131,7 @@ if (function_exists('yoast_breadcrumb')) { ?>
 								          </div>
 								        </a>
 								        <a
-								          href="http://botaksign.loc/wp-login.php?loginSocial=google&amp;redirect=http%3A%2F%2Fkita.loc%2F"
+								          href="http://botaksign.com/wp-login.php?loginSocial=google&amp;redirect=http%3A%2F%botaksign.com%2F"
 								          rel="nofollow"
 								          aria-label="Continue with Google"
 								          data-plugin="nsl"

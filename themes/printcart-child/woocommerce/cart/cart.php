@@ -212,7 +212,7 @@ function render_product_and_service($cart_item_key, $cart_item, $_product, $prod
         <div class="col-md-5 btk-action-table">
             <div class="row row-price">
                 <div class="product-subtotal" data-title="<?php esc_attr_e('Total', 'woocommerce'); ?>">
-                    <p class="title"><?php esc_attr_e('Total', 'woocommerce'); ?></p>
+<!--                     <p class="title"><?php esc_attr_e('Total', 'woocommerce'); ?></p> -->
                     <?php
                         echo apply_filters('woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal($_product, $cart_item['quantity']), $cart_item, $cart_item_key); // PHPCS: XSS ok.
                     ?>
@@ -265,8 +265,29 @@ function render_product_and_service($cart_item_key, $cart_item, $_product, $prod
                     );
                     ?>
                 </div>
+                <div class="btk-product-remove">
+                    <div class="btk-target-show-more-item btk-button-down active">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                    </div>
+                    <div class="btk-target-show-more-item btk-button-up">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                        </svg>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            $('.btk-target-show-more-item').on('click', function() {
+                $('.btk-target-show-more-item.btk-button-down').toggleClass('active');
+                $('.btk-target-show-more-item.btk-button-up').toggleClass('active');
+
+            })
+        })
+    </script>
     <?php }
 ?>
