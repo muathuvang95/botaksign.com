@@ -2994,11 +2994,10 @@ footer.site-footer .footer-top-section .form .submit_b {
     display: block;
 }
 .woocommerce-cart-form .product-item .btk-product-name .product-link {
-    font-size: 18px;
-    line-height: 24px;
+    font-size: 14px;
+    line-height: 1.5;
     font-weight: 600;
     margin-bottom: 10px;
-    border-bottom: 1px solid #ccc;
     display: flex;
     width: fit-content;
 }
@@ -3015,7 +3014,13 @@ footer.site-footer .footer-top-section .form .submit_b {
     border: none;
     padding: 0;
 }
-
+.btk-target-show-more-item {
+    display: none;
+    cursor: pointer;
+}
+.btk-target-show-more-item.active {
+    display: flex;
+}
 /*End Custom cart 19/06/2022*/
 
 
@@ -3029,6 +3034,11 @@ footer.site-footer .footer-top-section .form .submit_b {
 }
 .order-time-info .notice p{
     margin-bottom: 0px;
+}
+.nb-cart-left {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #000000;
 }
 .nb-cart-left .nbo-clear-cart-button {
     height: 50px;
