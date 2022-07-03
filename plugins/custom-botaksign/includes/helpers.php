@@ -210,6 +210,9 @@ function generate_quote_pdf($quote_id)
         .text-right {
             text-align: right;
         }
+        .text-center {
+            text-align: center;
+        }
         .text-bold {
             font-family: robotom;
         }
@@ -516,30 +519,41 @@ function generate_quote_pdf($quote_id)
             <tr>
                 <td style="width:50%; padding-top:5px">
                 </td>
-                <td style="width:50%; padding-top:5px; padding-left:30px" align="left">
-                    <table>
+                <td style="width:50%; padding-top:5px; padding-left:35px" align="left">
+                    <table class="w-100">
                     <tbody>
                     <tr>
-                        <td style="width:20%;padding-top:5px;border-top-color: #707070;border-top-size: 2px;" class="subtotal text-15" align="left">SUBTOTAL</td>
-                        <td style="width:50%;text-align: right;padding-top:5px" class="subtotal-price text-15" >' . wc_price($subtotal) . '</td>
+                        <td style="width:20%;padding-top:5px;" class="subtotal text-15" align="left">SUBTOTAL</td>
+                        <td style="width:50%;text-align: right;padding-top:5px;" class="subtotal-price text-15" >' . wc_price($subtotal) . '</td>
                     </tr>
                     <tr>
                         <td style="width:20%;padding-top:5px" class="subtotal text-15" align="left">SHIPPING</td>
-                        <td style="width:80%;padding-top:5px;text-align: right;" class="subtotal-price text-15">' . $fee_ship . '</td>
+                        <td style="width:50%;padding-top:5px;text-align: right;" class="subtotal-price text-15">' . $fee_ship . '</td>
                     </tr>
                     <tr>
-                        <td style="width:20%" class="gst text-15" align="left">GST 7%</td>
-                        <td style="width:50%;text-align: right;" class="gst-price text-15">' . wc_price($gst) . '</td>
-                    </tr>
-                    <tr>
-                        <td style="width:20%" class="total text-15 text-bold" align="left">TOTAL</td>
-                        <td style="width:50%;text-align: right;" class="total-price text-15 text-bold">' . wc_price($subtotal + $gst + $fee_ship) . '</td>
+                        <td style="width:20%;padding-top:5px;" class="subtotal text-15" align="left">GST 7%</td>
+                        <td style="width:50%;text-align: right;padding-top:5px;" class="subtotal-price text-15" >' . wc_price($gst) . '</td>
                     </tr>
                     </tbody>
                     </table>
                 </td>
             </tr>
-            </table>';
+            </table>
+            <div class="w-100" style="margin-top:10px;">
+                <div class="w-50 d-inline float-right">
+                    <div style="width: 100%; height: 1px; background: #707070"></div>
+                    <div class="order-number order-number-right" style="margin-top:5px;margin-bottom:5px">
+                        <div class="w-50 d-inline float-left gst text-15 text-bold" style="text-align: left">TOTAL</div>
+                        <div class="w-50 d-inline float-right text-15 text-bold" style="text-align:right">' . wc_price($subtotal + $gst + $fee_ship) . '</div>
+                    </div>
+                    <div style="width: 100%; height: 1px; background: #707070"></div>
+                </div>
+            </div><div
+              style="width: 500px; margin: 40px auto 0; height: 60px;padding: 20px; background: #ffffff; line-height:1.6"
+              class="item-order-detail text-center text-bold text-15"
+            >
+              This price quote is valid for a period of 31 days from the issuing date ofthe quotation. Items in this quotation are subject to stock availability
+            </div>';
 
         // Quotation detail end
 

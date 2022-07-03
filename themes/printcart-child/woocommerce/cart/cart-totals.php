@@ -29,7 +29,7 @@ if (!defined('ABSPATH')) {
             <table cellspacing="0" class="shop_table shop_table_responsive">
 
                 <tr class="cart-subtotal">
-                    <th><?php esc_html_e('Items', 'printcart'); ?></th>
+                    <th><?php esc_html_e('SUBTOTAL', 'printcart'); ?></th>
                     <td data-title="<?php esc_attr_e('Subtotal', 'printcart'); ?>"><?php wc_cart_totals_subtotal_html(); ?></td>
                 </tr>
 
@@ -93,8 +93,8 @@ if (!defined('ABSPATH')) {
                 <?php do_action('woocommerce_cart_totals_before_order_total'); ?>
 
                 <tr class="order-total">
-                    <th><?php esc_html_e('Subtotal (incl. tax)', 'printcart'); ?></th>
-                    <td data-title="<?php esc_attr_e('Subtotal (incl. tax)', 'printcart'); ?>"><?php wc_cart_totals_order_total_html(); ?></td>
+                    <th><?php esc_html_e('TOTAL(incl. tax)', 'printcart'); ?></th>
+                    <td data-title="<?php esc_attr_e('TOTAL(incl. tax)', 'printcart'); ?>"><?php wc_cart_totals_order_total_html(); ?></td>
                 </tr>
 
                 <?php do_action('woocommerce_cart_totals_after_order_total'); ?>
@@ -103,7 +103,7 @@ if (!defined('ABSPATH')) {
 
             <?php botak_show_production_time(); ?>
 
-            <?php if (is_user_logged_in()) { ?>
+         <!--    <?php if (is_user_logged_in()) { ?>
                 <div class="wc-proceed-to-checkout">
                     <a class="checkout-button button alt wc-forward bt-5 nb-wide-button btn-generate-quotation" style="cursor: pointer;">
                         <span>
@@ -112,7 +112,7 @@ if (!defined('ABSPATH')) {
                         </span>
                     </a>
                 </div>
-            <?php } ?>
+            <?php } ?> -->
 
             <div class="wc-continue-shiping">
                 <a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ) ?>" class="wc-backward checkout-button button alt wc-forward bt-5 nb-wide-button btn-continue-shiping"><?php echo __( 'Continue shopping', 'woocommerce' ); ?></a>

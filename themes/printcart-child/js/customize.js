@@ -83,7 +83,6 @@ jQuery(document).ready(function () {
         jQuery( ".single-product .product-image .thumb-gallery .woocommerce-product-gallery__image" ).height(jQuery( ".single-product .product-image .thumb-gallery .woocommerce-product-gallery__image" ).width());
     });
     jQuery(".archive .shop-main .products li.product.first img").addClass('attachment-printcart-masonry size-printcart-masonry wp-post-image');
-    
 //    //Plus and minus quantity button
 //    jQuery('.nb-quantity .quantity-plus-cart').one().on('click', function() {
 //        var input = jQuery('.nb-quantity input.qty');

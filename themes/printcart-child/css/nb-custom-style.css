@@ -4,6 +4,27 @@
 .nb-form-login-wrap.nb-sign-in {
     display: block;
 }
+.nb-form-login-wrap .nb-login-left {
+    padding-left: 6%;
+}
+.nb-form-login-wrap .nb-login-right {
+    padding-right: 6%;
+}
+.nb-sign-up-now {
+    margin-top: 20px;
+}
+.nb-signin-title {
+    font-size: 55px;
+    line-height: 1.5;
+    font-family: inherit;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+.nb-signin-desc {
+    font-size: 22px;
+    line-height: 1.5;
+    margin-bottom: 30px;
+}
 .nb-form-login-wrap {
 	padding: 15px 30px;
 	border: 1px solid #ebebeb;
@@ -16,6 +37,10 @@
     border-radius: 10px;
     background: transparent linear-gradient(180deg, #1BCB3F 0%, #45D242 33%, #7BDB46 78%, #91DF48 100%) 0% 0% no-repeat padding-box;
     border: none;
+    padding: 10px;
+}
+.nb-form-login .form-group {
+    margin-bottom: 20px;
 }
 .nb-social-log {
     position: absolute;
@@ -63,6 +88,22 @@
 }
 
 @media screen and (max-width: 768px) {
+    .nb-form-login-wrap .nb-login-left {
+        padding-left: 15px;
+    }
+    .nb-signin-title {
+        font-size: 30px;
+        line-height: 1.5;
+        font-family: inherit;
+        font-weight: 700;
+    }
+    .nb-signin-desc {
+        font-size: 17px;
+        line-height: 1.5;
+    }
+    .nb-form-login-wrap .nb-login-right {
+        padding-right: 15px;
+    }
     .nb-social-log {
         position: absolute;
         width: 100%;
