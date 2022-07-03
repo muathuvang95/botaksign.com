@@ -6,7 +6,7 @@ if (count($arr_object) > 0) {
     $expiration_days = $cxecrt_options['cxecrt_cart_expiration_time'];
     $opt_in_settings = $cxecrt_options['cxecrt_cart_expiration_active'];
     echo '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css" />';
-    foreach ($arr_object as $item) {
+    foreach ($arr_object as $key => $item) {
         $col_date_1 = '';
         $col_date_2 = '';
         $cart_retrieved = $item->post_date;
@@ -18,7 +18,8 @@ if (count($arr_object) > 0) {
             if ($expiration_days && $expiration_days > 0 && $opt_in_settings) {
                 $date = date('Y-m-d', strtotime($cart_retrieved));
                 $exp_date = date('d/m/Y', strtotime($date . ' + ' . $expiration_days . ' days'));
-                $col_date_2 .= '<span>Valid Till : ' . $exp_date . '</span>';
+                $check_expiring = strtotime($date . ' + ' . $expiration_days . ' days') < ( strtotime("now") + 8*3600 ) ? 'expiring' : '';
+                $col_date_2 .= '<span class="'. $check_expiring .'">Valid Till : ' . $exp_date . '</span>';
             }
         }
         ?>
@@ -42,10 +43,10 @@ if (count($arr_object) > 0) {
 		        		<td colspan="3">
 		        			<div class="accordion nb-accordion-quotation" id="accordionQuotation">
 								<div class="accordion-item">
-									<button hidden class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseQuotation" aria-expanded="true" aria-controls="collapseQuotation"></button>
-									<div id="collapseQuotation" class="accordion-collapse collapse" aria-labelledby="headingBilling" data-bs-parent="#accordionQuotation">
+<!-- 									<button hidden class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseQuotation<?php echo $item->ID; ?>" aria-expanded="true" aria-controls="collapseQuotation<?php echo $item->ID; ?>"></button> -->
+									<div id="collapseQuotation<?php echo $item->ID; ?>" class="accordion-collapse collapse" aria-labelledby="headingBilling">
 										<div class="accordion-body">
-											<div class="wrap-detail-cart collapse" id="collapseQuotation">
+											<div class="wrap-detail-cart">
 									        	<?php
 									            $cxecrt->backup_current_cart();
 									            $cxecrt->load_cart_from_post($item->ID);
@@ -125,13 +126,13 @@ if (count($arr_object) > 0) {
 								        </svg>
 								        <span class="nb-action">Remove</span>
 								    </a>
-								    <a class="btn btn-view-detail-cart" data-toggle="collapse" href="#accordionQuotation" role="button" aria-expanded="false" aria-controls="accordionQuotation">
+								    <a class="btn btn-view-detail-cart" data-bs-toggle="collapse" href="#collapseQuotation<?php echo $item->ID; ?>" role="button" aria-expanded="false" data-bs-target="#collapseQuotation<?php echo $item->ID; ?>" aria-controls="collapseQuotation<?php echo $item->ID; ?>">
 								    	<span class="nb-show nb-action-accordion">
 								    		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
 												<path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
 											</svg>
 								    	</span>
-								    	<span class="nb-hidden nb-action-accordion hidden">
+								    	<span class="nb-hidden nb-action-accordion">
 								    		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
 											  	<path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
 											</svg>

@@ -14,8 +14,8 @@ if ( ! function_exists( 'nb_step_content_shipping' ) ) {
 	function nb_step_content_shipping() {
 		$packages = WC()->shipping()->get_packages();
 		$first    = true;
-
 		foreach ( $packages as $i => $package ) {
+
 			$chosen_method = isset( WC()->session->chosen_shipping_methods[ $i ] ) ? WC()->session->chosen_shipping_methods[ $i ] : '';
 
 			$available_methods = $package['rates'];

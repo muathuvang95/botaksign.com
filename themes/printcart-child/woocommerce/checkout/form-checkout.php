@@ -117,7 +117,7 @@ $steps = array(
                 <span>PREVIOUS</span>
             </a>
             <a id="nb-next" class="checkout-button button nb-button-check-out" style="cursor: pointer;">
-                <span>Next</span>
+                <span>Check out</span>
             </a>
         </div>
     </div> 
