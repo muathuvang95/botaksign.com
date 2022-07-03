@@ -73,6 +73,8 @@ foreach (WC()->cart->cart_contents as $key => $item) {
 
 do_action('woocommerce_before_cart');
 ?>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
 
 <form class="woocommerce-cart-form" action="<?php echo esc_url(wc_get_cart_url()); ?>" method="post">
     <div class="row">
@@ -191,7 +193,7 @@ function render_product_and_service($cart_item_key, $cart_item, $_product, $prod
             ?>
         </div>
 
-        <div class="col-md-5 btk-product-name">
+        <div class="col-lg-4 btk-product-name">
             <?php
             if (!$product_permalink) {
                 echo wp_kses_post(apply_filters('woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key) . '&nbsp;');
@@ -200,16 +202,17 @@ function render_product_and_service($cart_item_key, $cart_item, $_product, $prod
             }
 
             do_action('woocommerce_after_cart_item_name', $cart_item, $cart_item_key);
-
+            echo '<div class="collapse mt-3" id="'. $cart_item_key .'">';
             // Meta data.
             echo wc_get_formatted_cart_item_data($cart_item); // PHPCS: XSS ok.
             // Backorder notification.
             if ($_product->backorders_require_notification() && $_product->is_on_backorder($cart_item['quantity'])) {
                 echo wp_kses_post(apply_filters('woocommerce_cart_item_backorder_notification', '<p class="backorder_notification">' . esc_html__('Available on backorder', 'woocommerce') . '</p>', $product_id));
             }
+            echo '</div>';
             ?>
         </div>
-        <div class="col-md-5 btk-action-table">
+        <div class="col-lg-6 btk-action-table">
             <div class="row row-price">
                 <div class="product-subtotal" data-title="<?php esc_attr_e('Total', 'woocommerce'); ?>">
 <!--                     <p class="title"><?php esc_attr_e('Total', 'woocommerce'); ?></p> -->
@@ -219,7 +222,7 @@ function render_product_and_service($cart_item_key, $cart_item, $_product, $prod
                 </div>
             </div>
             <div class="row row-action">
-                <div class="btk-product-quantity" data-title="<?php esc_attr_e('Quantity', 'woocommerce'); ?>">
+                <div class="btk-product-quantity mr-1 mb-1" data-title="<?php esc_attr_e('Quantity', 'woocommerce'); ?>">
                     <?php
                     if ($_product->is_sold_individually()) {
                         $product_quantity = sprintf('1 <input type="hidden" name="cart[%s][qty]" value="1" />', $cart_item_key);
@@ -238,7 +241,7 @@ function render_product_and_service($cart_item_key, $cart_item, $_product, $prod
                     echo apply_filters('woocommerce_cart_item_quantity', $product_quantity, $cart_item_key, $cart_item); // PHPCS: XSS ok.
                     ?>
                 </div>
-                <div class="btk-product-edit">
+                <div class="btk-product-edit mr-1 mb-1">
                     <?php
                         $link = add_query_arg(
                             array(
@@ -254,7 +257,7 @@ function render_product_and_service($cart_item_key, $cart_item, $_product, $prod
                         );
                     ?>
                 </div>
-                <div class="btk-product-remove">
+                <div class="btk-product-remove mr-1 mb-1">
                     <?php
                     $svg_trash = '<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" viewBox="0 -256 1792 1792" id="svg3741" version="1.1" inkscape:version="0.48.3.1 r9886" width="20" height="20" sodipodi:docname="trash_font_awesome.svg"> <g transform="matrix(1,0,0,-1,197.42373,1255.0508)" id="g3743"> <path d="M 512,800 V 224 q 0,-14 -9,-23 -9,-9 -23,-9 h -64 q -14,0 -23,9 -9,9 -9,23 v 576 q 0,14 9,23 9,9 23,9 h 64 q 14,0 23,-9 9,-9 9,-23 z m 256,0 V 224 q 0,-14 -9,-23 -9,-9 -23,-9 h -64 q -14,0 -23,9 -9,9 -9,23 v 576 q 0,14 9,23 9,9 23,9 h 64 q 14,0 23,-9 9,-9 9,-23 z m 256,0 V 224 q 0,-14 -9,-23 -9,-9 -23,-9 h -64 q -14,0 -23,9 -9,9 -9,23 v 576 q 0,14 9,23 9,9 23,9 h 64 q 14,0 23,-9 9,-9 9,-23 z M 1152,76 v 948 H 256 V 76 Q 256,54 263,35.5 270,17 277.5,8.5 285,0 288,0 h 832 q 3,0 10.5,8.5 7.5,8.5 14.5,27 7,18.5 7,40.5 z M 480,1152 h 448 l -48,117 q -7,9 -17,11 H 546 q -10,-2 -17,-11 z m 928,-32 v -64 q 0,-14 -9,-23 -9,-9 -23,-9 h -96 V 76 q 0,-83 -47,-143.5 -47,-60.5 -113,-60.5 H 288 q -66,0 -113,58.5 Q 128,-11 128,72 v 952 H 32 q -14,0 -23,9 -9,9 -9,23 v 64 q 0,14 9,23 9,9 23,9 h 309 l 70,167 q 15,37 54,63 39,26 79,26 h 320 q 40,0 79,-26 39,-26 54,-63 l 70,-167 h 309 q 14,0 23,-9 9,-9 9,-23 z" id="path3745" inkscape:connector-curvature="0" style="fill:currentColor"/> </g></svg>';
                     $remove_html = '<a href="%s" class="remove" aria-label="%s" data-product_id="%s" data-product_sku="%s">'.$svg_trash.' <span class="btk-title-action">Remove</span></a>';
@@ -265,8 +268,8 @@ function render_product_and_service($cart_item_key, $cart_item, $_product, $prod
                     );
                     ?>
                 </div>
-                <div class="btk-product-remove">
-                    <div class="btk-target-show-more-item btk-button-down active">
+                <div class="btk-product-remove mb-1" data-toggle="collapse" data-target="#<?php echo esc_attr($cart_item_key); ?>" aria-expanded="false" aria-controls="<?php echo esc_attr($cart_item_key); ?>">
+                    <div class="btk-target-show-more-item btk-button-down active" >
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
                         </svg>
@@ -280,14 +283,7 @@ function render_product_and_service($cart_item_key, $cart_item, $_product, $prod
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-        jQuery(document).ready(function ($) {
-            $('.btk-target-show-more-item').on('click', function() {
-                $('.btk-target-show-more-item.btk-button-down').toggleClass('active');
-                $('.btk-target-show-more-item.btk-button-up').toggleClass('active');
-
-            })
-        })
-    </script>
     <?php }
 ?>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

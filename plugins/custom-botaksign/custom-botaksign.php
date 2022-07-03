@@ -1583,11 +1583,6 @@ function print_footer_botaksign()
                     },
                 });
             }
-            $(".item-quotation-cart .btn-view-detail-cart").click(function () {
-                $('.nb-hidden.nb-action-accordion').toggleClass('hidden');
-                $('.nb-show.nb-action-accordion').toggleClass('hidden');
-                $('.nb-accordion-quotation .accordion-button').trigger( "click" );
-            });
             $(".submit-upload-design").click(function () {
                 $('.single-product .single-product-wrap .wrap-price-pro').css('margin-top', '30px');
             });
