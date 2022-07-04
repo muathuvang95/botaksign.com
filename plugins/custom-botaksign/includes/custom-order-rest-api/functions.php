@@ -1250,7 +1250,14 @@ function v3_get_role_status_by_user($user_id) {
     }
     $user_can = array();
     $is_role = array_search(min($role_level), $role_level);
-    $user_can = $get_option_roles[$is_role] ;
+    $list_status = unserialize(get_option('custom_status_order') );
+
+    foreach($get_option_roles[$is_role] as $key => $value) {
+        if($value == 1) {
+            $user_can[$key] =  $list_status[$key];
+        }  
+    }
+
     return $user_can;
 }
 

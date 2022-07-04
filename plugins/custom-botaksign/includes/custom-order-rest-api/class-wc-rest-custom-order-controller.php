@@ -273,6 +273,7 @@ class WC_REST_Custom_Controller {
 	                $opt_status = 'order_received';
 	                wc_update_order_item_meta($item_id, '_item_status', $opt_status);
 	            }
+	            $user_can[$opt_status] = unserialize(get_option('custom_status_order') )[$opt_status];
 	            $nbu_item_key = wc_get_order_item_meta($item_id, '_nbu');
 	            $nbd_item_key = wc_get_order_item_meta($item_id, '_nbd');
 	            $download = wc_get_order_item_meta($item_id , '_nbd_item_edit');
@@ -302,10 +303,10 @@ class WC_REST_Custom_Controller {
 				$items['production_time']	= v3_get_production_time_item($item ,$order , false);
 				$items['date_completed']	= $time_completed;
 				$items['date_out']			= wc_get_order_item_meta($item_id, '_item_date_out');
-				$items['list_status']		= unserialize(get_option('custom_status_order') );
+				$items['list_status']		= $user_can;
 				$items['expiring']			= $check_expiring;
 				$items['item_on_hold']      = wc_get_order_item_meta($item_id , '_item_on_hold');
-				$items['user_can']    		= $user_can[$opt_status] == 1 ? 'edit' : 'view';
+				$items['user_can']    		= 'edit';
 				$item_meta[] = $items;
 				$order_no ++;
 			}	
@@ -822,7 +823,8 @@ class WC_REST_Custom_Controller {
 			update_option('per_page_order_dashboard' ,  $per_page_new);
 			$per_page = $per_page_new;
 		}
-		$data['time_refresh'] = $time_refresh;
+		// $data['time_refresh'] = $time_refresh;
+		$data['time_refresh'] = 1000;
 		$data['per_page'] = $per_page;
 		$response = rest_ensure_response($data);
 		return $response;
@@ -1321,10 +1323,11 @@ class WC_REST_Custom_Controller {
 		// }
 		if($specialist) {
 			if(is_array($specialist)) {
-				$query_last .= " AND ( wp_postmeta.meta_key = '_specialist_id' AND ( ";
+				$query_first .= " INNER JOIN wp_postmeta AS mts ON ( wp_posts.ID = mts.post_id )";
+				$query_last .= " AND ( mts.meta_key = '_specialist_id' AND ( ";
 				foreach ($specialist as $key => $value) {
 					$specialist_id = $value->id;
-					$query_last .= "wp_postmeta.meta_value = '${specialist_id}'";
+					$query_last .= "mts.meta_value = '${specialist_id}'";
 					if(count($specialist) >0 && $key < count($specialist) - 1) {
 						$query_last .= " OR ";
 					}
