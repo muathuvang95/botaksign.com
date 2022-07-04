@@ -1,6 +1,6 @@
 <?php 
 $email_button_title = "Order Complete";
-$email_button_color = "transparent linear-gradient(180deg, #1BCB3F 0%, #45D242 33%, #7BDB46 78%, #91DF48 100%) 0% 0% no-repeat padding-box";
+$email_button_color = "#1BCB3F";
 ?>
 
 <table id="header-logo" style="width:100%;padding-top:20px;border-collapse:collapse;margin-bottom:45px;">
