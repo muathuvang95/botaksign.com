@@ -4,7 +4,7 @@
             <div class="footer-text-2" style="color:#1BCB3F;">9190 7688 / 6286 2298</div>
             <div class="footer-text-3" style="color:#B7B7B7;">© Botak Sign Pte Ltd 2020. All rights reserved.</div>
         </div>
-        <table style="border-collapse:collapse;display: inline-block;padding-top: 20px">
+        <table style="border-collapse:collapse;display: inline-block;padding-top: 20px; margin: 0 auto;">
             <tbody><tr>
                     <td align="center" style="padding-left: 5px; padding-right: 5px"><img class="confim" style="margin-right: 0!important;width: 32px" src="https://botaksign.com/wp-content/plugins/custom-botaksign/assets/images/fb.png"></td>
                     <td align="center" style="padding-left: 5px; padding-right: 5px"><img class="confim" style="margin-right: 0!important;width: 32px" src="https://botaksign.com/wp-content/plugins/custom-botaksign/assets/images/inta.png"></td>

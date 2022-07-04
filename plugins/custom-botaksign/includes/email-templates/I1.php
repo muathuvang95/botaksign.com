@@ -1,6 +1,6 @@
 <?php 
 $email_button_title = "Payment Failed";
-$email_button_color = "transparent linear-gradient(0deg, #FF0000 0%, #F78F8F 100%) 0% 0% no-repeat padding-box";
+$email_button_color = "#FF0000";
 ?>
 
 <table id="header-logo" style="width:100%;padding-top:20px;border-collapse:collapse;margin-bottom:45px;">
