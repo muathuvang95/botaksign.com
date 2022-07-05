@@ -1,6 +1,9 @@
 .nb-steps-wrapper .woocommerce-checkout {
 	margin-bottom: 20px!important;
 }
+.nb-tabs-wrapper {
+	margin-bottom: 20px;
+}
 .nb-tabs-wrapper .nb-tabs-list {
 	display: flex;
 	justify-content: space-evenly;
@@ -264,15 +267,16 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 .nb-footer-action .btn-generate-quotation,
 .nb-footer-action #nb-prev.nb-button-check-out {
 	cursor: pointer;
-    height: 40px;
-    line-height: 40px;
+    height: 45px;
+    line-height: 45px;
     border: none;
     border-radius: 10px;
-    width: auto;
     background: #FFFFFF 0% 0% no-repeat padding-box;
-	width: 180px;
+	width: 235px;
 	text-align: center;
 	box-shadow: 0px 20px 50px #00000029;
+	font-size: 14px;
+	margin-right: 20px;
 }
 .nb-footer-action .btn-generate-quotation.hidden,
 .nb-footer-action #nb-prev.nb-button-check-out.hidden {
@@ -281,14 +285,14 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 
 .nb-footer-action #nb-next.nb-button-check-out {
 	cursor: pointer;
-    height: 40px;
-    line-height: 40px;
+    height: 45px;
+    line-height: 45px;
     border: 0px;
     border-radius: 10px;
-    width: auto;
     background: transparent linear-gradient(180deg, #1BCB3F 0%, #45D242 33%, #7BDB46 78%, #91DF48 100%) 0% 0% no-repeat padding-box;
-    width: 180px;
+    width: 235px;
     text-align: center;
+    font-size: 14px;
 }
 
 .nb-footer-action .btn-generate-quotation span,
@@ -381,6 +385,16 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 }
 .nb-shipping-order-details {
 	margin-top: 40px;
+}
+.nb-shipping-order-details .nb-delivery-detail .title {
+	font-size: 15px;
+	line-height: 1.5;
+	color: #000000;
+}
+.nb-shipping-order-details .nb-delivery-detail {
+	font-size: 14px;
+	line-height: 1.5;
+	color: #000000;
 }
 .nb-shipping-order-details .nb-delivery-detail .order-time-info {
 	display: inline-block;
