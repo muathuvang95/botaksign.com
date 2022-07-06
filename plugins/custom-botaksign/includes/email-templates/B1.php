@@ -9,7 +9,7 @@ $email_button_color = "#1BCB3F";
             <td align="left" style="width:50%;"><img class="logo" src="https://botaksign.com/wp-content/plugins/custom-botaksign/assets/images/logo.png" style="margin-left:0px;margin-top:0px;height: 56px; width: auto;"></td>
             <td align="right" style="width:50%;">
                 <?php if($email_button_title && $email_button_color) {
-                    echo '<button style="background: '. $email_button_color .';box-shadow: 0px 10px 20px #00000029; border: none; color: #fff; padding: 14px 40px; font-size: 22px; line-height: 28px; border-radius: 10px;">'. $email_button_title .'</button>';
+                    echo '<button class="status-button" style="background: '. $email_button_color .';box-shadow: 0px 10px 20px #00000029; border: none; color: #fff; padding: 14px 40px; font-size: 22px; line-height: 28px; border-radius: 10px;">'. $email_button_title .'</button>';
                 } ?>
             </td>
         </tr>
@@ -80,7 +80,7 @@ if ($order) {
 
     ?>
     <div style="margin-bottom: 25px;">
-        <span class="info-title" style="display:block;font-size:17px !important; line-height: 20px; font-weight: 500; margin-bottom: 12px;"><?php printf( esc_html__( 'Hi %s,', 'woocommerce' ), esc_html( $order->get_billing_first_name() ) ); ?></span>
+        <span class="info-title" style="display:block;font-size:17px; line-height: 20px; font-weight: 500; margin-bottom: 12px;"><?php printf( esc_html__( 'Hi %s,', 'woocommerce' ), esc_html( $order->get_billing_first_name() ) ); ?></span>
         <span class="info-subtext" style="font-size:14px !important; line-height: 24px; color:#231f20;">Thanks for ordering with us! Your order <span style="font-weight: 500;">#<?php echo $order_id; ?></span> has been placed successfully. You’ll receive another email notifying you when your order is ready for <?php echo $shippting_method == 'Self-collection' ? 'collection' : 'delivery' ?>.</span>
     </div>
     <div style="border: 1px solid #ECECEC; box-shadow: 0px 0px 12px #0000001F; border-radius: 1em; padding: 20px; overflow: hidden; background: #fafafa;">

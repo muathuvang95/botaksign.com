@@ -24,11 +24,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="nb-dashboard">
 	<div class="nb-dashboard-header">
-		<div class="nb-dashboard-header-title">
-			Hello <span class="name"><?php echo esc_html( $current_user->display_name ); ?>!</span>
-		</div>
-		<div class="nb-dashboard-header-desc">
-			It’s good to see you again.
+		<div class="row">
+			<div class="col-sm-6" style="padding-top: 10px; padding-bottom: 20px;">
+				<div class="nb-dashboard-header-title">
+					Hello <span class="name"><?php echo esc_html( $current_user->display_name ); ?>!</span>
+				</div>
+				<div class="nb-dashboard-header-desc">
+					It’s good to see you again.
+				</div>
+			</div>
+			<div class="col-sm-6" style="display: flex;align-items: end;">
+				<div class="nb-dashboard-thumbnail-wrap">
+					<img style="width: 90%; height: auto" src="<?php echo esc_attr(CUSTOM_BOTAKSIGN_URL.'assets/images/gif2.gif'); ?>" alt="">
+				</div>
+			</div>
 		</div>
 	</div>
 

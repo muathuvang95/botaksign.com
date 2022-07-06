@@ -505,5 +505,14 @@ $keys = array('a5598861647590597', '823a7891647591076', '6d590391647620413', '7f
 //
 
 
-v3_generate_order_detail_pdf(44736);
+// v3_generate_order_detail_pdf(44736);
 // echo v3_generate_order_detail_pdf(44719);
+// 
+
+$order = wc_get_order(44719);
+
+include(CUSTOM_BOTAKSIGN_PATH . "includes/email-templates/email_header.php");
+
+include(CUSTOM_BOTAKSIGN_PATH . "includes/email-templates/D1.php");
+
+include(CUSTOM_BOTAKSIGN_PATH . "includes/email-templates/email_footer.php");
