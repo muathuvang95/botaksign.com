@@ -80,7 +80,7 @@ if (function_exists('yoast_breadcrumb')) { ?>
 								<span>Or</span>
 							</div>
 						</div>
-						<div class="col-md-5 nb-login-left">
+						<div class="col-md-5 nb-login-right">
 							<div class="nb-social-login">
 						        <div class="nb-social-login">
 									<?php if( class_exists('NextendSocialLogin') ) { ?>
