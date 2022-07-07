@@ -1,4 +1,4 @@
-<div style="border: 1px solid #ECECEC; box-shadow: 0px 0px 12px #0000001F; border-radius: 1em; padding: 20px; overflow: hidden; background: #fafafa;color:#000000;font-weight: 400;font-size:15px; line-height: 24px;">
+<div style="border: 1px solid #ECECEC; box-shadow: 0px 0px 12px #0000001F; border-radius: 1em; padding: 20px 20px 0 20px; overflow: hidden; background: #fafafa;color:#000000;font-weight: 400;font-size:15px; line-height: 24px;">
     <div style="display: flex;">
         <div style="width: 50%;">
             <div class="stt" align="left" style="padding-bottom:40px;">
@@ -9,7 +9,7 @@
                 <div>You’re now part of us.</div>
             </div>
         </div>
-        <div style="width: 50%;">
+        <div style="width: 50%; display: flex;align-self: flex-end;">
             <img style="width: 100%; height: auto" src="<?php echo esc_attr(CUSTOM_BOTAKSIGN_URL.'assets/images/gif1.gif'); ?>" alt="">
         </div>
     </div>

@@ -108,7 +108,7 @@ if ($order) {
                             <div>Kindly show this email upon collection as proof of purchase.</div>
                         </div>
                     </div>
-                    <div style="width: 50%;">
+                    <div style="width: 50%;display: flex;justify-content: flex-end;">
                         <img style="width: 100%; height: auto" src="<?php echo esc_attr(CUSTOM_BOTAKSIGN_URL.'assets/images/gif3.gif'); ?>" alt="">
                     </div>
                 </div>
@@ -133,7 +133,7 @@ if ($order) {
                             <div><?php echo $order_data['billing']['phone']; ?></div>
                         </div>
                     </div>
-                    <div style="width: 50%;">
+                    <div style="width: 50%;display: flex;justify-content: flex-end;">
                         <img style="width: 100%; height: auto" src="<?php echo esc_attr(CUSTOM_BOTAKSIGN_URL.'assets/images/gif3.gif'); ?>" alt="">
                     </div>
                 </div>
