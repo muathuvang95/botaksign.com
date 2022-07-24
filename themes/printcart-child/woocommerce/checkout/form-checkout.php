@@ -109,16 +109,20 @@ $steps = array(
     <div class="col-md-6">
     </div>
     <div class="col-md-6">
-        <div class="nb-footer-action-right">
-            <a class="checkout-button button alt wc-forward bt-5 btn-generate-quotation" style="cursor: pointer;">
-                <span>Quotation</span>
-            </a>
-            <a id="nb-prev" class="checkout-button button nb-button-check-out hidden" style="cursor: pointer;">
-                <span>PREVIOUS</span>
-            </a>
-            <a id="nb-next" class="checkout-button button nb-button-check-out" style="cursor: pointer;">
-                <span>Check out</span>
-            </a>
+        <div class="row nb-footer-action-right">
+            <div class="col-sm-6">
+                <a class="checkout-button button alt wc-forward bt-5 btn-generate-quotation" style="cursor: pointer;">
+                    <span>Quotation</span>
+                </a>
+                <a id="nb-prev" class="checkout-button button nb-button-check-out hidden" style="cursor: pointer;">
+                    <span>PREVIOUS</span>
+                </a>
+            </div>
+            <div class="col-sm-6">
+                <a id="nb-next" class="checkout-button button nb-button-check-out" style="cursor: pointer;">
+                    <span>Check out</span>
+                </a>
+            </div> 
         </div>
     </div> 
 </div>

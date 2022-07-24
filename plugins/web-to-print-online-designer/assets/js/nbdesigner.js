@@ -218,8 +218,8 @@ jQuery(document).ready(function () {
         }
         // custom botak upload s3 by JS SDK 
         var bucket = new AWS.S3({
-            accessKeyId: "AKIAX4QORCYMGSQXVT55",
-            secretAccessKey: "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",
+            accessKeyId: "",
+            secretAccessKey: "",
             region: 'ap-southeast-1'
         });
         awsUploadfile = function(fileName, file, folderName , formData , nbds_frontend , nbu_item_key , fileS3) {
