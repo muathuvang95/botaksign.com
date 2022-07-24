@@ -41,7 +41,7 @@ if (function_exists('yoast_breadcrumb')) { ?>
 
 							<div class="nb-form-login">
 
-								<div class="nb-signing-title"><?php esc_html_e( 'Sign In', 'woocommerce' ); ?></div>
+								<div class="nb-signin-title"><?php esc_html_e( 'Sign In', 'woocommerce' ); ?></div>
 								<p>Continue where you left off</p>
 
 								<form class="woocommerce-form woocommerce-form-login login" method="post">

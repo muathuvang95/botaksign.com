@@ -17,7 +17,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if( $order->get_date_paid() ) {
+if( $order->get_date_paid() || $order->get_payment_method() == 'cod') {
 	$i  = 0;
 
 	$steps = array(
@@ -36,7 +36,7 @@ if( $order->get_date_paid() ) {
 	        "title" => "Check Out",
 	        "class" => "nb-step-checkout",
 	    ),
-	)
+	);
 
 	?>
 
