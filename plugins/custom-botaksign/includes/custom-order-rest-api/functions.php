@@ -1240,13 +1240,24 @@ function v3_array_merge($array1 , $array2) {
 }
 function v3_get_role_status_by_user($user_id) {
     $get_option_roles = unserialize(get_option('status_role_methods'));
+    $get_option_roles_level = unserialize(get_option('save_option_roles_level'));
     $roles = get_userdata($user_id)->roles;
-    $user_can = array();  
+    $role_level = [];
     if(is_array($roles)) {
         foreach ($roles as $key => $role) {
-            $user_can = v3_array_merge($user_can , $get_option_roles[$role] );
+            $role_level[$role] = isset($get_option_roles_level[$role]) ? $get_option_roles_level[$role] : $key;
         }
     }
+    $user_can = array();
+    $is_role = array_search(min($role_level), $role_level);
+    $list_status = unserialize(get_option('custom_status_order') );
+
+    foreach($get_option_roles[$is_role] as $key => $value) {
+        if($value == 1) {
+            $user_can[$key] =  $list_status[$key];
+        }  
+    }
+
     return $user_can;
 }
 

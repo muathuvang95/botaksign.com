@@ -33,7 +33,7 @@ jQuery(window).ready(function($){
 				} else {
 					cout_step = 4;
 				}
-				if(cout_step > 1) {
+				if($('.nb-step-item').hasClass('current')) {
 					$('#nb-prev').removeClass('hidden');
 					$('.btn-generate-quotation').addClass('hidden');
 				}

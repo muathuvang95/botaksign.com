@@ -1,6 +1,9 @@
 .nb-steps-wrapper .woocommerce-checkout {
 	margin-bottom: 20px!important;
 }
+.nb-tabs-wrapper {
+	margin-bottom: 20px;
+}
 .nb-tabs-wrapper .nb-tabs-list {
 	display: flex;
 	justify-content: space-evenly;
@@ -264,15 +267,15 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 .nb-footer-action .btn-generate-quotation,
 .nb-footer-action #nb-prev.nb-button-check-out {
 	cursor: pointer;
-    height: 40px;
-    line-height: 40px;
+    height: 45px;
+    line-height: 45px;
     border: none;
     border-radius: 10px;
-    width: auto;
     background: #FFFFFF 0% 0% no-repeat padding-box;
-	width: 180px;
+	width: 100%;
 	text-align: center;
 	box-shadow: 0px 20px 50px #00000029;
+	font-size: 14px;
 }
 .nb-footer-action .btn-generate-quotation.hidden,
 .nb-footer-action #nb-prev.nb-button-check-out.hidden {
@@ -281,14 +284,14 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 
 .nb-footer-action #nb-next.nb-button-check-out {
 	cursor: pointer;
-    height: 40px;
-    line-height: 40px;
+    height: 45px;
+    line-height: 45px;
     border: 0px;
     border-radius: 10px;
-    width: auto;
     background: transparent linear-gradient(180deg, #1BCB3F 0%, #45D242 33%, #7BDB46 78%, #91DF48 100%) 0% 0% no-repeat padding-box;
-    width: 180px;
+    width: 100%;
     text-align: center;
+    font-size: 14px;
 }
 
 .nb-footer-action .btn-generate-quotation span,
@@ -298,6 +301,10 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 .nb-footer-action-right {
 	display: flex;
 	justify-content: space-between;
+	flex-wrap: wrap;
+}
+.nb-footer-action-right .checkout-button {
+	margin-bottom: 20px;
 }
 .nb-step-item-billing, .nb-step-checkout-thankyou {
 	background: transparent linear-gradient(179deg, #FFFFFF 0%, #F6F8F7 100%) 0% 0% no-repeat padding-box;
@@ -309,10 +316,25 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 	background: transparent linear-gradient(179deg, #FFFFFF 0%, #F6F8F7 100%) 0% 0% no-repeat padding-box;
 	border: 1px solid #0000001F;
 	border-radius: 10px;
-	padding: 40px 30px;
+	padding: 0 45px;
 	max-width: 700px;
 	margin-right: auto;
 	margin-left: auto;
+}
+.nb-checkout-thankyou-left {
+	padding: 30px 0;
+}
+.nb-checkout-thankyou-left .nb-checkout-success .nb-checkout-icon {
+	display: inline-block;
+}
+.nb-checkout-thankyou-left .nb-checkout-success .nb-checkout-icon.mobile {
+	display: none;
+}
+.nb-thankyou-image-mobile {
+	display: none;
+}
+.nb-tabs-checkout-thankyou {
+	display: block;
 }
 .nb-step-item-billing .woocommerce-billing-fields h3 {
 	text-align: center;
@@ -382,6 +404,16 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 .nb-shipping-order-details {
 	margin-top: 40px;
 }
+.nb-shipping-order-details .nb-delivery-detail .title {
+	font-size: 15px;
+	line-height: 1.5;
+	color: #000000;
+}
+.nb-shipping-order-details .nb-delivery-detail {
+	font-size: 14px;
+	line-height: 1.5;
+	color: #000000;
+}
 .nb-shipping-order-details .nb-delivery-detail .order-time-info {
 	display: inline-block;
 	border: none;
@@ -422,18 +454,37 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 	.nb-footer-action {
 		text-align: right;
 	}
-	.nb-footer-action .btn-generate-quotation, .nb-footer-action .nb-button-check-out {
-		padding: 0;
-		width: 120px!important;
-	}
 	.nb-tabs-wrapper .nb-tab-line {
 		width: 100px;
 	}
-}
-
-@media screen and (max-width: 992px) {
-	.nb-footer-action .btn-generate-quotation, .nb-footer-action .nb-button-check-out {
-		padding: 0;
-		width: 160px!important;
+	.nb-tabs-checkout-thankyou {
+		display: none;
+	}
+	.nb-thankyou-image-mobile {
+		display: block;
+		text-align: center;
+	}
+	.nb-thankyou-image-mobile img {
+		width: 33%;
+		height: auto;
+	}
+	.nb-checkout-thankyou-right img {
+		display: none;
+	}
+	.nb-checkout-thankyou-left {
+		text-align: center;
+	}
+	.nb-checkout-thankyou-left .nb-checkout-success .nb-checkout-title {
+		display: none;
+	}
+	.nb-checkout-thankyou-left .nb-checkout-success .nb-checkout-icon {
+		display: none;
+	}
+	.nb-checkout-thankyou-left .nb-checkout-success .nb-checkout-icon.mobile {
+		display: inline-block;
+	}
+	.nb-checkout-thankyou-left .nb-checkout-success .nb-checkout-icon.mobile svg{
+		width: 35px;
+		height: 35px;
 	}
 }
