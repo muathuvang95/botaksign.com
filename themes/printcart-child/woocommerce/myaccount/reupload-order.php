@@ -73,6 +73,9 @@ if($order) {
     }
     $items = $order->get_items('line_item');
     $price_service = 0;
+    if($save_design_reorder && $nbd_item_key) {
+        nbd_export_pdfs( $nbd_item_key, false, false, 'no' );
+    }
     if($items):
         ?>
             <div id="nb-custom-reupload" class="container">
