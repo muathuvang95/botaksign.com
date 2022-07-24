@@ -68,6 +68,9 @@ $save_design_reorder = isset($_GET['save_design_reorder']) ? $_GET['save_design_
 $nbd_item_key = isset($_GET['nbd_item_key']) ? $_GET['nbd_item_key'] : '';
 $order = wc_get_order($order_id);
 if($order) {
+    if($save_design_reorder && $nbd_item_key) {
+        nbd_export_pdfs( $nbd_item_key, false, false, 'no' );
+    }
     $items = $order->get_items('line_item');
     $price_service = 0;
     if($save_design_reorder && $nbd_item_key) {
