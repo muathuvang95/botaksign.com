@@ -39,7 +39,22 @@ $items_parent = [];
 $items_service = [];
 $push_status = false;
 $time_option_items = [];
+$order_created_at = $order->get_date_created();
+$can_reorder = true;
 foreach ($list_item as $item_id => $item) {
+    $product = $item->get_product();
+    $product_id = $product->get_id();
+    if($product_id) {
+        $option_id = NBD_FRONTEND_PRINTING_OPTIONS::get_product_option($product_id);
+        $_options = NBD_FRONTEND_PRINTING_OPTIONS::get_option( $option_id );
+        if(isset($_options['modified']) && $_options['modified'] ) {
+            if( strtotime($_options['modified']) > strtotime($order_created_at) ) {
+                $can_reorder = false;
+            }
+        }
+    }
+    
+
     if ($item->get_meta('_parent_cart_item_key')) {
         $items_service[] = $item;
     } else {
@@ -361,7 +376,11 @@ $est_time = show_est_completion($order);
 		</tfoot>
 	</table>
 
-	<?php do_action( 'woocommerce_order_details_after_order_table', $order ); ?>
+	<?php 
+    if($can_reorder) {
+        do_action( 'woocommerce_order_details_after_order_table', $order ); 
+    }
+    ?>
 </section>
 
 <script>
