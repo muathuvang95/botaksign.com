@@ -2062,7 +2062,7 @@ if( $cart_item_key != ''){ ?>
 <script type="text/javascript">
     //custom BOTAK refresh value input when going back page
     window.addEventListener("pageshow", function() {
-        var form = jQuery('form'); 
+        var form = jQuery('form.cart'); 
         form[0].reset();
     });
     (function($){
