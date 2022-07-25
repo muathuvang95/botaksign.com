@@ -218,20 +218,20 @@ jQuery(document).ready(function () {
         }
         // custom botak upload s3 by JS SDK 
         var bucket = new AWS.S3({
-            accessKeyId: "",
-            secretAccessKey: "",
-            region: 'ap-southeast-1'
+            accessKeyId: nbds_frontend.awsAccessKey,
+            secretAccessKey: nbds_frontend.awsSecretKey,
+            region: nbds_frontend.awsRegion
         });
         awsUploadfile = function(fileName, file, folderName , formData , nbds_frontend , nbu_item_key , fileS3) {
             const params = {
-                Bucket: "botaksignorder",
+                Bucket: nbds_frontend.awsBucket,
                 Key: folderName + fileName,
                 Body: file,
                 ContentType: file.type,
                 ACL : 'public-read'
             };
             const params_remove = {
-                Bucket: "botaksignorder",
+                Bucket: nbds_frontend.awsBucket,
                 Key: folderName + fileName,
             };
             return bucket.upload(params, function(err, data) {
@@ -380,99 +380,30 @@ jQuery(document).ready(function () {
                 }
             });
         }
-        //end s3
-        // function uploadFile(files){
-        //     var file = files[0],
-        //     type = file.type.toLowerCase();
-        //     if( listFileUpload.length > (nbd_number-1) ) {
-        //         alert('Exceed number of upload files!');
-        //         return;
-        //     }
-        //     //if( type == '' ){
-        //         type = file.name.substring(file.name.lastIndexOf('.')+1).toLowerCase();
-        //     //}
-        //     type = type == 'image/jpeg' ? 'image/jpg' : type;
-        //     if( nbd_disallow_type != '' ){
-        //         var nbd_disallow_type_arr = nbd_disallow_type.toLowerCase().split(',');
-        //         var check = false;
-        //         nbd_disallow_type_arr.forEach(function(value){
-        //             value = value == 'jpeg' ? 'jpg' : value;
-        //             if( type.indexOf(value) > -1 ){
-        //                 check = true;
-        //             }
-        //         });
-        //         if( check ){
-        //             resetUploadInput();
-        //             alert('Disallow extensions: ' + nbd_disallow_type);
-        //             return;
-        //         }
-        //     }
-        //     if( nbd_allow_type != '' ){
-        //         var nbd_allow_type_arr = nbd_allow_type.toLowerCase().split(',');
-        //         var check = false;
-        //         nbd_allow_type_arr.forEach(function(value){
-        //             value = value == 'jpeg' ? 'jpg' : value;
-        //             if( type.indexOf(value) > -1 ){
-        //                 check = true;
-        //             }
-        //         });   
-        //         if( !check ){
-        //             resetUploadInput();
-        //             alert('Only support: ' + nbd_allow_type);
-        //             return;
-        //         }
-        //     }
-        //     if (file.size > nbd_maxsize * 1024 * 1024 ) {
-        //         alert('Max file size' + nbd_maxsize + " MB");
-        //         resetUploadInput();
-        //         return;
-        //     }else if(file.size < nbd_minsize * 1024 * 1024){
-        //         alert('Min file size' + nbd_minsize + " MB");
-        //         resetUploadInput();
-        //         return;
-        //     };
-        //     var formData = new FormData;
-        //     formData.append('file', file);
-        //     jQuery('.nbd-upload-loading').addClass('is-visible');
-        //     jQuery('.upload-zone label').addClass('is-loading');
-        //     jQuery('.nbd-m-upload-design-wrap').addClass('is-loading');
-        //     var first_time = listFileUpload.length > 0 ? 2 : 1;
-        //     var product_id = jQuery('[name="nbd-add-to-cart"]').attr('value');
-        //     var variation_id = jQuery('[name="variation_id"]').length > 0 ? jQuery('[name="variation_id"]').attr('value') : 0;
-        //     formData.append('first_time', first_time);
-        //     formData.append('action', 'nbd_upload_design_file');
-        //     formData.append('task', 'new');
-        //     formData.append('product_id', product_id);
-        //     formData.append('variation_id', variation_id);
-        //     formData.append('nonce', nbds_frontend.nonce);
-        //     jQuery.ajax({
-        //         url: nbds_frontend.url,
-        //         method: "POST",
-        //         dataType: 'json',
-        //         cache: false,
-        //         contentType: false,
-        //         processData: false,
-        //         data: formData,
-        //         complete: function() {
-        //             jQuery('.nbd-upload-loading').removeClass('is-visible');
-        //             jQuery('.upload-zone label').removeClass('is-loading');
-        //             jQuery('.nbd-m-upload-design-wrap').removeClass('is-loading');
-        //         },
-        //         success: function(data) {
-        //             if( data.flag == 1 ){
-        //                 listFileUpload.push( { src : data.src, name : data.name } );
-        //                 buildPreviewUpload();
-        //             }else{
-        //                 alert(data.mes);
-        //             }
-        //             resetUploadInput();
-        //         }
-        //     });
-        // }
         window.removeUploadFile = function(index){
-            listFileUpload.splice(index, 1);
-            resetUploadInput();
-            buildPreviewUpload();
+            var formData = new FormData;
+            jQuery('.nbd-upload-loading').addClass('is-visible');
+            formData.append('action', 'nbd_remove_design_upload_file');
+            formData.append('file', JSON.stringify(listFileUpload[index]));
+            jQuery.ajax({
+                url: nbds_frontend.url,
+                method: "POST",
+                dataType: 'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function(data) {
+                    if( data.flag == 1 ){
+                        listFileUpload.splice(index, 1);
+                        buildPreviewUpload();
+                    }else{
+                        alert("Error");
+                    }
+                    jQuery('.nbd-upload-loading').removeClass('is-visible');
+                    resetUploadInput();
+                }
+            });
         };
         // function buildPreviewUpload(){
         //     show_upload_thumb(listFileUpload);
