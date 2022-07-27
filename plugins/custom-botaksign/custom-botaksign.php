@@ -5893,8 +5893,8 @@ function botak_get_list_files_upload_from_s3( $uri ){
     return $files;
 }
 function botak_remove_obj_from_s3($uri) {
-    $awsAccessKey = get_option('nbdesigner_aws_access_key', false);
-    $awsSecretKey = get_option('nbdesigner_aws_secret_key', false);
+    $awsAccessKey = get_option('nbdesigner_aws_access_key_remove', false);
+    $awsSecretKey = get_option('nbdesigner_aws_secret_key_remove', false);
     $amazonRegion = get_option('nbdesigner_aws_region', false);
     $bucket = get_option('nbdesigner_aws_bucket', false);
     try {
