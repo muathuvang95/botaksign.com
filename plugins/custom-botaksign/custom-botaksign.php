@@ -5757,7 +5757,7 @@ function nbd_upload_file_custom_to_s3($filename , $file_name_dir ,  $folder_name
     //AWS access info
     if (!defined('awsAccessKey')) define('awsAccessKey', get_option('nbdesigner_aws_access_key', false));
     if (!defined('awsSecretKey')) define('awsSecretKey', get_option('nbdesigner_aws_secret_key', false));
-    $amazonRegion = 'ap-southeast-1';
+    $amazonRegion = get_option('nbdesigner_aws_region', false);
     $_bucket = get_option('nbdesigner_aws_bucket', false);
     if (!awsAccessKey || !awsSecretKey || !$_bucket) {
         return false;
@@ -5846,7 +5846,7 @@ function botak_access_key_s3() {
     //AWS access info
     $awsAccessKey = get_option('nbdesigner_aws_access_key', false);
     $awsSecretKey = get_option('nbdesigner_aws_secret_key', false);
-    $amazonRegion = 'ap-southeast-1';
+    $amazonRegion = get_option('nbdesigner_aws_region', false);
     if (!defined('awsAccessKey')) define('awsAccessKey', get_option('nbdesigner_aws_access_key', false));
     if (!defined('awsSecretKey')) define('awsSecretKey', get_option('nbdesigner_aws_secret_key', false));
     $bucket = get_option('nbdesigner_aws_bucket', false);
@@ -5893,9 +5893,29 @@ function botak_get_list_files_upload_from_s3( $uri ){
     return $files;
 }
 function botak_remove_obj_from_s3($uri) {
-    $s3 = botak_access_key_s3()['s3'];
-    $bucket = botak_access_key_s3()['bucket'];
-    return $s3->deleteObject($bucket , $uri);
+    $awsAccessKey = get_option('nbdesigner_aws_access_key_remove', false);
+    $awsSecretKey = get_option('nbdesigner_aws_secret_key_remove', false);
+    $amazonRegion = get_option('nbdesigner_aws_region', false);
+    $bucket = get_option('nbdesigner_aws_bucket', false);
+    try {
+        $s3 = new Aws\S3\S3Client([
+            'version' => 'latest',
+            'region'  => $amazonRegion,
+            'credentials' => array(
+                'key' => $awsAccessKey,
+                'secret' => $awsSecretKey
+            )
+        ]);
+
+        $result = $s3->deleteObject(array(
+            'Bucket' => $bucket,
+            'Key'    => $uri
+        ));
+        return $result;
+    } catch (Exception $e) {
+        
+    }
+    
 }
 function botak_coppy_folder_from_s3($uri, $new_name = '') {
     if($new_name != '') {
@@ -5937,12 +5957,12 @@ function botak_create_folder_s3($uri) {
 function botak_get_list_file_s3($uri) {
     $awsAccessKey = get_option('nbdesigner_aws_access_key', false);
     $awsSecretKey = get_option('nbdesigner_aws_secret_key', false);
-    $amazonRegion = 'ap-southeast-1';
+    $amazonRegion = get_option('nbdesigner_aws_region', false);
     $bucket = get_option('nbdesigner_aws_bucket', false);
 
     $s3 = new Aws\S3\S3Client([
         'version' => 'latest',
-        'region'  => 'ap-southeast-1',
+        'region'  => $amazonRegion,
         'credentials' => array(
             'key' => $awsAccessKey,
             'secret' => $awsSecretKey

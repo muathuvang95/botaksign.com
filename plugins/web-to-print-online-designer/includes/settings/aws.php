@@ -41,6 +41,24 @@ if(!class_exists('Nbdesigner_Settings_Aws')){
                         'type'          => 'password',
                         'placeholder'   => ''
                     ),
+                    array(
+                        'title'         => esc_html__( 'Access Key ( Action only remove file)', 'web-to-print-online-designer'),
+                        'description'   => esc_html__( 'Enter your AWS access key.', 'web-to-print-online-designer'),
+                        'id'            => 'nbdesigner_aws_access_key_remove',
+                        'class'         => 'regular-text',
+                        'default'       => '',
+                        'type'          => 'text',
+                        'placeholder'   => ''
+                    ),
+                    array(
+                        'title'         => esc_html__( 'Secret Key ( Action only remove file)', 'web-to-print-online-designer'),
+                        'description'   => esc_html__( 'Enter your AWS secret key.', 'web-to-print-online-designer'),
+                        'id'            => 'nbdesigner_aws_secret_key_remove',
+                        'class'         => 'regular-text',
+                        'default'       => '',
+                        'type'          => 'text',
+                        'placeholder'   => ''
+                    ),
                 ),
             ));
         }

@@ -73,6 +73,7 @@ class Nbdesigner_Plugin {
             'nbdesigner_update_all_product'             => false,
             'nbd_save_customer_design'                  => true,
             'nbd_remove_design_and_file'                => true,
+            'nbd_remove_design_upload_file'             => true,
             'nbd_save_draft_design'                     => true,
             'nbd_update_customer_upload'                => true,
             'nbd_save_cart_design'                      => true,
@@ -3400,6 +3401,27 @@ class Nbdesigner_Plugin {
         WC()->session->__unset('nbd_item_key_'.$nbd_item_cart_key);
         WC()->session->__unset('nbu_item_key_'.$nbd_item_cart_key);
         echo 'success';
+        wp_die(); 
+    }
+    public function nbd_remove_design_upload_file(){
+        $file  = isset( $_POST['file'] ) ? json_decode(stripslashes($_POST['file']) , true) : '';
+        $result = array(
+            'flag' => 0,
+        );
+        if ( $file && isset($file['src']) && $file['src'] ) {
+            $src = $file['src'];
+            $uri_preview = strstr($src, 'reupload-design/');
+            $uri = str_replace('_preview', '', $uri_preview);
+            if($uri_preview) {
+                botak_remove_obj_from_s3($uri_preview);
+            }
+            if($uri) {
+                botak_remove_obj_from_s3($uri);
+            }
+            $result['flag'] = 1;
+        }
+
+        echo json_encode($result);
         wp_die(); 
     }
     public function merge_product_config( $product_config, $width, $height, $number_side ){

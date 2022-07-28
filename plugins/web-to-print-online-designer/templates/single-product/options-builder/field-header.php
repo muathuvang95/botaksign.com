@@ -18,7 +18,7 @@
         </span>
     <?php endif; ?>
 </div>
-<?php if(isset($field['general']['agreement_clause']) && $field['nbd_type'] == 'terms_conditions'): ?>
+<?php if(isset($field['general']['agreement_clause']) && isset($field['nbd_type']) && $field['nbd_type'] == 'terms_conditions'): ?>
     <div class="terms_conditions_attr" style="padding: 15px;border: 2px solid #ddd;margin: 10px 0;border-radius: 5px;">
         <?php
             foreach ($field['general']['attributes']["options"] as $key => $attr): 
