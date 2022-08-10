@@ -119,36 +119,36 @@ $layout = nbdesigner_get_option('nbdesigner_design_layout');
                                         <img src="<?php echo esc_url( $img_overlay ); ?>" class="img_overlay"/>
                                     </div>
                                     <div class="nbd-bleed <?php if (!$v['show_bleed']) echo 'nbdesigner-disable'; ?> <?php if( $v['area_design_type'] == 2 ) echo 'nbd-rounded' ?>"
-                                        style="width: <?php echo round( $ratio * ($v['real_width'] - 2 * (($v['bleed_left'] + $v['bleed_right']) /2)))  ?>px;
-                                                height: <?php echo round( $ratio * ($v['real_height'] - 2 * (($v['bleed_top'] + $v['bleed_bottom']) / 2)))  ?>px;
-                                                top: <?php echo round( $ratio * ($top + $v['real_top'] + $v['bleed_top']))  ?>px;
-                                                left: <?php echo round( $ratio * ($left + $v['real_left'] + $v['bleed_left']))  ?>px;
-                                                bottom: <?php echo round( $ratio * ($bottom + $v['real_top'] + $v['bleed_bottom']))  ?>px;
-                                                right: <?php echo round( $ratio * ($right + $v['real_left'] + $v['bleed_right']))  ?>px;
-                                                border-top-left-radius: <?php echo $v['bleed_corner'] ? '1000' : ($v['bleed_corner_top'] ? $ratio * $v['bleed_corner_top'] : 0)?>px;
-                                                border-top-right-radius: <?php echo $v['bleed_corner'] ? '1000' : ($v['bleed_corner_left'] ? $ratio * $v['bleed_corner_left'] : 0)?>px;
-                                                border-bottom-left-radius: <?php echo $v['bleed_corner'] ? '1000' : ($v['bleed_corner_bottom'] ? $ratio * $v['bleed_corner_bottom'] : 0)?>px;
-                                                border-bottom-right-radius: <?php echo $v['bleed_corner'] ? '1000' : ($v['bleed_corner_right'] ? $ratio * $v['bleed_corner_right'] : 0)?>px;
+                                        style="width: <?php echo round( $ratio * ((float) $v['real_width'] - 2 * (((float) $v['bleed_left'] + (float) $v['bleed_right']) /2)))  ?>px;
+                                                height: <?php echo round( $ratio * ((float) $v['real_height'] - 2 * (((float) $v['bleed_top'] + (float) $v['bleed_bottom']) / 2)))  ?>px;
+                                                top: <?php echo round( $ratio * ($top + (float) $v['real_top'] + (float) $v['bleed_top']))  ?>px;
+                                                left: <?php echo round( $ratio * ($left + (float) $v['real_left'] + (float) $v['bleed_left']))  ?>px;
+                                                bottom: <?php echo round( $ratio * ($bottom + (float) $v['real_top'] + (float) $v['bleed_bottom']))  ?>px;
+                                                right: <?php echo round( $ratio * ($right + (float) $v['real_left'] + (float) $v['bleed_right']))  ?>px;
+                                                border-top-left-radius: <?php echo (float) $v['bleed_corner'] ? '1000' : ((float) $v['bleed_corner_top'] ? $ratio * (float) $v['bleed_corner_top'] : 0)?>px;
+                                                border-top-right-radius: <?php echo (float) $v['bleed_corner'] ? '1000' : ((float) $v['bleed_corner_left'] ? $ratio * (float) $v['bleed_corner_left'] : 0)?>px;
+                                                border-bottom-left-radius: <?php echo (float) $v['bleed_corner'] ? '1000' : ((float) $v['bleed_corner_bottom'] ? $ratio * (float) $v['bleed_corner_bottom'] : 0)?>px;
+                                                border-bottom-right-radius: <?php echo (float) $v['bleed_corner'] ? '1000' : ((float) $v['bleed_corner_right'] ? $ratio * (float) $v['bleed_corner_right'] : 0)?>px;
                                                 ">
                                     </div>
                                     <div class="nbd-safe-zone <?php if (!$v['show_safe_zone']) echo 'nbdesigner-disable'; ?> <?php if( $v['area_design_type'] == 2 ) echo 'nbd-rounded' ?>"
-                                        style="width: <?php echo round( $ratio * ($v['real_width'] - 2 * (($v['bleed_left'] + $v['bleed_right']) /2) - 2 * (($v['margin_left'] + $v['margin_right']) / 2)))  ?>px;
-                                                height: <?php echo round( $ratio * ($v['real_height'] - 2 * (($v['bleed_top'] + $v['bleed_bottom']) / 2) - 2 * (($v['margin_top'] + $v['margin_bottom']) / 2)))  ?>px;
-                                                top: <?php echo round( $ratio * ($top + $v['real_top'] + $v['bleed_top'] + $v['margin_top']))  ?>px;
-                                                left: <?php echo round( $ratio * ($left + $v['real_left'] + $v['bleed_left'] + $v['margin_left']))  ?>px;
-                                                bottom: <?php echo round( $ratio * ($bottom + $v['real_top'] + $v['bleed_bottom'] + $v['margin_bottom']))  ?>px;
-                                                right: <?php echo round( $ratio * ($right + $v['real_left'] + $v['bleed_right'] + $v['margin_right']))  ?>px;
-                                                border-top-left-radius: <?php echo $v['safe_corner'] ? '1000' : ($v['safe_corner_top'] ? (($ratio * $v['safe_corner_top'] > 0) ? ($ratio * $v['safe_corner_top']) : 10) : 0 ) ?>px;
-                                                border-top-right-radius: <?php echo $v['safe_corner'] ? '1000' : ($v['safe_corner_left'] ? (($ratio * $v['safe_corner_left'] > 0) ? ($ratio * $v['safe_corner_left']) : 10) : 0 ) ?>px;
-                                                border-bottom-left-radius: <?php echo $v['safe_corner'] ? '1000' : ($v['safe_corner_bottom'] ? (($ratio * $v['safe_corner_bottom'] > 0) ? ($ratio * $v['safe_corner_bottom']) : 10) : 0 ) ?>px;
-                                                border-bottom-right-radius: <?php echo $v['safe_corner'] ? '1000' : ($v['safe_corner_right'] ? (($ratio * $v['safe_corner_right'] > 0) ? ($ratio * $v['safe_corner_right']) : 10) : 0 ) ?>px;
+                                        style="width: <?php echo round( $ratio * ((float) $v['real_width'] - 2 * (((float) $v['bleed_left'] + (float) $v['bleed_right']) /2) - 2 * (((float) $v['margin_left'] + (float) $v['margin_right']) / 2)))  ?>px;
+                                                height: <?php echo round( $ratio * ((float) $v['real_height'] - 2 * (((float) $v['bleed_top'] + (float) $v['bleed_bottom']) / 2) - 2 * (((float) $v['margin_top'] + (float) $v['margin_bottom']) / 2)))  ?>px;
+                                                top: <?php echo round( $ratio * ($top + (float) $v['real_top'] + (float) $v['bleed_top'] + (float) $v['margin_top']))  ?>px;
+                                                left: <?php echo round( $ratio * ($left + (float) $v['real_left'] + (float) $v['bleed_left'] + (float) $v['margin_left']))  ?>px;
+                                                bottom: <?php echo round( $ratio * ($bottom + (float) $v['real_top'] + (float) $v['bleed_bottom'] + (float) $v['margin_bottom']))  ?>px;
+                                                right: <?php echo round( $ratio * ($right + (float) $v['real_left'] + (float) $v['bleed_right'] + (float) $v['margin_right']))  ?>px;
+                                                border-top-left-radius: <?php echo (float) $v['safe_corner'] ? '1000' : ((float) $v['safe_corner_top'] ? (($ratio * (float) $v['safe_corner_top'] > 0) ? ($ratio * (float) $v['safe_corner_top']) : 10) : 0 ) ?>px;
+                                                border-top-right-radius: <?php echo (float) $v['safe_corner'] ? '1000' : ((float) $v['safe_corner_left'] ? (($ratio * (float) $v['safe_corner_left'] > 0) ? ($ratio * (float) $v['safe_corner_left']) : 10) : 0 ) ?>px;
+                                                border-bottom-left-radius: <?php echo (float) $v['safe_corner'] ? '1000' : ((float) $v['safe_corner_bottom'] ? (($ratio * (float) $v['safe_corner_bottom'] > 0) ? ($ratio * (float) $v['safe_corner_bottom']) : 10) : 0 ) ?>px;
+                                                border-bottom-right-radius: <?php echo (float) $v['safe_corner'] ? '1000' : ((float) $v['safe_corner_right'] ? (($ratio * (float) $v['safe_corner_right'] > 0) ? ($ratio * (float) $v['safe_corner_right']) : 10) : 0 ) ?>px;
                                                 ">
                                     </div>
                                     <div class="nbdesigner-area-design <?php if( $v['area_design_type'] == 2 ) echo 'nbd-rounded' ?>" id="nbdesigner-area-design-<?php esc_attr_e( $k ); ?>" 
-                                         style="width: <?php esc_attr_e( $v['area_design_width'] . 'px' ); ?>; 
-                                                height: <?php esc_attr_e( $v['area_design_height'] . 'px' ); ?>; 
-                                                left: <?php esc_attr_e( $v['area_design_left'] . 'px' ); ?>; 
-                                                top: <?php esc_attr_e( $v['area_design_top'] . 'px' ); ?>;"> </div>
+                                         style="width: <?php esc_attr_e((float) $v['area_design_width'] . 'px' ); ?>; 
+                                                height: <?php esc_attr_e((float) $v['area_design_height'] . 'px' ); ?>; 
+                                                left: <?php esc_attr_e((float) $v['area_design_left'] . 'px' ); ?>; 
+                                                top: <?php esc_attr_e((float) $v['area_design_top'] . 'px' ); ?>;"> </div>
                                 </div>
                                 <input type="hidden" class="hidden_img_src" name="_designer_setting[<?php esc_attr_e( $k ); ?>][img_src]" value="<?php esc_attr_e( $v['img_src'] ); ?>" >
                                 <input type="hidden" class="hidden_img_src_top" name="_designer_setting[<?php esc_attr_e( $k ); ?>][img_src_top]" value="<?php esc_attr_e( $v['img_src_top'] ); ?>">
