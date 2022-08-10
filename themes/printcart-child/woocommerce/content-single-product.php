@@ -116,13 +116,13 @@ global $product;
 		wc_get_template('netbase/single-product/tabs/default.php');
 	}
 
-	if(printcart_get_options('nbcore_show_upsells')) {
-		woocommerce_upsell_display();
-	}
+	// if(printcart_get_options('nbcore_show_upsells')) {
+	// 	woocommerce_upsell_display();
+	// }
 	
-	if(printcart_get_options('nbcore_show_related')) {
-		woocommerce_output_related_products();
-	}
+	// if(printcart_get_options('nbcore_show_related')) {
+	// 	woocommerce_output_related_products();
+	// }
 	?>
 
 </div><!-- #product-<?php the_ID(); ?> -->
