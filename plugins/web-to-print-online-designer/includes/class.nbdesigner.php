@@ -2788,8 +2788,11 @@ class Nbdesigner_Plugin {
         echo json_encode($result);
         wp_die();
     }
-    private function store_design_data($nbd_item_key, $data, $product_config, $product_option, $product_upload){
+    private function store_design_data($nbd_item_key, $data, $product_config, $product_option, $product_upload, $is_template = false){
         $path = NBDESIGNER_CUSTOMER_DIR . '/' . $nbd_item_key;
+        if($is_template) {
+            $path = NBDESIGNER_CUSTOMER_TEMPLATE_DIR . '/' . $nbd_item_key;
+        }
         if(file_exists($path.'_old')) Nbdesigner_IO::delete_folder($path.'_old');
         if(file_exists($path)) rename($path, $path.'_old');
         if ( wp_mkdir_p($path) ) {
@@ -3251,6 +3254,11 @@ class Nbdesigner_Plugin {
         // END
 
         $path = NBDESIGNER_CUSTOMER_DIR . '/' . $nbd_item_key;
+        $is_template = false;
+        if($task == 'create' || ($task == 'edit' && $design_type = 'template') ) {
+           $path = NBDESIGNER_CUSTOMER_TEMPLATE_DIR . '/' . $nbd_item_key;
+           $is_template = true;
+        }
         if( $task == 'new' || $task == 'create' ){
             if($variation_id > 0){
                 $product_config = unserialize(get_post_meta($variation_id, '_designer_variation_setting', true));
@@ -3267,7 +3275,7 @@ class Nbdesigner_Plugin {
         $att_swatch         = (isset($_POST['att_swatch']) && $_POST['att_swatch'] != '') ? $_POST['att_swatch'] : '';
         $product_config     = apply_filters('nbd_save_customer_design_product_config', $product_config, $product_option, $att_swatch);
         $product_upload     = get_post_meta($product_id, '_nbdesigner_upload', true);
-        $save_status        = $this->store_design_data($nbd_item_key, $_FILES, $product_config, $product_option, $product_upload);     
+        $save_status        = $this->store_design_data($nbd_item_key, $_FILES, $product_config, $product_option, $product_upload, $is_template);     
         $width              = absint(nbdesigner_get_option('nbdesigner_thumbnail_width')) ? absint(nbdesigner_get_option('nbdesigner_thumbnail_width', 300)) : 300; 
         if( $task == 'create' || $design_type == 'template' ){
             $width = absint(nbdesigner_get_option('nbdesigner_template_width', 500)) ? absint(nbdesigner_get_option('nbdesigner_template_width', 500)) : 500;
@@ -4623,7 +4631,11 @@ class Nbdesigner_Plugin {
         $path = Nbdesigner_IO::create_file_path(NBDESIGNER_TEMP_DIR, $new_name);
         if( $result ){
             if(move_uploaded_file($_FILES['file']["tmp_name"],$path['full_path'])){
-                $link_s3 = nbd_upload_file_custom_to_s3($path['date_path'] , $path['full_path'] , 'design-templates' ); 
+                $link_s3 = nbd_upload_file_custom_to_s3($path['date_path'] , $path['full_path'] , 'design-templates' );
+                if(!$link_s3 ) {
+                   $result     = false;
+                   unlink($path['full_path']);
+                }
                 $origin_path = $path['full_path'];
                 $res['mes'] = esc_html__('Upload success !', 'web-to-print-online-designer');
             }else{

@@ -74,6 +74,8 @@ nbd_define('NBDESIGNER_PDF_DIR', NBDESIGNER_DATA_DIR . '/pdfs');
 nbd_define('NBDESIGNER_PDF_URL', NBDESIGNER_DATA_URL . '/pdfs');
 nbd_define('NBDESIGNER_CUSTOMER_DIR', NBDESIGNER_DATA_DIR . '/designs');
 nbd_define('NBDESIGNER_CUSTOMER_URL', NBDESIGNER_DATA_URL . '/designs');
+nbd_define('NBDESIGNER_CUSTOMER_TEMPLATE_DIR', NBDESIGNER_DATA_DIR . '/templates');
+nbd_define('NBDESIGNER_CUSTOMER_TEMPLATE_URL', NBDESIGNER_DATA_URL . '/templates');
 nbd_define('NBDESIGNER_UPLOAD_DIR', NBDESIGNER_DATA_DIR . '/reupload-design');
 nbd_define('NBDESIGNER_UPLOAD_URL', NBDESIGNER_DATA_URL . '/reupload-design');
 nbd_define('NBDESIGNER_SUGGEST_DESIGN_DIR', NBDESIGNER_DATA_DIR . '/suggest_designs');

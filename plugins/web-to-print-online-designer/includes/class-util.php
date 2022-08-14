@@ -1566,7 +1566,7 @@ function nbd_get_resource_templates($product_id, $variation_id, $limit = 20, $st
     $data = array();
     $templates = nbd_get_templates($product_id, $variation_id, '', false, $limit, $start);
     foreach ($templates as $tem){
-        $path_preview = NBDESIGNER_CUSTOMER_DIR .'/'.$tem['folder']. '/preview';
+        $path_preview = NBDESIGNER_CUSTOMER_TEMPLATE_DIR .'/'.$tem['folder']. '/preview';
         $listThumb = Nbdesigner_IO::get_list_images($path_preview);
         asort( $listThumb );
         if(count($listThumb)){
@@ -1588,7 +1588,7 @@ function nbd_get_resource_templates($product_id, $variation_id, $limit = 20, $st
 }
 function nbd_get_template_by_folder( $folder ){
     $data           = array();
-    $path           = NBDESIGNER_CUSTOMER_DIR .'/'.$folder;
+    $path           = NBDESIGNER_CUSTOMER_TEMPLATE_DIR .'/'.$folder;
     $data['fonts']  = nbd_get_data_from_json($path . '/used_font.json');
     $data['design'] = nbd_get_data_from_json($path . '/design.json'); 
     $data['config'] = nbd_get_data_from_json($path . '/config.json');
@@ -1606,7 +1606,13 @@ function nbd_get_product_info( $product_id, $variation_id, $nbd_item_key = '', $
 //        $nbd_item_key = WC()->session->get($cart_item_key . '_nbd');
 //    }
     $lazy_load_default_template = nbdesigner_get_option('nbdesigner_lazy_load_template');
-    $path = NBDESIGNER_CUSTOMER_DIR . '/' . $nbd_item_key;
+    $path_origin = NBDESIGNER_CUSTOMER_DIR;
+    if($need_templates) {
+        $path_origin = NBDESIGNER_CUSTOMER_TEMPLATE_DIR;
+    }
+    $path = $path_origin . '/' . $nbd_item_key;
+    var_dump($need_templates);
+    var_dump($path);
     /* Path not exist in case add to cart before design, session has been init */  
     if( $nbd_item_key == '' || !file_exists($path) ){
         $data['upload'] = unserialize(get_post_meta($product_id, '_nbdesigner_upload', true));
@@ -1639,6 +1645,10 @@ function nbd_get_product_info( $product_id, $variation_id, $nbd_item_key = '', $
             $data['design'] = nbd_get_data_from_json($path . '/design.json');
         }
     }
+    echo '<pre>';
+    var_dump($data);
+    echo '</pre>';
+    die;
     // custom setting upload design
     if(!get_post_meta($product_id, '_designer_upload_cs', true)) {
         $data['upload']['allow_type'] = nbdesigner_get_option('nbdesigner_allow_upload_file_type', '');
@@ -1654,7 +1664,7 @@ function nbd_get_product_info( $product_id, $variation_id, $nbd_item_key = '', $
         /* Get primary template or latest template for new design */
         $template = nbd_get_templates( $product_id, $variation_id, '', 1 );
         if( isset($template[0]) ){
-            $template_path = NBDESIGNER_CUSTOMER_DIR . '/' . $template[0]['folder'];
+            $template_path = $path_origin . '/' . $template[0]['folder'];
             $data['fonts'] = nbd_get_data_from_json($template_path . '/used_font.json');
             $data['config'] = nbd_get_data_from_json($template_path . '/config.json');
             if($lazy_load_default_template == 'yes'){
@@ -1668,7 +1678,7 @@ function nbd_get_product_info( $product_id, $variation_id, $nbd_item_key = '', $
     }
     if(  $reference != '' ){
         /* Get reference design, font and reference product setting */
-        $ref_path = NBDESIGNER_CUSTOMER_DIR . '/' . $reference;
+        $ref_path = $path_origin . '/' . $reference;
         if($lazy_load_default_template == 'yes'){
             $data['lazy_load_design_folder'] = $reference;
         }else{
