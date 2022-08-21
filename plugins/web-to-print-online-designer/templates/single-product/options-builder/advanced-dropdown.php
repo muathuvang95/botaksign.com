@@ -1,7 +1,7 @@
 <?php if (!defined('ABSPATH')) exit; ?>
 <div nbo-adv-dropdown class="nbd-option-field nbd-field-ad-dropdown-wrap <?php echo $class; ?>" data-id="<?php echo $field['id']; ?>" ng-if="nbd_fields['<?php echo $field['id']; ?>'].enable">
     <?php include( $currentDir .'/options-builder/field-header.php' ); ?>
-    <?php if(isset($field['general']['attributes']) && isset($field['nbd_type']) && $field['nbd_type'] !== 'terms_conditions'): ?>
+    <?php if(isset($field['general']['attributes']) && $field['nbd_type'] !== 'terms_conditions'): ?>
     <div class="nbd-field-content">
         <div>
             <select ng-change="check_valid()" name="nbd-field[<?php echo $field['id']; ?>]{{nbd_fields['<?php echo $field['id']; ?>'].form_name}}" class="nbo-dropdown" ng-model="nbd_fields['<?php echo $field['id']; ?>'].value">

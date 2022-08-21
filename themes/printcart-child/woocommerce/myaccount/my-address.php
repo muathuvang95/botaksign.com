@@ -75,7 +75,7 @@ $current_user = get_user_by( 'id', $user_id );
 			<div class="accordion-item">
 				<h2 class="accordion-header" id="headingChangePassword">
 					<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseChangePassword" aria-expanded="true" aria-controls="collapseChangePassword">
-					Change Password
+					Update
 					</button>
 				</h2>
 				<div id="collapseChangePassword" class="accordion-collapse collapse" aria-labelledby="headingChangePassword" data-bs-parent="#accordionAccout">
