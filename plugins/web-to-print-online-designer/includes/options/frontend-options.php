@@ -791,7 +791,18 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                     $adjusted_price = $adjusted_price > 0 ? $adjusted_price : 0;
                     
                     //CS V3 production time: calc price with production time option
-                    $role_use = wp_get_current_user()->roles['0'];
+                    
+                    $get_option_roles_level = unserialize(get_option('save_option_roles_level'));
+                    $roles = wp_get_current_user()->roles;
+                    $role_level = [];
+                    if(is_array($roles)) {
+                        foreach ($roles as $key => $role) {
+                            $role_level[$role] = isset($get_option_roles_level[$role]) ? $get_option_roles_level[$role] : $key;
+                        }
+                    }
+
+                    $role_use = array_search(min($role_level), $role_level) ? array_search(min($role_level), $role_level) : '';
+
                     $have_role_use = false;
                     $have_check_default = false;
                     $_role_options = array();
@@ -1083,7 +1094,19 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
 
                 //CS V3 Production time
                 $_adjusted_price = $original_price + $option_price['total_price'] - $option_price['discount_price'];
-                $role_use = wp_get_current_user()->roles['0'];
+
+
+                $get_option_roles_level = unserialize(get_option('save_option_roles_level'));
+                $roles = wp_get_current_user()->roles;
+                $role_level = [];
+                if(is_array($roles)) {
+                    foreach ($roles as $key => $role) {
+                        $role_level[$role] = isset($get_option_roles_level[$role]) ? $get_option_roles_level[$role] : $key;
+                    }
+                }
+
+                $role_use = array_search(min($role_level), $role_level) ? array_search(min($role_level), $role_level) : '';
+
                 $have_role_use = false;
                 $have_check_default = false;
                 $_role_options = array();
@@ -1262,7 +1285,19 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
             }
 
             //CS botak Role quantity break V3 start
-            $role_use = wp_get_current_user()->roles['0'];
+            
+
+            $get_option_roles_level = unserialize(get_option('save_option_roles_level'));
+            $roles = wp_get_current_user()->roles;
+            $role_level = [];
+            if(is_array($roles)) {
+                foreach ($roles as $key => $role) {
+                    $role_level[$role] = isset($get_option_roles_level[$role]) ? $get_option_roles_level[$role] : $key;
+                }
+            }
+
+            $role_use = array_search(min($role_level), $role_level) ? array_search(min($role_level), $role_level) : '';
+
             $max_production_time = 0;
             $pre_name = '';
             $have_role_use = false;
