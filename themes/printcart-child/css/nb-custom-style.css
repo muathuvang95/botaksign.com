@@ -42,6 +42,9 @@
 .nb-form-login .form-group {
     margin-bottom: 20px;
 }
+.nb-form-login .woocommerce-form-login input.form-control {
+    padding-left: 10px;
+}
 .nb-social-log {
     position: absolute;
     height: 100%;
@@ -89,7 +92,8 @@
 
 @media screen and (max-width: 768px) {
     .nb-form-login-wrap .nb-login-left {
-        padding-left: 15px;
+        padding-left: 25px;
+        padding-right: 25px;
     }
     .nb-signin-title {
         font-size: 30px;
@@ -101,8 +105,13 @@
         font-size: 17px;
         line-height: 1.5;
     }
+    .nb-form-login-wrap .nb-login-middle {
+        padding-left: 25px;
+        padding-right: 25px;
+    }
     .nb-form-login-wrap .nb-login-right {
-        padding-right: 15px;
+        padding-left: 25px;
+        padding-right: 25px;
     }
     .nb-social-log {
         position: absolute;
