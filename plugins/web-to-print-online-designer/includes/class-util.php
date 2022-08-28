@@ -1594,7 +1594,7 @@ function nbd_get_template_by_folder( $folder ){
     $data['config'] = nbd_get_data_from_json($path . '/config.json');
     return $data;
 }
-function nbd_get_product_info( $product_id, $variation_id, $nbd_item_key = '', $task, $task2 = '', $reference = '', $need_templates = false, $cart_item_key = '' ){
+function nbd_get_product_info( $product_id, $variation_id, $nbd_item_key = '', $task, $task2 = '', $reference = '', $need_templates = false, $cart_item_key = '', $design_type = 'design' ){
     $data = array();
     if($variation_id > 0){
         $variation_id = get_wpml_original_id($variation_id);
@@ -1607,12 +1607,12 @@ function nbd_get_product_info( $product_id, $variation_id, $nbd_item_key = '', $
 //    }
     $lazy_load_default_template = nbdesigner_get_option('nbdesigner_lazy_load_template');
     $path_origin = NBDESIGNER_CUSTOMER_DIR;
-    if($need_templates) {
+    if($design_type == 'template') {
         $path_origin = NBDESIGNER_CUSTOMER_TEMPLATE_DIR;
     }
+
     $path = $path_origin . '/' . $nbd_item_key;
-    var_dump($need_templates);
-    var_dump($path);
+
     /* Path not exist in case add to cart before design, session has been init */  
     if( $nbd_item_key == '' || !file_exists($path) ){
         $data['upload'] = unserialize(get_post_meta($product_id, '_nbdesigner_upload', true));
@@ -1645,10 +1645,7 @@ function nbd_get_product_info( $product_id, $variation_id, $nbd_item_key = '', $
             $data['design'] = nbd_get_data_from_json($path . '/design.json');
         }
     }
-    echo '<pre>';
-    var_dump($data);
-    echo '</pre>';
-    die;
+
     // custom setting upload design
     if(!get_post_meta($product_id, '_designer_upload_cs', true)) {
         $data['upload']['allow_type'] = nbdesigner_get_option('nbdesigner_allow_upload_file_type', '');

@@ -2689,7 +2689,7 @@ class Nbdesigner_Plugin {
         $template_id        = (isset($_POST['template_id']) &&  $_POST['template_id'] != '') ? $_POST['template_id'] : '';
         $need_templates     = (isset($_POST['need_templates']) &&  $_POST['need_templates'] != '') ? true : false;
         if( $template_id != '' ){
-            $path                   = NBDESIGNER_CUSTOMER_DIR . '/' . $template_id;
+            $path                   = NBDESIGNER_CUSTOMER_TEMPLATE_DIR . '/' . $template_id;
             $data['fonts']          = nbd_get_data_from_json( $path . '/used_font.json' );
             $data['design']         = nbd_get_data_from_json( $path . '/design.json' );
             $data['config']         = nbd_get_data_from_json( $path . '/config.json' );
@@ -5113,7 +5113,7 @@ class Nbdesigner_Plugin {
             $list_design = array();
             $templates = nbd_get_templates($product_id, $variation_id);
             foreach ($templates as $tem){
-                $path_preview   = NBDESIGNER_CUSTOMER_DIR .'/'.$tem['folder']. '/preview';
+                $path_preview   = NBDESIGNER_CUSTOMER_TEMPLATE_DIR .'/'.$tem['folder']. '/preview';
                 $listThumb      = Nbdesigner_IO::get_list_images($path_preview);
                 $image          = '';
                 if(count($listThumb)){

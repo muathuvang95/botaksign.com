@@ -118,7 +118,7 @@
                 $templates      = nbd_get_resource_templates( $product_id, $variation_id, false );
             }
             $total_template     = nbd_count_total_template( $product_id, $variation_id );
-            $product_data       = nbd_get_product_info( $product_id, $variation_id, $nbd_item_key, $task, $task2, $reference, false, $cart_item_key );
+            $product_data       = nbd_get_product_info( $product_id, $variation_id, $nbd_item_key, $task, $task2, $reference, false, $cart_item_key, $design_type );
             
             $link_get_options   = add_query_arg(
                 urlencode_deep( array(
