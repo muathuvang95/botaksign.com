@@ -960,7 +960,7 @@ class My_Design_Endpoint {
         $posts = $wpdb->get_results( $sql, 'ARRAY_A' );
         if( $return_total ) return count( $posts );
         foreach ($posts as $p){
-            $path_preview = NBDESIGNER_CUSTOMER_DIR .'/'.$p['folder']. '/preview';
+            $path_preview = NBDESIGNER_CUSTOMER_TEMPLATE_DIR .'/'.$p['folder']. '/preview';
             if( $p['thumbnail'] ){
                 $image = wp_get_attachment_url( $p['thumbnail'] );
             }else{
