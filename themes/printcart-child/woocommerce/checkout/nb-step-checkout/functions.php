@@ -39,8 +39,8 @@ if ( ! function_exists( 'nb_step_content_shipping' ) ) {
 				</div>
 				<div class="form-row place-order">
 					<div class="row nb-shipping-order-details">
-						<div class="col-md-6"></div>
-						<div class="col-md-6">
+						<div class="col-md-6 nb-col-6"></div>
+						<div class="col-md-6 nb-col-6">
 							<div class="nb-delivery-detail">
 								<?php botak_show_production_time(); ?>
 							</div>
@@ -92,7 +92,7 @@ if ( ! function_exists( 'nb_step_content_payment' ) ) {
 									<input hidden id="payment_method_<?php echo esc_attr( $gateway->id ); ?>" type="radio" class="input-radio" name="payment_method" value="<?php echo esc_attr( $gateway->id ); ?>" data-order_button_text="<?php echo esc_attr( $gateway->order_button_text ); ?>" <?php checked( $gateway->chosen, true ); ?> />
 
 									<label for="payment_method_<?php echo esc_attr( $gateway->id ); ?>">
-										<img src="<?php echo get_stylesheet_directory_uri(). '/woocommerce/checkout/nb-step-checkout/assets/logo/' . $gateway->id . '.jpg'; ?>">
+										<img src="<?php echo get_stylesheet_directory_uri(). '/woocommerce/checkout/nb-step-checkout/assets/logo/' . $gateway->id . '.png'; ?>">
 									</label>
 								</div>
 							</div>
@@ -114,9 +114,10 @@ if ( ! function_exists( 'nb_step_content_billing' ) ) {
 	 * The content of the Billing step.
 	 */
 	function nb_step_content_billing() {
+		echo '<div class="nb-billing-customer-details">';
 		do_action( 'woocommerce_checkout_before_customer_details' );
 		do_action( 'woocommerce_checkout_billing' );
-
+		echo '</div>';
 		do_action( 'woocommerce_checkout_shipping' );
 		do_action( 'woocommerce_checkout_after_customer_details' );
 	}
@@ -131,7 +132,7 @@ if ( ! function_exists( 'nb_step_content_login' ) ) {
 	 * @param bool   $stop_at_login If the user should be logged in in order to checkout.
 	 */
 	function nb_step_content_login( $checkout, $stop_at_login ) { ?> 
-	<div class="nb-step-item nb-step-login">
+		<div class="nb-step-item nb-step-login">
 			<div id="checkout_login" class="woocommerce_checkout_login wp-multi-step-checkout-step">
 				<?php
 				woocommerce_login_form(
@@ -148,12 +149,13 @@ if ( ! function_exists( 'nb_step_content_login' ) ) {
 					echo apply_filters( 'woocommerce_checkout_must_be_logged_in_message', __( 'You must be logged in to checkout.', 'woocommerce' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				}
 				?>
-	</div>
+		</div>
 	<?php }
 }
 
 function nb_cart_totals_shipping_method_label( $method ) {
-	$label     = $method->get_label();
+	$label     = '<div class="nb-shipping-title">'. $method->get_label() . '</div>';
+	$label 	   = str_replace( '(', '<br>(', $label);
 	$has_cost  = 0 < $method->cost;
 	$hide_cost = ! $has_cost && in_array( $method->get_method_id(), array( 'free_shipping', 'local_pickup' ), true );
 

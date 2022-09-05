@@ -27,20 +27,22 @@ jQuery(window).ready(function($){
 			$( '.nb-step-item-inner:first' ).addClass( 'current' );
 
 			// Click on "next" button
+			var shipping_method = $( self.$shipping_method.filter( '.active' ) ).data('shipping-method');
 			$( '#nb-next, #nb-skip-login').on( 'click', function() {
 				if(cout_step < 4) {
 					cout_step++;
 				} else {
 					cout_step = 4;
 				}
-				if($('.nb-step-item').hasClass('current')) {
+				var shipping_method = $( self.$shipping_method.filter( '.active' ) ).data('shipping-method');
+				var tab_show_pre = shipping_method !== 'Self-collection' ? 2 : 1;
+				if(cout_step == tab_show_pre) {
 					$('#nb-prev').removeClass('hidden');
 					$('.btn-generate-quotation').addClass('hidden');
 				}
 				if(self.current_tab() === "payment") {
 					$( 'form.checkout' ).submit();
 				} else if (self.current_tab() === "shipping") {
-					var shipping_method = $( self.$shipping_method.filter( '.active' ) ).data('shipping-method');
 					var cur_step_inner = self.$step_inner.index( self.$step_inner.filter( '.current' ) ) ? self.$step_inner.index( self.$step_inner.filter( '.current' ) ) : 0;
 
 					if(shipping_method !== 'Self-collection' && cur_step_inner < self.$step_inner.length - 1 ) {
@@ -52,7 +54,6 @@ jQuery(window).ready(function($){
 				} else {
 					self.switch_tab( self.current_index() + 1);
 				}
-				
 			});
 
 			// Change shipping method
@@ -71,9 +72,8 @@ jQuery(window).ready(function($){
 					$('.btn-generate-quotation').removeClass('hidden');
 				}
 				var cur_step_inner = self.$step_inner.index( self.$step_inner.filter( '.current' ) ) ? self.$step_inner.index( self.$step_inner.filter( '.current' ) ) : 0;
-
+				var shipping_method = $( self.$shipping_method.filter( '.active' ) ).data('shipping-method');
 				if (self.current_tab() === "shipping") {
-					var shipping_method = $( self.$shipping_method.filter( '.active' ) ).data('shipping-method');
 
 					if(shipping_method !== 'Self-collection' && cur_step_inner > 0 ) {
 						self.$step_inner.removeClass( 'current' );

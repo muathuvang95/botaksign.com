@@ -3660,6 +3660,7 @@ footer.site-footer .footer-top-section .form .submit_b {
     display: flex;
     justify-content: center;
     list-style: none;
+    padding-left: 0;
 }
 .nb-custom-my-account .nb-woocommerce-MyAccount-navigation .nb-navigation-item {
     padding: 10px 15px;
@@ -3679,13 +3680,10 @@ footer.site-footer .footer-top-section .form .submit_b {
     border: 1px solid #DEDEDE;
     border-radius: 10px;
 }
-.nb-custom-my-account .nb-woocommerce-MyAccount-navigation .nb-navigation-item >a .icon {
-    margin-bottom: 10px;
-}
-.nb-custom-my-account .nb-woocommerce-MyAccount-navigation .nb-navigation-item >a .icon svg {
-    width: 30px;
-    height: 30px;
-    color: #1BCB3F;
+.nb-custom-my-account .nb-woocommerce-MyAccount-navigation .nb-navigation-item >a .icon img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 8px;
 }
 .nb-custom-my-account .nb-navigation-item.is-active >a{
     border: 1px #1BCB3F solid;
@@ -3711,6 +3709,7 @@ footer.site-footer .footer-top-section .form .submit_b {
     line-height: 48px;
     color: #000000;
     font-weight: 700;
+    display: flex;
 }
 .nb-custom-my-account .nb-woocommerce-MyAccount-content .nb-dashboard-header .nb-dashboard-header-desc {
     font-size: 19px;

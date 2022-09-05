@@ -28,7 +28,7 @@ do_action( 'woocommerce_before_edit_account_form' ); ?>
 
 	<p class="nb-submit-change">
 		<?php wp_nonce_field( 'nb_save_account_password', 'save-account-change-password-nonce' ); ?>
-		<button type="submit" class="woocommerce-Button button" name="nb_save_account_password" value="<?php esc_attr_e( 'Save changes', 'woocommerce' ); ?>"><?php esc_html_e( 'Save changes', 'woocommerce' ); ?></button>
+		<button type="submit" class="woocommerce-Button button" name="nb_save_account_password" value="<?php esc_attr_e( 'Save changes', 'woocommerce' ); ?>"><?php esc_html_e( 'Update', 'woocommerce' ); ?></button>
 		<input type="hidden" name="action" value="nb_save_account_password" />
 	</p>
 

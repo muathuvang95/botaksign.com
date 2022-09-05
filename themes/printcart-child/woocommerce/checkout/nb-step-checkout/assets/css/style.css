@@ -44,14 +44,14 @@
 	min-height: 30px;
 	height: 30px;
 	margin-top: -14px;
-	color: #999;
+	color: #000000;
 	background: #fff;
 	border-radius: 50%;
 	position: relative;
 	-webkit-transition: color 0.3s, background 0.3s;
 	-o-transition: color 0.3s, background 0.3s;
 	transition: color 0.3s, background 0.3s;
-	font-size: 16px;
+	font-size: 14px;
 	font-weight: 400;
 	font-family: Arial, Helvetica, sans-serif;
 }
@@ -153,7 +153,7 @@
 .nb-tabs-wrapper .nb-tab-item .nb-tab-number {
 	color: #000;
 	background: #fff;
-	border: 1px solid #ccc;
+	box-shadow: 0px 5px 20px #00000029;;
 }
 
 .nb-tabs-wrapper .nb-tab-item.current {
@@ -224,7 +224,9 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 .nb-step-item #order_review_heading {
 	width: 100%;
 }
-
+.nb-shipping-methods {
+	justify-content: center;
+}
 .nb-shipping-methods .nb-shipping-method .shipping-method {
 	background: transparent linear-gradient(176deg, #FFFFFF 0%, #F6F8F7 100%) 0% 0% no-repeat padding-box;
 	border: 1px solid #DEDEDE;
@@ -232,6 +234,11 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 	margin-bottom: 20px;
 	text-align: center;
 	height: calc(100% - 20px);
+}
+.nb-shipping-methods .nb-shipping-method {
+	padding-left: 20px;
+	padding-right: 20px;
+	max-width: 480px;
 }
 
 .nb-shipping-methods .nb-shipping-method .shipping-method.active {
@@ -245,11 +252,12 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 .nb-shipping-methods .nb-shipping-method .shipping-method-title {
 	font-weight: 700;
 	width: 100%;
-    height: 140px;
+    height: 100px;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 .nb-shipping-methods .nb-shipping-method .shipping-method-title .nb-price {
 	font-weight: 400;
@@ -260,8 +268,8 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 	text-align: left;
 }
 .nb-footer-action .col-md-6 {
-	padding-top: 10px;
-	padding-bottom: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
 }
 
 .nb-footer-action .btn-generate-quotation,
@@ -276,6 +284,7 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 	text-align: center;
 	box-shadow: 0px 20px 50px #00000029;
 	font-size: 14px;
+	max-width: 235px;
 }
 .nb-footer-action .btn-generate-quotation.hidden,
 .nb-footer-action #nb-prev.nb-button-check-out.hidden {
@@ -292,6 +301,7 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
     width: 100%;
     text-align: center;
     font-size: 14px;
+    max-width: 235px;
 }
 
 .nb-footer-action .btn-generate-quotation span,
@@ -311,6 +321,30 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 	border: 1px solid #1BCB3F;
 	border-radius: 10px;
 	padding: 20px;
+}
+.nb-step-item-billing .nb-billing-customer-details {
+	padding-left: 30px;
+	padding-right: 30px;
+}
+.nb-step-item-billing .shipping_address {
+	padding-left: 30px;
+	padding-right: 30px;
+}
+.nb-step-item-billing #ship-to-different-address-checkbox {
+	width: 30px;
+    height: 30px;
+    margin-right: 13px;
+}
+.nb-step-item-billing #ship-to-different-address-checkbox:checked {
+	color: #f00;
+}
+.nb-step-item-billing .woocommerce-form__label {
+	display: flex;
+	align-items: center;
+}
+.nb-step-shipping {
+	max-width: 750px;
+	margin: 0 auto;
 }
 .nb-step-checkout-thankyou {
 	background: transparent linear-gradient(179deg, #FFFFFF 0%, #F6F8F7 100%) 0% 0% no-repeat padding-box;
@@ -376,7 +410,10 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 .nb-step-item-billing .woocommerce-shipping-fields .form-row.form-row-wide {
 	width: 100%%;
 }
-
+.nb-woocommerce-checkout-payment {
+	max-width: 1000px;
+	margin: 0 auto;
+}
 .nb-woocommerce-checkout-payment .wc_payment_method {
 	padding-top: 10px;
 	padding-bottom: 10px;
@@ -403,6 +440,10 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 }
 .nb-shipping-order-details {
 	margin-top: 40px;
+}
+.nb-col-6 {
+	padding-left: 20px;
+	padding-right: 20px;
 }
 .nb-shipping-order-details .nb-delivery-detail .title {
 	font-size: 15px;
@@ -486,5 +527,11 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 	.nb-checkout-thankyou-left .nb-checkout-success .nb-checkout-icon.mobile svg{
 		width: 35px;
 		height: 35px;
+	}
+	.nb-footer-action .btn-generate-quotation, .nb-footer-action #nb-prev.nb-button-check-out {
+		max-width: 100%;
+	}
+	.nb-footer-action #nb-next.nb-button-check-out {
+		max-width: 100%;
 	}
 }
