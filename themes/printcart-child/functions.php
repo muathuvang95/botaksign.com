@@ -101,12 +101,21 @@ class Printshopcustomcate_Widget extends WP_Widget
 
             }
             echo '<ul class="product_categories">';
+            // Fix error 17/09 WP_error not string
             if (isset($level_mtop)) {
-                echo '<li class="all-product"><a href="' . get_term_link($level_mtop->slug, get_query_var('taxonomy')) . '">All Product</a><span class="pc-count">' . $level_mtop->count . '</span></li>';
+                $term_link_all = get_term_link($level_mtop->slug, get_query_var('taxonomy'));
+                if ( is_wp_error( $term_link_all ) ) {
+                    $term_link_all = '';
+                }
+                echo '<li class="all-product"><a href="' . $term_link . '">All Product</a><span class="pc-count">' . $level_mtop->count . '</span></li>';
             }
             if (is_array($top_level_terms)) {
                 foreach ($top_level_terms as $top_level_term) {
-                    echo '<li class="' . ($top_level_term->term_id == $termId ? 'active' : '') . '"><a href="' . get_term_link($top_level_term->slug, get_query_var('taxonomy')) . '">' . $top_level_term->name . '</a><span class="pc-count">' . $top_level_term->count . '</span></li>';
+                    $term_link = get_term_link($top_level_term->slug, get_query_var('taxonomy'));
+                    if ( is_wp_error( $term_link ) ) {
+                        $term_link = '';
+                    }
+                    echo '<li class="' . ($top_level_term->term_id == $termId ? 'active' : '') . '"><a href="' . $term_link . '">' . $top_level_term->name . '</a><span class="pc-count">' . $top_level_term->count . '</span></li>';
                 }
             }
             echo '</ul>';
@@ -716,17 +725,17 @@ function cs_create_cron_job() {
 }
 add_filter('cron_schedules','botak_cron_schedules');
 function botak_cron_schedules($schedules){
-    if(!isset($schedules["1min"])){
-        $schedules["1min"] = array(
-            'interval' => 60,
-            'display' => __('Once every 1 minutes'));
+    if(!isset($schedules["5min"])){
+        $schedules["5min"] = array(
+            'interval' => 300,
+            'display' => __('Once every 5 minutes'));
     }
     return $schedules;
 }
 wp_clear_scheduled_hook( 'action_scheduler_run_queue' );
 
 if ( !wp_next_scheduled('custom_send_email_pending_order') ) { 
-    wp_schedule_event(time(), '1min', 'custom_send_email_pending_order');
+    wp_schedule_event(time(), '5min', 'custom_send_email_pending_order');
 }
 
 add_filter('woocommerce_cancel_unpaid_order','botak_cancel_unpaid_order' , 10 , 2);
@@ -777,6 +786,8 @@ function botak_get_unpaid_orders( $date ) {
 
     return $unpaid_orders;
 }
+
+add_action('botak_cancel_unpaid_orders' , 'botak_cancel_unpaid_orders' );
 function botak_cancel_unpaid_orders() {
     $held_duration = get_option( 'woocommerce_hold_stock_minutes' );
 
@@ -796,11 +807,14 @@ function botak_cancel_unpaid_orders() {
                 }
             }
         }
-    }
-    wp_clear_scheduled_hook( 'woocommerce_cancel_unpaid_orders' );
-    wp_schedule_single_event( time() + ( absint( $held_duration ) * 60 ), 'woocommerce_cancel_unpaid_orders' );
+    };
 }
-add_action( 'woocommerce_cancel_unpaid_orders', 'botak_cancel_unpaid_orders' );
+
+if ( !wp_next_scheduled('botak_cancel_unpaid_orders') ) { 
+    wp_schedule_event(time(), 'daily', 'botak_cancel_unpaid_orders');
+}
+
+// add_action( 'woocommerce_cancel_unpaid_orders', 'botak_cancel_unpaid_orders' );
 
 add_action('woocommerce_register_form_end', 'NextendSocialLogin::addLoginFormButtons');
 
