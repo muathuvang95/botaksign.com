@@ -28,72 +28,20 @@ jQuery(window).ready(function($){
 			$( '.nb-step-item-inner:first' ).addClass( 'current' );
 
 			// Click on "next" button
-
-			// $( '#nb-next, #nb-skip-login').on( 'click', function() {
-			// 	if(cout_step < 4) {
-			// 		cout_step++;
-			// 	} else {
-			// 		cout_step = 4;
-			// 	}
-			// 	var shipping_method = $( self.$shipping_method.filter( '.active' ) ).data('shipping-method');
-			// 	var tab_show_pre = shipping_method !== 'Self-collection' ? 2 : 1;
-			// 	if(cout_step == tab_show_pre) {
-			// 		$('#nb-prev').removeClass('hidden');
-			// 		$('.btn-generate-quotation').addClass('hidden');
-			// 	}
-			// 	if(self.current_tab() === "payment") {
-			// 		$( 'form.checkout' ).submit();
-			// 	} else if (self.current_tab() === "shipping") {
-			// 		var cur_step_inner = self.$step_inner.index( self.$step_inner.filter( '.current' ) ) ? self.$step_inner.index( self.$step_inner.filter( '.current' ) ) : 0;
-
-			// 		if(shipping_method !== 'Self-collection' && cur_step_inner < self.$step_inner.length - 1 ) {
-			// 			self.$step_inner.removeClass( 'current' );
-			// 			self.$step_inner.eq( cur_step_inner + 1 ).addClass( 'current' );
-			// 		} else {
-			// 			self.switch_tab( self.current_index() + 1);
-			// 		}
-			// 	} else {
-			// 		self.switch_tab( self.current_index() + 1);
-			// 	}
-			// });
 			$( '#nb-next, #nb-skip-login').on( 'click', function() {
-				self.switch_tab( self.current_index() + 1);
+				self.switch_tab( self.current_index() + 1, 'next');
 			});
+
+			// Click on "previous" button
 			$( '#nb-prev' ).on( 'click', function() {
-				self.switch_tab( self.current_index() - 1);
+				self.switch_tab( self.current_index() - 1, 'prev');
 			});
 
 			// Change shipping method
 			
 			this.$checkout_form.on( 'change', 'input[name^="shipping_method"]', this.trigger_update_checkout );
 
-			// Click on "previous" button
-
-			// $( '#nb-prev' ).on( 'click', function() {
-			// 	if(cout_step > 0) {
-			// 		cout_step--;
-			// 	} else {
-			// 		cout_step = 0;
-			// 	}
-			// 	if(cout_step < 2) {
-			// 		$('#nb-prev').addClass('hidden');
-			// 		$('.btn-generate-quotation').removeClass('hidden');
-			// 	}
-			// 	var cur_step_inner = self.$step_inner.index( self.$step_inner.filter( '.current' ) ) ? self.$step_inner.index( self.$step_inner.filter( '.current' ) ) : 0;
-			// 	var shipping_method = $( self.$shipping_method.filter( '.active' ) ).data('shipping-method');
-			// 	if (self.current_tab() === "shipping") {
-
-			// 		if(shipping_method !== 'Self-collection' && cur_step_inner > 0 ) {
-			// 			self.$step_inner.removeClass( 'current' );
-			// 			self.$step_inner.eq( cur_step_inner - 1 ).addClass( 'current' );
-			// 		} else {
-			// 			self.switch_tab( self.current_index() + 1);
-			// 		}
-			// 	}
-			// 	self.switch_tab( self.current_index() - 1);
-			// });
-
-
+			
 			$( '.nb-woocommerce-checkout-payment .wc_payment_method_wrap').on( 'click', function() {
 				self.$payment_method.removeClass('active');
 				$(this).addClass('active');
@@ -230,7 +178,7 @@ jQuery(window).ready(function($){
 				}, 800);
 			}
 		},
-		switch_tab: function( theIndex ) {
+		switch_tab: function( theIndex, dir = '' ) {
 			var self = this;
 
 			$( '.woocommerce-checkout' ).trigger( 'nb_before_switching_tab' );
@@ -238,51 +186,57 @@ jQuery(window).ready(function($){
 			if ( theIndex < -1 || theIndex > this.$sections.length - 1 ) {
 				return false;
 			}
+			theIndex = theIndex == -1 ? 0 : theIndex;
+			var toInnerIndex = 1;
 
 			this.scroll_top(); 
 		
 			$( 'html, body' ).promise().done( function() {
 				
-				var check_current = self.$sections_inner.eq( 1 ).hasClass( 'current' );
+				var is_first_inner = self.$sections_inner.eq( 0 ).hasClass( 'current' );
+				var is_last_inner = self.$sections_inner.eq( 1 ).hasClass( 'current' );
 				var next_section = true;
-				if(self.shipping_method() != 'Self-collection' && !check_current) {
-					self.$sections_inner.removeClass( 'current' );
-					self.$sections_inner.eq( 1 ).addClass( 'current' );
-					next_section = false;
-					theIndex = 0;
-				}
+				$( '#nb-next' ).addClass( 'current' );
+				$( '#nb-prev' ).addClass( 'current' );
 
-				if(check_current && theIndex == -1) {
+				if(self.shipping_method() != 'Self-collection') {
+					if(dir == 'next' && is_first_inner && theIndex == 1) {
+						toInnerIndex = 1;
+						theIndex = 0;
+					}
+					if(dir == 'prev' && theIndex == 0) {
+						toInnerIndex = 1;
+						if(is_last_inner) {
+							toInnerIndex = 0;
+							$( '#nb-prev' ).removeClass( 'current' );
+						}
+					}
 					self.$sections_inner.removeClass( 'current' );
-					self.$sections_inner.eq( 0 ).addClass( 'current' );
-					theIndex = 0;
+					self.$sections_inner.eq( toInnerIndex ).addClass( 'current' );
+
+				} else if( theIndex == 0 ){
+					$( '#nb-prev' ).removeClass( 'current' );
 				}
 
 				self.$tabs.removeClass( 'previous' ).filter( '.current' ).addClass( 'previous' );
 				self.$sections.removeClass( 'previous' ).filter( '.current' ).addClass( 'previous' );
 				$( '.woocommerce-NoticeGroup-checkout:not(nb-error)' ).show();
 
-				if(next_section) {
-					// Change the tab
-					self.$tabs.removeClass( 'current' );
-					self.$tabs.eq( theIndex ).addClass( 'current' );
-					self.current_step = self.$tabs.eq( theIndex ).data( 'step-title' );
-					$( '.nb-tabs-list' ).data( 'current-title', self.current_step );
-				 
-					// Change the section
-					self.$sections.removeClass( 'current' );
-					self.$sections.eq( theIndex ).addClass( 'current' );
-				}
+				
+				// Change the tab
+				self.$tabs.removeClass( 'current' );
+				self.$tabs.eq( theIndex ).addClass( 'current' );
+				self.current_step = self.$tabs.eq( theIndex ).data( 'step-title' );
+				$( '.nb-tabs-list' ).data( 'current-title', self.current_step );
+			 
+				// Change the section
+				self.$sections.removeClass( 'current' );
+				self.$sections.eq( theIndex ).addClass( 'current' );
 
 				// Which buttons to show?
 				self.$buttons.removeClass( 'current' );
 				self.$coupon_form.hide();
 				self.$before_form.hide();
-
-				// Show "next" button 
-				if ( theIndex < self.$sections.length - 2 ) {
-					$( '#nb-next' ).addClass( 'current' );
-				}
 
 				// Remove errors from previous steps
 				if ( typeof $( '.woocommerce-NoticeGroup-checkout' ).data( 'for-step' ) !== 'undefined' && $( '.woocommerce-NoticeGroup-checkout' ).data( 'for-step' ) !== self.current_step ) {
@@ -300,7 +254,6 @@ jQuery(window).ready(function($){
 				$( '.btn-generate-quotation' ).addClass( 'current' );
 				$( '#nb-submit' ).removeClass( 'current' );
 				if ( theIndex === self.$sections.length - 2 ) {
-					$( '#nb-prev' ).addClass( 'current' );
 					$( '#nb-submit' ).addClass( 'current' );
 					$( '#nb-next' ).removeClass( 'current' );
 					$( '.btn-generate-quotation' ).removeClass( 'current' );

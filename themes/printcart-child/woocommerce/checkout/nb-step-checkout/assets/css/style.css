@@ -328,7 +328,10 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 	display: inline-block;
 }
 
-
+.nb-footer-action .nb-btn-success.woocommerce_checkout_place_order {
+    width: 100%;
+    max-width: 235px;
+}
 .nb-footer-action .nb-btn-success {
 	cursor: pointer;
     height: 45px;
@@ -336,10 +339,9 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
     border: 0px;
     border-radius: 10px;
     background: transparent linear-gradient(180deg, #1BCB3F 0%, #45D242 33%, #7BDB46 78%, #91DF48 100%) 0% 0% no-repeat padding-box;
-    width: 100%;
     text-align: center;
     font-size: 14px;
-    max-width: 235px;
+    padding: 0 20px;
 }
 .nb-footer-action .nb-action {
 	margin: 5px 0;

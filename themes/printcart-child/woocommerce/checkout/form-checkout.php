@@ -125,7 +125,7 @@ $steps = array(
             <a id="nb-prev" class="button nb-btn-light" style="cursor: pointer;">
                 <span>PREVIOUS</span>
             </a>
-            <a id="nb-next" class="button nb-btn-light current" style="cursor: pointer;">
+            <a id="nb-next" class="button nb-btn-success current" style="cursor: pointer;">
                 <span>NEXT</span>
             </a>
         </div>
