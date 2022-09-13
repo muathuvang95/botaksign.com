@@ -508,7 +508,7 @@ $order = wc_get_order(44719);
 include(CUSTOM_BOTAKSIGN_PATH . "includes/email-templates/email_header.php");
 
 
-include(CUSTOM_BOTAKSIGN_PATH . "includes/email-templates/B2.php");
+include(CUSTOM_BOTAKSIGN_PATH . "includes/email-templates/D1.php");
 
 include(CUSTOM_BOTAKSIGN_PATH . "includes/email-templates/email_footer.php");
 
