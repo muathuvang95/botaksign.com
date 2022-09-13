@@ -6,7 +6,7 @@ $email_button_color = "#FF9E28";
 <table id="header-logo" style="width:100%;padding-top:20px;border-collapse:collapse;margin-bottom:45px;">
     <tbody>
         <tr>
-            <td align="left" style="width:50%;"><img class="logo" src="https://botaksign.com/wp-content/plugins/custom-botaksign/assets/images/logo.png" style="margin-left:0px;margin-top:0px;height: 56px; width: auto;"></td>
+            <td align="left" style="width:50%;"><img class="logo" src="<?php echo CUSTOM_BOTAKSIGN_URL . '/assets/images/logo-transparent.png'; ?>" style="margin-left:0px;margin-top:0px;height: 56px; width: auto;"></td>
             <td align="right" style="width:50%;">
                 <?php if($email_button_title && $email_button_color) {
                     echo '<button class="status-button" style="background: '. $email_button_color .';box-shadow: 0px 10px 20px #00000029; border: none; color: #fff; padding: 14px 40px; font-size: 22px; line-height: 28px; border-radius: 10px;">'. $email_button_title .'</button>';

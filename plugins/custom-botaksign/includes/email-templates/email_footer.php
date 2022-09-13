@@ -6,10 +6,10 @@
         </div>
         <table style="border-collapse:collapse;display: inline-block;padding-top: 20px; margin: 0 auto;">
             <tbody><tr>
-                    <td align="center" style="padding-left: 5px; padding-right: 5px"><img class="confim" style="margin-right: 0!important;width: 32px" src="https://botaksign.com/wp-content/plugins/custom-botaksign/assets/images/fb.png"></td>
-                    <td align="center" style="padding-left: 5px; padding-right: 5px"><img class="confim" style="margin-right: 0!important;width: 32px" src="https://botaksign.com/wp-content/plugins/custom-botaksign/assets/images/inta.png"></td>
-                    <td align="center" style="padding-left: 5px; padding-right: 5px"><img class="confim" style="margin-right: 0!important;width: 32px" src="https://botaksign.com/wp-content/plugins/custom-botaksign/assets/images/email.png"></td>
-                    <td align="center" style="padding-left: 5px; padding-right: 5px"><img class="confim" style="margin-right: 0!important;width: 32px" src="https://botaksign.com/wp-content/plugins/custom-botaksign/assets/images/web.png"></td>
+                    <td align="center" style="padding-left: 5px; padding-right: 5px"><img class="confim" style="margin-right: 0!important;width: 32px" src="<?php echo CUSTOM_BOTAKSIGN_URL . '/assets/images/fb.png'; ?>"></td>
+                    <td align="center" style="padding-left: 5px; padding-right: 5px"><img class="confim" style="margin-right: 0!important;width: 32px" src="<?php echo CUSTOM_BOTAKSIGN_URL . '/assets/images/inta.png'; ?>"></td>
+                    <td align="center" style="padding-left: 5px; padding-right: 5px"><img class="confim" style="margin-right: 0!important;width: 32px" src="<?php echo CUSTOM_BOTAKSIGN_URL . '/assets/images/email.png'; ?>"></td>
+                    <td align="center" style="padding-left: 5px; padding-right: 5px"><img class="confim" style="margin-right: 0!important;width: 32px" src="<?php echo CUSTOM_BOTAKSIGN_URL . '/assets/images/web.png'; ?>"></td>
                 </tr>
             </tbody></table></div>
 </div>
