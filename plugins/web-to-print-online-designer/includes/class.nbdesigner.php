@@ -4623,6 +4623,18 @@ class Nbdesigner_Plugin {
         $path = Nbdesigner_IO::create_file_path(NBDESIGNER_TEMP_DIR, $new_name);
         if( $result ){
             if(move_uploaded_file($_FILES['file']["tmp_name"],$path['full_path'])){
+                // fix image Orientation
+                if( ( $ext == 'jpg' || $ext == 'jpeg' ) && ( extension_loaded( 'exif' ) && function_exists( 'exif_read_data' ) ) ){
+                    $exif = @exif_read_data( $path['full_path'] );
+
+                    if( $exif && isset( $exif['Orientation'] ) ) {
+                        $orientation = $exif['Orientation'];
+                        if( $orientation != 1 ){
+                            NBD_Image::strip_exif_orientation( $path['full_path'], $orientation );
+                        }
+                    }
+                }
+
                 $link_s3 = nbd_upload_file_custom_to_s3($path['date_path'] , $path['full_path'] , 'design-templates' ); 
                 $origin_path = $path['full_path'];
                 $res['mes'] = esc_html__('Upload success !', 'web-to-print-online-designer');

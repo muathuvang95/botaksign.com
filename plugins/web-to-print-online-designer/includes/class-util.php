@@ -2594,7 +2594,16 @@ function nbd_export_pdfs( $nbd_item_key, $watermark = true, $force = false, $sho
     if( !file_exists($folder) ) {
         wp_mkdir_p($folder);
     }
-    if( nbdesigner_get_option( 'nbdesigner_enable_cloud2print_api', 'no' ) == 'yes' ){
+
+    // use cloud2print api when design has font
+    $has_font = false;
+    $used_font_path = $path. '/used_font.json';
+    $used_font      = json_decode( file_get_contents($used_font_path) );
+    if(count($used_font) > 0) {
+        $has_font = true;
+    }
+
+    if( nbdesigner_get_option( 'nbdesigner_enable_cloud2print_api', 'no' ) == 'yes' || $has_font ){
         nbd_cloud_export_pdfs( $nbd_item_key, $watermark, $force, $showBleed, null, false );
         $output_file    = NBDESIGNER_CUSTOMER_DIR . '/' . $nbd_item_key. '/customer-pdfs' . '/' . $nbd_item_key . '.pdf';
         if( $force ){
@@ -2613,8 +2622,7 @@ function nbd_export_pdfs( $nbd_item_key, $watermark = true, $force = false, $sho
             }
         };
         $layout         = isset( $option['layout'] ) ? $option['layout'] : 'm';
-        $used_font_path = $path. '/used_font.json';
-        $used_font      = json_decode( file_get_contents($used_font_path) );
+
         $path_font      = array();
         foreach( $used_font as $font ){
             $font_name = $font->name;
