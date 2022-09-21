@@ -377,13 +377,13 @@ class WC_REST_Custom_Controller {
 		// update status payment by woocoomerce
 		$payment_status = get_post_meta($order->get_id() , '_payment_status' , true);
 		if($payment_status != 'paid') {
-			if( ($order->get_payment_method() == 'paypal' || $order->get_payment_method() == 'omise_paynow') && ( $order->get_status() == 'on-hold' || $order->get_status() == 'pending' ) ) {
+			if( ($order->get_payment_method() == 'paypal' || $order->get_payment_method() == 'omise_paynow' || $order->get_payment_method() == 'omise') && ( $order->get_status() == 'on-hold' || $order->get_status() == 'pending' ) ) {
 				$payment_status = 'pendding';
 			} 
 			if ($order->get_payment_method() == 'cod') {
 				$payment_status = 'pendding';
 			}
-			if( ($order->get_payment_method() == 'paypal' || $order->get_payment_method() == 'omise_paynow') && ( $order->get_status() == 'processing' || $order->get_status() == 'completed' ) ) {
+			if( ($order->get_payment_method() == 'paypal' || $order->get_payment_method() == 'omise_paynow' || $order->get_payment_method() == 'omise') && ( $order->get_status() == 'processing' || $order->get_status() == 'completed' ) ) {
 				$payment_status = 'paid';
 			}
 			if( $order->get_status() == 'cancelled' ||  $order->get_status() == 'failed') {
@@ -527,7 +527,7 @@ class WC_REST_Custom_Controller {
 			update_post_meta($order->get_id() , '_payment_status' , 'cancelled');
 		}
 		if(!isset($payment_status) || $payment_status == '' ) {
-			if( ($order->get_payment_method() == 'paypal' || $order->get_payment_method() == 'omise_paynow') && $order->get_status() == 'processing' ) {
+			if( ($order->get_payment_method() == 'paypal' || $order->get_payment_method() == 'omise_paynow' || $order->get_payment_method() == 'omise') && $order->get_status() == 'processing' ) {
 				$payment_status = 'paid';
 				update_post_meta($order->get_id() , '_payment_status' , 'paid');
 			}
