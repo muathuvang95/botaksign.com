@@ -975,7 +975,7 @@ function nb_save_account_password() {
 
 add_filter( 'yith_wcas_ajax_search_products_search_query', 'nb_format_search_query', 10 , 1 );
 function nb_format_search_query($search_query) {
-    $search_query = str_replace("\'", "", $_REQUEST['query']);
-    $search_query = str_replace("'", "", $_REQUEST['query']);
+    $search_query = str_replace("\'", "", $search_query);
+    $search_query = str_replace("'", "", $search_query);
     return $search_query;
 }
