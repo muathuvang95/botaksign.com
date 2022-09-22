@@ -1,6 +1,7 @@
 <?php 
 $email_button_title = "Artwork Amendment";
-$email_button_color = "#FF9E28";
+// $email_button_color = "#FF9E28";
+$email_button_color = "transparent linear-gradient(0deg, #FFE134 0%, #FF9E28 100%) 0% 0% no-repeat padding-box";
 ?>
 
 <table id="header-logo" style="width:100%;padding-top:20px;border-collapse:collapse;margin-bottom:45px;">
