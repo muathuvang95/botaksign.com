@@ -10,7 +10,7 @@ $email_button_color = "transparent linear-gradient(0deg, #1BCB3F 0%, #45D242 33%
             <td align="left" style="width:50%;"><img class="logo" src="<?php echo CUSTOM_BOTAKSIGN_URL . '/assets/images/logo-transparent.png'; ?>" style="margin-left:0px;margin-top:0px;height: 56px; width: auto;"></td>
             <td align="right" style="width:50%;">
                 <?php if($email_button_title && $email_button_color) {
-                    echo '<button class="status-button" style="background: '. $email_button_color .';box-shadow: 0px 10px 20px #00000029; border: none; color: #fff; padding: 14px 40px; font-size: 22px; line-height: 28px; border-radius: 10px;">'. $email_button_title .'</button>';
+                    echo '<button class="status-button" style="background: '. $email_button_color .';box-shadow: 0px 10px 20px #00000029; border: none; color: #fff; padding: 14px 25px; font-size: 20px; line-height: 28px; border-radius: 10px;">'. $email_button_title .'</button>';
                 } ?>
             </td>
         </tr>
@@ -86,7 +86,7 @@ if ($order) {
     ?>
      <div style="margin-bottom: 25px;">
         <span class="info-title" style="display:block;font-size:17px; line-height: 20px; font-weight: 500; margin-bottom: 12px;"><?php printf( esc_html__( 'Hi %s,', 'woocommerce' ), esc_html( $order->get_billing_first_name() ) ); ?></span>
-        <span class="info-subtext" style="font-size:17px !important; line-height: 24px; color:#231f20;">Your order <span style="font-weight: 600;">#<?php echo $order->get_id(); ?></span> is on its way to you! Here are the <?php echo $shippting_method == 'Self-collection' ? 'collection' : 'delivery'; ?> details :</span>
+        <span class="info-subtext" style="font-size:17px !important; line-height: 24px; color:#231f20;">Your order <span style="font-size:20px;font-weight: 600;">#<?php echo $order->get_id(); ?></span> is on its way to you! Here are the <?php echo $shippting_method == 'Self-collection' ? 'collection' : 'delivery'; ?> details :</span>
     </div>
 
     <?php
@@ -95,18 +95,18 @@ if ($order) {
             <div style="border: 1px solid #ECECEC; box-shadow: 0px 0px 12px #0000001F; border-radius: 1em; padding: 20px; overflow: hidden; background: #fafafa;color:#000000;font-weight: 400;font-size:14px; line-height: 24px;">
                 <div class="stt" align="left" style="padding-bottom:5px;">
                     <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:17px;">Collection at : </div>
-                    <div>22 Yio Chu Kang Road #01-19 Highland Centre Singapore 545535</div>
+                    <div style="font-size:14px;line-height:17px;">22 Yio Chu Kang Road #01-19 Highland Centre Singapore 545535</div>
                 </div>
                 <div style="width: 100%; display: flex;">
                     <div style="width: 50%;">
                         <div class="stt" align="left" style="padding-bottom:5px;">
                             <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:17px;">Operation Hours : </div>
-                            <div>Open Mon - Fri 9am - 5pm, Sat 9am - 1pm</div>
-                            <div>Closed on Sundays and public holidays</div>
+                            <div style="font-size:14px;line-height:17px;">Open Mon - Fri 9am - 5pm, Sat 9am - 1pm</div>
+                            <div style="font-size:14px;line-height:17px;">Closed on Sundays and public holidays</div>
                         </div>
                         <div class="stt" align="left" style="padding-bottom:5px;">
                             <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:17px;">Note : </div>
-                            <div>Kindly show this email upon collection as proof of purchase.</div>
+                            <div style="font-size:14px;line-height:17px;">Kindly show this email upon collection as proof of purchase.</div>
                         </div>
                     </div>
                     <div style="width: 50%;display: flex;justify-content: flex-end;">
@@ -123,11 +123,11 @@ if ($order) {
                 <div style="display: flex;">
                     <div style="width: 50%;">
                         <div class="stt" align="left" style="padding-bottom:5px;">
-                            <div style="padding-bottom:5px;color:#000000;font-weight: 500;font-size:17px;">Estimated Delivery Date : </div>
+                            <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:17px;">Estimated Delivery Date : </div>
                             <div><?php echo $time_completed_display; ?></div>
                         </div>
                         <div class="stt" align="left" style="padding-bottom:5px; font-size:14px; line-height: 19px;">
-                            <div style="padding-bottom:5px;color:#000000;font-weight: 500;font-size:17px;">Deliver to : </div>
+                            <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:17px;">Deliver to : </div>
                             <div><?php echo $order_data['billing']['first_name'] . ' ' . $order_data['billing']['last_name']; ?></div>
                             <div><?php echo $order_data['billing']['address_1']; ?></div>
                             <div><?php echo $order_data['billing']['address_2']; ?></div>
