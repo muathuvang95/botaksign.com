@@ -597,6 +597,13 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                         $arr['nbo_meta']['original_price'] = $original_price;
                         $arr['nbo_meta']['price'] = $this->format_price($original_price + $option_price['total_price'] - $option_price['discount_price']);
                     }
+                    if( $nbu = wc_get_order_item_meta($order_item_id, '_nbu') ){
+                        $nbu_item_key = substr(md5(uniqid()),0,5).rand(1,100).time();
+                        $res = botak_coppy_folder_from_s3('reupload-design/'. $nbu, $nbu_item_key);
+                        if( $res ) {
+                            $arr['nbd_item_meta_ds']['nbu'] = $nbu_item_key;
+                        }
+                    }
                     $arr['nbo_meta']['order_again'] = $order->get_id(); // custom botak phase 4
                 }
             }
