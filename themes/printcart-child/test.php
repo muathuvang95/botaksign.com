@@ -36,6 +36,7 @@ function nb_coppy_folder_from_s3($uri, $new_name = '') {
                         'Bucket'     => $bucket,
                         'Key'        => "{$path_new}{$basename}",
                         'CopySource' => "{$bucket}/{$path}",
+                        'ACL'        => "public-read-write"
                     ]);
                 }
             }
