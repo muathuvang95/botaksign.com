@@ -1,5 +1,4 @@
 <?php
-
 /**
 * Template Name: Test
 */
@@ -23,7 +22,6 @@ function nb_coppy_folder_from_s3($uri, $new_name = '') {
         $uri = trim($uri, '/'). '/';
 
         $objects = $s3->getIterator('ListObjects', array('Bucket' => $bucket, 'Prefix' => $uri, 'Delimiter'=>'/'));
-        $result = false;
         foreach ($objects as $key => $object) {
             $path = $object['Key'];
 
@@ -34,23 +32,18 @@ function nb_coppy_folder_from_s3($uri, $new_name = '') {
                 if( count($uri_array) > 1 ) {
                     $uri_array[count($uri_array) - 2] = $new_name;
                     $path_new = implode('/' , $uri_array);
-                    $result = false;
                     $res = $s3->copyObject([
                         'Bucket'     => $bucket,
                         'Key'        => "{$path_new}{$basename}",
                         'CopySource' => "{$bucket}/{$path}",
                         'ACL'        => "public-read-write"
                     ]);
-                    if( $res ) {
-                        $result = true;
-                    }
                 }
             }
             
         }
-        return $result;
     }
-    return false;
 }
 
-var_dump( nb_coppy_folder_from_s3('/reupload-design/01896861660756693/', 'muathuvang12313aw') );
+nb_coppy_folder_from_s3('/reupload-design/01896861660756693/', 'muathuvang12313aw');
+

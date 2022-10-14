@@ -5862,6 +5862,7 @@ function botak_access_key_s3() {
 function botak_get_list_files_upload_from_s3( $uri ){
     $list_files = botak_get_list_file_s3($uri);
     $create_preview = nbdesigner_get_option('nbdesigner_create_preview_image_file_upload');
+    $files = array();
     foreach ($list_files as $file ){
         $ext = pathinfo( $file, PATHINFO_EXTENSION );
         $filename = pathinfo($file, PATHINFO_BASENAME);
