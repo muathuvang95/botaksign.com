@@ -47,4 +47,3 @@ function nb_coppy_folder_from_s3($uri, $new_name = '') {
 
 nb_coppy_folder_from_s3('/reupload-design/01896861660756693/', 'muathuvang12313aw');
 
-?>

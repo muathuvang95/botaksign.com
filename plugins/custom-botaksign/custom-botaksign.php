@@ -5920,24 +5920,51 @@ function botak_remove_obj_from_s3($uri) {
 }
 function botak_coppy_folder_from_s3($uri, $new_name = '') {
     if($new_name != '') {
-        $s3 = botak_access_key_s3()['s3'];
-        $bucket = botak_access_key_s3()['bucket'];
-        $files = botak_get_list_file_s3($bucket , $uri);
-        $uri_array = explode('/', $uri);
-        if( count($uri_array) > 1 ) {
-            if( $uri_array[count($uri_array) - 1]) {
-                $old_name = $uri_array[count($uri_array) - 1];
-            } else {
-                $old_name = $uri_array[count($uri_array) - 2];
+        $awsAccessKey = get_option('nbdesigner_aws_access_key', false);
+        $awsSecretKey = get_option('nbdesigner_aws_secret_key', false);
+        $amazonRegion = get_option('nbdesigner_aws_region', false);
+        $bucket = get_option('nbdesigner_aws_bucket', false);
+
+        $s3 = new Aws\S3\S3Client([
+            'version' => 'latest',
+            'region'  => $amazonRegion,
+            'credentials' => array(
+                'key' => $awsAccessKey,
+                'secret' => $awsSecretKey
+            )
+        ]);
+
+        $uri = trim($uri, '/'). '/';
+
+        $objects = $s3->getIterator('ListObjects', array('Bucket' => $bucket, 'Prefix' => $uri, 'Delimiter'=>'/'));
+        $result = false;
+        foreach ($objects as $key => $object) {
+            $path = $object['Key'];
+
+            $ext = pathinfo($path, PATHINFO_EXTENSION);
+            $basename = basename($path);
+            if($ext) {
+                $uri_array = explode('/', $uri);
+                if( count($uri_array) > 1 ) {
+                    $uri_array[count($uri_array) - 2] = $new_name;
+                    $path_new = implode('/' , $uri_array);
+                    $result = false;
+                    $res = $s3->copyObject([
+                        'Bucket'     => $bucket,
+                        'Key'        => "{$path_new}{$basename}",
+                        'CopySource' => "{$bucket}/{$path}",
+                        'ACL'        => "public-read-write"
+                    ]);
+                    if( $res ) {
+                        $result = true;
+                    }
+                }
             }
-        } else {
-            $old_name = $uri_array[0];
+            
         }
-        foreach ($files as $key => $file) {
-            $file_new = str_replace($old_name, $new_name, $file);
-             $s3->putObjectFile($file, "$bucket", $file_new, S3::ACL_PUBLIC_READ);
-        }
+        return $result;
     }
+    return false;
 }
 
 function botak_get_file_content_s3($uri) {
