@@ -57,7 +57,7 @@ wp_enqueue_style('nb-custom-style', get_stylesheet_directory_uri().'/css/nb-cust
 					</div>
 
 					<?php do_action( 'woocommerce_login_form' ); ?>
-					<div class="form-check mb-4">
+					<div class="form-check mb-4 nb-login-remember-me">
 					    <input class="form-check-input" name="rememberme" type="checkbox" id="rememberme" value="forever" />
 					    <label class="form-check-label" for="exampleCheck1"><?php esc_html_e( 'Remember me', 'woocommerce' ); ?></label>
 					</div>
