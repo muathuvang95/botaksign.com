@@ -1,14 +1,12 @@
 .nb-button-register {
 	width: 50%;
 }
-.nb-form-login-wrap.nb-sign-in {
-    display: block;
-}
 .nb-form-login-wrap .nb-login-left {
-    padding-left: 6%;
+    max-width: ;
+    /*padding-left: 6%;*/
 }
 .nb-form-login-wrap .nb-login-right {
-    padding-right: 6%;
+    /*padding-right: 6%;*/
 }
 .nb-sign-up-now {
     margin-top: 20px;
@@ -27,15 +25,31 @@
 }
 .nb-form-login-wrap {
 	padding: 15px 40px;
-	border: 1px solid #ebebeb;
+	border: 1px solid #DEDEDE;
     width: 100%;
     border-radius: 10px;
     box-shadow: 0 0 5px rgba(23,24,24,.05),0 1px 2px rgba(0,0,0,.15);
     margin-bottom: 60px;
+    margin-top: 20px;
 }
-.nb-form-login-wrap .checkbox-inline input[type="checkbox"] {
+.nb-form-login-wrap.nb-sign-up {
+    max-width: 690px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-bottom: 30px;
+}
+.nb-form-login-wrap.nb-sign-in {
+    display: block;
+    max-width: 1000px;
+    margin-right: auto;
+    margin-left: auto;
+    padding:  39px 62px;
+}
+.nb-form-login-wrap .checkbox-inline input[type="checkbox"],
+.nb-form-login-wrap .checkbox input[type="checkbox"] {
     height: 27px!important;
     width: 27px!important;
+    margin-right: 4px!important;
 }
 .nb-form-login-wrap .checkbox-inline {
     padding-left: 40px!important;
@@ -47,12 +61,13 @@
     padding: 10px;
 }
 .nb-form-login .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 27px;
 }
 .nb-form-login .woocommerce-form-login input.form-control {
     padding-left: 10px;
 }
 .nb-social-log {
+    color: #CBD4E6;
     position: absolute;
     height: 100%;
     left: 50%;
@@ -61,7 +76,7 @@
     align-items: center;
 }
 
-.nb-social-log span:before {
+.nb-social-log span:before { 
     position: absolute;
     height: 40%;
     left: 50%;
@@ -97,7 +112,25 @@
     width: auto!important;
 }
 
+@media screen and (min-width: 768px) {
+    .nb-login-left, .nb-login-right {
+        flex: 0 0 46.666667%;
+        max-width: 46.666667%;
+    }
+    .nb-login-middle {
+        flex: 0 0 6.666667%;
+        max-width: 6.666667%;
+    }
+}
+
 @media screen and (max-width: 768px) {
+    .nb-form-login-wrap.nb-sign-in {
+        padding: 15px 15px 22px 15px;
+        width: 365px;
+    }
+    .nb-form-login-wrap.nb-sign-up {
+        width: 365px;
+    }
     .nb-form-login-wrap .nb-login-left {
         padding-left: 25px;
         padding-right: 25px;
@@ -154,5 +187,8 @@
     }
     .nb-button-register {
         width: 100%;
+    }
+    .nb-login-remember-me {
+        color: #B5B5B5;
     }
 }
