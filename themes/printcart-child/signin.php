@@ -75,7 +75,7 @@ if (function_exists('yoast_breadcrumb')) { ?>
 
 							</div>
 						</div>
-						<div class="col-md-2">
+						<div class="col-md-2 nb-login-middle">
 							<div class="nb-social-log">
 								<span>Or</span>
 							</div>
