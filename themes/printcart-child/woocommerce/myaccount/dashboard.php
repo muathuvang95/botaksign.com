@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="row">
 			<div class="col-sm-6" style="padding-top: 10px; padding-bottom: 20px;">
 				<div class="nb-dashboard-header-title">
-					<span class="name">Hello<span class="nb-space" /><?php echo esc_html( $current_user->display_name ); ?>!</span>
+					<span class="name">Hello<span class="nb-space"><?php echo esc_html( $current_user->display_name ); ?>!</span>
 				</div>
 				<div class="nb-dashboard-header-desc">
 					It’s good to see you again.

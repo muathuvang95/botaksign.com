@@ -12,7 +12,7 @@
 }
 .nb-signin-title {
     font-size: 55px;
-    line-height: 1.5;
+    line-height: 54px;
     font-family: inherit;
     font-weight: 700;
     margin-bottom: 10px;
@@ -30,6 +30,7 @@
     box-shadow: 0 0 5px rgba(23,24,24,.05),0 1px 2px rgba(0,0,0,.15);
     margin-bottom: 60px;
     margin-top: 20px;
+    font-family: Roboto;
 }
 .nb-form-login-wrap.nb-sign-up {
     max-width: 690px;
@@ -55,16 +56,18 @@
 }
 .nb-form-login .woocommerce-button, .nb-button-register {
     border-radius: 10px;
-    background: transparent linear-gradient(180deg, #1BCB3F 0%, #45D242 33%, #7BDB46 78%, #91DF48 100%) 0% 0% no-repeat padding-box;
+    background: transparent linear-gradient(0deg, #1BCB3F 0%, #45D242 33%, #7BDB46 78%, #91DF48 100%) 0% 0% no-repeat padding-box;
     border: none;
     padding: 10px;
-}
-.nb-form-login .form-group {
-    margin-bottom: 27px;
+    box-shadow: 0px 10px 20px #00000029;;
 }
 .nb-form-login .woocommerce-form-login input.form-control {
     padding-left: 10px;
 }
+/*.nb-form-login .iti-flag {
+    height: 14px;
+    background-position: -4449px 0;
+}*/
 .nb-social-log {
     color: #CBD4E6;
     position: absolute;
@@ -105,10 +108,21 @@
     margin-bottom: 20px!important;
 }
 
+.nb-social-login .nb-sign-up-now {
+    font-size: 17px;
+    line-height: 18px;
+}
 .nb-social-login .nb-sign-up-now a {
     color: #f00;
     display: inline-block!important;
     width: auto!important;
+    margin-left: 3px;
+}
+.nb-social-login .nsl-button-label-container {
+    flex: none;
+}
+.nb-login-remember-me {
+    color: #B5B5B5;
 }
 
 @media screen and (min-width: 768px) {
@@ -125,10 +139,10 @@
 @media screen and (max-width: 768px) {
     .nb-form-login-wrap.nb-sign-in {
         padding: 15px 15px 22px 15px;
-        width: 365px;
+        max-width: 365px;
     }
     .nb-form-login-wrap.nb-sign-up {
-        width: 365px;
+        max-width: 365px;
     }
     .nb-form-login-wrap .nb-login-left {
         padding-left: 25px;
@@ -136,17 +150,18 @@
     }
     .nb-signin-title {
         font-size: 30px;
-        line-height: 1.5;
+        line-height: 42px;
         font-family: inherit;
         font-weight: 700;
     }
     .nb-signin-desc {
         font-size: 17px;
-        line-height: 1.5;
+        line-height: 17px;
     }
     .nb-form-login-wrap .nb-login-middle {
         padding-left: 25px;
         padding-right: 25px;
+        margin: 25px 0;
     }
     .nb-form-login-wrap .nb-login-right {
         padding-left: 25px;
@@ -164,8 +179,8 @@
     .nb-social-log span:before {
         position: absolute;
         height: 1px;
-        width: calc(45% - 15px);
-        left: 15px;
+        width: calc(45% - 18px);
+        left: 20px;
         transform: translateY(-50%);
         content: '';
         background: #CBD4E6;
@@ -175,8 +190,8 @@
     .nb-social-log span:after {
         position: absolute;
         height: 1px;
-        width: calc(45% - 15px);
-        right: 15px;
+        width: calc(45% - 18px);
+        right: 20px;
         left: initial;
         transform: translateY(-50%);
         content: '';
@@ -189,5 +204,6 @@
     }
     .nb-login-remember-me {
         color: #B5B5B5;
+        margin-bottom: 15px!important;
     }
 }

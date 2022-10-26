@@ -2921,6 +2921,7 @@ footer.site-footer .footer-top-section .form .submit_b {
 }
 /*Custom cart 19/06/2022*/
 .woocommerce-cart-form .nbd-cart-item-design .nbd-edit-design,
+.woocommerce-cart-form .nbd-cart-item-upload-file .nbd-reup-design,
 .woocommerce-cart-form .nbd-cart-item-upload-file .nbd-upload-design {
     padding: 5px 15px;
     background-color: #F3F3F3;
@@ -3710,6 +3711,11 @@ footer.site-footer .footer-top-section .form .submit_b {
     color: #000000;
     font-weight: 700;
     display: flex;
+    text-overflow: clip;
+    white-space: nowrap;
+}
+.nb-custom-my-account .nb-woocommerce-MyAccount-content .nb-dashboard-header .nb-space {
+    margin-left: 4px;
 }
 .nb-custom-my-account .nb-woocommerce-MyAccount-content .nb-dashboard-header .nb-dashboard-header-desc {
     font-size: 19px;
