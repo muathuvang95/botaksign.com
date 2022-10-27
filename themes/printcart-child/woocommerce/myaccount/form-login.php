@@ -47,7 +47,7 @@ wp_enqueue_style('nb-custom-style', get_stylesheet_directory_uri().'/css/nb-cust
 
 					<?php do_action( 'woocommerce_login_form_start' ); ?>
 
-					<div class="form-group">
+					<div class="form-group mb-4">
 						<input type="text" class="form-control" name="username" placeholder="<?php esc_html_e( 'Username or email', 'woocommerce' ); ?>" id="username" autocomplete="username" value="<?php echo ( ! empty( $_POST['username'] ) ) ? esc_attr( wp_unslash( $_POST['username'] ) ) : ''; ?>" /><?php // @codingStandardsIgnoreLine ?>
 					</div>
 					<div class="form-group">
