@@ -4516,16 +4516,19 @@ function botak_show_production_time($shipping_method_label = '')
     ?>
 
     <div class="order-time-info">
-        <div class="title"><b>YOUR ORDER WILL BE <?php echo $shipping_method_label && $shipping_method_label !== 'Self-collection' ? 'DELIVER' : 'READY'; ?> BY :</b></div>
+        <div class="title mb-2"><b>Your order will be <?php echo $shipping_method_label && $shipping_method_label !== 'Self-collection' ? 'deliver' : 'ready'; ?> by :</b></div>
         <?php if ($max_shipping_time == 0) : ?>
-            <div class="time"><b><?= $production_datetime_completed; ?></b></div>
+            <div class="time  mb-2"><b><?= $production_datetime_completed; ?></b></div>
         <?php else: ?>
             <div class="time"><?= $production_date_completed; ?> - <?= $shipping_date_completed ?></div>
         <?php endif; ?>
-        <div class="notice">
-            <p>* This timing does not take into account:</p>
-            <p>- Delays due to unforseen circumstances</p>
-            <p>- Potential delays due to artwork issues</p>
+        <div class="notice nb-order-info">
+            <p class="mb-2">This timing does not take into account: <span class="text-danger">*<span></p>
+            <ul>
+                <li>Delivery</li>
+                <li>Delays due to unforeseen circumstances</li>
+                <li>Potential delays due to artwork issues / amendments</li>
+            </ul>
         </div>
     </div>
     <?php

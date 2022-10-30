@@ -72,7 +72,7 @@ wp_enqueue_style('nb-custom-style', get_stylesheet_directory_uri().'/css/nb-cust
 		</div>
 		<div class="col-md-2 nb-login-middle">
 			<div class="nb-social-log">
-				<span>Or</span>
+				<span>or</span>
 			</div>
 		</div>
 		<div class="col-md-5 nb-login-right">

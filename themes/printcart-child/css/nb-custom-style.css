@@ -27,10 +27,11 @@
 	border: 1px solid #DEDEDE;
     width: 100%;
     border-radius: 10px;
-    box-shadow: 0 0 5px rgba(23,24,24,.05),0 1px 2px rgba(0,0,0,.15);
+    filter:  drop-shadow(0px 0px 12px #0000001F);
     margin-bottom: 60px;
     margin-top: 20px;
     font-family: Roboto;
+    backdrop-filter: blur(50px) opacity(0.03) brightness(0.1);
 }
 .nb-form-login-wrap.nb-sign-up {
     max-width: 690px;
@@ -63,6 +64,10 @@
 }
 .nb-form-login .woocommerce-form-login input.form-control {
     padding-left: 10px;
+    min-height: 40px;
+    font-size: 14px;
+    line-height: 17px;
+    color: #B5B5B5;
 }
 /*.nb-form-login .iti-flag {
     height: 14px;
@@ -123,6 +128,11 @@
 }
 .nb-login-remember-me {
     color: #B5B5B5;
+    font-size: 15px;
+    line-height: 17px;
+}
+.nb-login-remember-me .form-check-input {
+    margin-top: 0px;
 }
 
 @media screen and (min-width: 768px) {
@@ -205,5 +215,21 @@
     .nb-login-remember-me {
         color: #B5B5B5;
         margin-bottom: 15px!important;
+    }
+    .nb-form-login .woocommerce-form-login .form-check-label {
+        font-size: 12px;
+        line-height: 13px;
+    }
+    .nb-form-login .woocommerce-form-login input.form-control {
+        font-size: 9px;
+        line-height: 11px;
+    }
+    .nb-social-login .nb-sign-up-now {
+        font-size: 13px;
+        line-height: 14px;
+    }
+    .nb-form-login .woocommerce-button, .nb-button-register {
+        font-size: 13px;
+        line-height: 16px;
     }
 }
