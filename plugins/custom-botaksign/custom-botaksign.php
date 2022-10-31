@@ -3700,13 +3700,13 @@ function woo_new_terms_coditions_tab_content()
     echo $content;
 }
 
-add_filter('woocommerce_cart_item_name', 'showing_sku_in_cart_items', 100, 3);
+add_filter('woocommerce_after_cart_item_name', 'showing_sku_in_cart_items', 100, 2);
 
-function showing_sku_in_cart_items($item_name, $cart_item, $cart_item_key)
+function showing_sku_in_cart_items( $cart_item, $cart_item_key)
 {
     // The WC_Product object
     $product = $cart_item['data'];
-
+    $item_name = '';
     //CS botak check condition to change gallery
     $sku = '';
     if (isset($cart_item['nbo_meta'])) {
@@ -3747,9 +3747,9 @@ function showing_sku_in_cart_items($item_name, $cart_item, $cart_item_key)
     }
 
     // Add the sku
-    $item_name .= '<br><small class="product-sku">' . __("SKU: ", "woocommerce") . $sku . '</small>';
+    $item_name .= '<br><div class="product-sku">' . __("SKU: ", "woocommerce") . '<span class="variation-value">' . $sku . '</span></div>';
 
-    return $item_name;
+    echo $item_name;
 }
 
 function iconic_account_menu_items($items)

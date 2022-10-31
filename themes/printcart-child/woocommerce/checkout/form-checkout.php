@@ -95,7 +95,7 @@ $steps = array(
 
         echo '</div>';
     } ?>
-        <div class="nb-footer-action" style="margin-top: 20px;">
+        <div class="nb-footer-action wc-proceed-to-checkout" style="margin-top: 20px;">
             <div class="nb-action">
                 <div class="nb-action-right">
                     <a class="checkout-button button alt wc-forward bt-5 btn-generate-quotation nb-btn-light current" style="cursor: pointer;">
@@ -114,7 +114,7 @@ $steps = array(
 
 <!-- The steps buttons -->
 
-<div class="nb-footer-action wc-proceed-to-checkout" style="max-width: 850px; margin: 20px auto 20px;">
+<div class="nb-footer-action" style="max-width: 850px; margin: 20px auto 20px;">
     <div class="row nb-action">
         <div class="col-6 nb-action-left">
             <a class="button nb-btn-light" data-href="<?php echo wc_get_cart_url(); ?>" id="nb-back-to-cart" class="button nb-btn-light" style="cursor: pointer;">
