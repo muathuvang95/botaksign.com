@@ -20,7 +20,11 @@ if (!empty($login_form_enabled) && !empty($form['login_and_register'])) {
     $side_by_side = true;
     $reg_form_active = true;
 }
+$success = true;
+echo '<pre>'; var_dump($response); echo '</pre>'
 ?>
+<div class="nb-signin-title"><?php esc_html_e( !$success ? 'Sign Up!' : 'Please verify your email' , 'woocommerce' ); ?></div>
+<div class="nb-signin-desc"><?php echo !$success ? 'Create a new account with us!' : ''; ?></div>
 <div id="erf_form_container_<?php echo $form['id']; ?>" class="erf-container erf-label-<?php echo $label_position ?> erf-layout-<?php echo $layout ?> erf-style-<?php echo $form['field_style']; ?> <?php echo $side_by_side ? 'erf-login-register-form' : ''; ?> <?php echo!empty($form['login_and_register']) ? 'erf-login-register' : ''; ?>">
     <?php
     if ($side_by_side) {
@@ -28,9 +32,12 @@ if (!empty($login_form_enabled) && !empty($form['login_and_register'])) {
     }
     ?>
     <div class="erf-reg-form-container" style="<?php echo empty($reg_form_active) ? 'display:none;' : ''; ?>">
-        <?php include('layout_options.php'); ?>
+
         <?php if ($success) : ?>
             <div class="erf-success">
+                <div>You're almost there! We sent an email to {{verification_link}}</div>
+                <div>If you don't see it, you may check your spam folder.</div>
+                <div>Still can't find the email?</div>
                 <?php echo $form['success_msg']; ?>
             </div> 
         <?php else: ?>
