@@ -16,12 +16,11 @@ if (!empty($login_form_enabled)) {
     }
 }
 $side_by_side = false;
+
 if (!empty($login_form_enabled) && !empty($form['login_and_register'])) {
     $side_by_side = true;
     $reg_form_active = true;
 }
-$success = true;
-echo '<pre>'; var_dump($response); echo '</pre>'
 ?>
 <div class="nb-signin-title"><?php esc_html_e( !$success ? 'Sign Up!' : 'Please verify your email' , 'woocommerce' ); ?></div>
 <div class="nb-signin-desc"><?php echo !$success ? 'Create a new account with us!' : ''; ?></div>
@@ -34,11 +33,10 @@ echo '<pre>'; var_dump($response); echo '</pre>'
     <div class="erf-reg-form-container" style="<?php echo empty($reg_form_active) ? 'display:none;' : ''; ?>">
 
         <?php if ($success) : ?>
-            <div class="erf-success">
-                <div>You're almost there! We sent an email to {{verification_link}}</div>
-                <div>If you don't see it, you may check your spam folder.</div>
-                <div>Still can't find the email?</div>
-                <?php echo $form['success_msg']; ?>
+            <div class="erf-success text-center">
+                <div class="mb-4">You're almost there! We sent an email to {{verification_link}}</div>
+                <div class="mb-4">If you don't see it, you may check your spam folder.</div>
+                <div class="mb-4">Still can't find the email?</div>
             </div> 
         <?php else: ?>
 
