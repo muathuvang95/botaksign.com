@@ -59,7 +59,7 @@
     background: transparent linear-gradient(0deg, #1BCB3F 0%, #45D242 33%, #7BDB46 78%, #91DF48 100%) 0% 0% no-repeat padding-box;
     border: none;
     padding: 10px;
-    filter: drop-shadow(0px 0px 12px #0000003F);
+    filter: drop-shadow(0px 0px 12px #0000002F);
 }
 .nb-button-resend-email {
     color: #fff;

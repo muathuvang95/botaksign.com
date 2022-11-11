@@ -41,6 +41,10 @@ if (function_exists('yoast_breadcrumb')) { ?>
 
 							<div class="nb-form-login">
 
+								<div class="nb-signin-title"><?php esc_html_e( 'Sign Up!', 'woocommerce' ); ?></div>
+
+								<div class="nb-signin-desc">Create a new account with us!</div>
+
 								<?php echo do_shortcode('[erforms id="11461"]'); ?>
 
 							</div>
