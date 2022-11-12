@@ -3700,13 +3700,13 @@ function woo_new_terms_coditions_tab_content()
     echo $content;
 }
 
-add_filter('woocommerce_cart_item_name', 'showing_sku_in_cart_items', 100, 3);
+add_filter('woocommerce_after_cart_item_name', 'showing_sku_in_cart_items', 100, 2);
 
-function showing_sku_in_cart_items($item_name, $cart_item, $cart_item_key)
+function showing_sku_in_cart_items( $cart_item, $cart_item_key)
 {
     // The WC_Product object
     $product = $cart_item['data'];
-
+    $item_name = '';
     //CS botak check condition to change gallery
     $sku = '';
     if (isset($cart_item['nbo_meta'])) {
@@ -3747,9 +3747,9 @@ function showing_sku_in_cart_items($item_name, $cart_item, $cart_item_key)
     }
 
     // Add the sku
-    $item_name .= '<br><small class="product-sku">' . __("SKU: ", "woocommerce") . $sku . '</small>';
+    $item_name .= '<br><div class="product-sku">' . __("SKU: ", "woocommerce") . '<span class="variation-value">' . $sku . '</span></div>';
 
-    return $item_name;
+    echo $item_name;
 }
 
 function iconic_account_menu_items($items)
@@ -4516,16 +4516,19 @@ function botak_show_production_time($shipping_method_label = '')
     ?>
 
     <div class="order-time-info">
-        <div class="title"><b>YOUR ORDER WILL BE <?php echo $shipping_method_label && $shipping_method_label !== 'Self-collection' ? 'DELIVER' : 'READY'; ?> BY :</b></div>
+        <div class="title mb-2"><b>Your order will be <?php echo $shipping_method_label && $shipping_method_label !== 'Self-collection' ? 'deliver' : 'ready'; ?> by :</b></div>
         <?php if ($max_shipping_time == 0) : ?>
-            <div class="time"><b><?= $production_datetime_completed; ?></b></div>
+            <div class="time  mb-2"><b><?= $production_datetime_completed; ?></b></div>
         <?php else: ?>
             <div class="time"><?= $production_date_completed; ?> - <?= $shipping_date_completed ?></div>
         <?php endif; ?>
-        <div class="notice">
-            <p>* This timing does not take into account:</p>
-            <p>- Delays due to unforseen circumstances</p>
-            <p>- Potential delays due to artwork issues</p>
+        <div class="notice nb-order-info">
+            <p class="mb-2">This timing does not take into account: <span class="text-danger">*<span></p>
+            <ul>
+                <li>Delivery</li>
+                <li>Delays due to unforeseen circumstances</li>
+                <li>Potential delays due to artwork issues / amendments</li>
+            </ul>
         </div>
     </div>
     <?php

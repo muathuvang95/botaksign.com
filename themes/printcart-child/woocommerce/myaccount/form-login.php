@@ -47,26 +47,24 @@ wp_enqueue_style('nb-custom-style', get_stylesheet_directory_uri().'/css/nb-cust
 
 					<?php do_action( 'woocommerce_login_form_start' ); ?>
 
-					<div class="form-group">
-						<!-- <label for="username"><?php esc_html_e( 'Username or email address', 'woocommerce' ); ?>&nbsp;<span class="required">*</span></label> -->
+					<div class="form-group mb-4">
 						<input type="text" class="form-control" name="username" placeholder="<?php esc_html_e( 'Username or email', 'woocommerce' ); ?>" id="username" autocomplete="username" value="<?php echo ( ! empty( $_POST['username'] ) ) ? esc_attr( wp_unslash( $_POST['username'] ) ) : ''; ?>" /><?php // @codingStandardsIgnoreLine ?>
 					</div>
 					<div class="form-group">
-						<!-- <label for="password"><?php esc_html_e( 'Password', 'woocommerce' ); ?>&nbsp;<span class="required">*</span></label> -->
 						<input class="form-control" type="password" placeholder="<?php esc_html_e( 'Password', 'woocommerce' ); ?>" name="password" id="password" autocomplete="current-password" />
 					</div>
 
 					<?php do_action( 'woocommerce_login_form' ); ?>
-					<div class="form-check mb-4 nb-login-remember-me">
+					<div class="form-check mb-5 nb-login-remember-me">
 					    <input class="form-check-input" name="rememberme" type="checkbox" id="rememberme" value="forever" />
-					    <label class="form-check-label" for="exampleCheck1"><?php esc_html_e( 'Remember me', 'woocommerce' ); ?></label>
+					    <label class="form-check-label" for="rememberme"><?php esc_html_e( 'Remember me', 'woocommerce' ); ?></label>
 					</div>
 					<?php wp_nonce_field( 'woocommerce-login', 'woocommerce-login-nonce' ); ?>
 					<input type="hidden" name="redirect" value="<?php echo esc_attr(wc_get_page_permalink( 'myaccount' )); ?>">
 					<button type="submit" class="woocommerce-button btn btn-success w-100" name="login" value="<?php esc_attr_e( 'Sign in', 'woocommerce' ); ?>"><?php esc_html_e( 'Sign in', 'woocommerce' ); ?></button>
-					<p class="woocommerce-LostPassword lost_password">
+<!-- 					<p class="woocommerce-LostPassword lost_password">
 						<a href="<?php echo esc_url( wp_lostpassword_url() ); ?>"><?php esc_html_e( 'Lost your password?', 'woocommerce' ); ?></a>
-					</p>
+					</p> -->
 
 				</form>
 
@@ -74,7 +72,7 @@ wp_enqueue_style('nb-custom-style', get_stylesheet_directory_uri().'/css/nb-cust
 		</div>
 		<div class="col-md-2 nb-login-middle">
 			<div class="nb-social-log">
-				<span>Or</span>
+				<span>or</span>
 			</div>
 		</div>
 		<div class="col-md-5 nb-login-right">

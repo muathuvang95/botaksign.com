@@ -12,7 +12,7 @@
 }
 .nb-signin-title {
     font-size: 55px;
-    line-height: 1.5;
+    line-height: 54px;
     font-family: inherit;
     font-weight: 700;
     margin-bottom: 10px;
@@ -27,15 +27,16 @@
 	border: 1px solid #DEDEDE;
     width: 100%;
     border-radius: 10px;
-    box-shadow: 0 0 5px rgba(23,24,24,.05),0 1px 2px rgba(0,0,0,.15);
     margin-bottom: 60px;
     margin-top: 20px;
+    font-family: Roboto;
 }
 .nb-form-login-wrap.nb-sign-up {
     max-width: 690px;
     margin-right: auto;
     margin-left: auto;
     padding-bottom: 30px;
+    backdrop-filter: blur(50px) opacity(0.03) brightness(0.1);
 }
 .nb-form-login-wrap.nb-sign-in {
     display: block;
@@ -53,18 +54,28 @@
 .nb-form-login-wrap .checkbox-inline {
     padding-left: 40px!important;
 }
-.nb-form-login .woocommerce-button, .nb-button-register {
+.nb-form-login .woocommerce-button, .nb-button-register, .nb-button-resend-email {
     border-radius: 10px;
-    background: transparent linear-gradient(180deg, #1BCB3F 0%, #45D242 33%, #7BDB46 78%, #91DF48 100%) 0% 0% no-repeat padding-box;
+    background: transparent linear-gradient(0deg, #1BCB3F 0%, #45D242 33%, #7BDB46 78%, #91DF48 100%) 0% 0% no-repeat padding-box;
     border: none;
     padding: 10px;
+    filter: drop-shadow(0px 0px 12px #0000002F);
 }
-.nb-form-login .form-group {
-    margin-bottom: 27px;
+.nb-button-resend-email {
+    color: #fff;
+    padding: 10px 20px;
 }
 .nb-form-login .woocommerce-form-login input.form-control {
     padding-left: 10px;
+    min-height: 40px;
+    font-size: 14px;
+    line-height: 17px;
+    color: #B5B5B5;
 }
+/*.nb-form-login .iti-flag {
+    height: 14px;
+    background-position: -4449px 0;
+}*/
 .nb-social-log {
     color: #CBD4E6;
     position: absolute;
@@ -97,6 +108,12 @@
     display: block;
     bottom: 0;
 }
+.nb-log-with-social .nsl-button {
+    justify-content: center;
+}
+.nb-log-with-social .nsl-button .nsl-button-label-container {
+    flex: none!important;
+}
 .nb-social-login .nsl-container-buttons {
     width: 100%;
 }
@@ -105,10 +122,26 @@
     margin-bottom: 20px!important;
 }
 
+.nb-social-login .nb-sign-up-now {
+    font-size: 17px;
+    line-height: 18px;
+}
 .nb-social-login .nb-sign-up-now a {
     color: #f00;
     display: inline-block!important;
     width: auto!important;
+    margin-left: 3px;
+}
+.nb-social-login .nsl-button-label-container {
+    flex: none;
+}
+.nb-login-remember-me {
+    color: #B5B5B5;
+    font-size: 15px;
+    line-height: 17px;
+}
+.nb-login-remember-me .form-check-input {
+    margin-top: 0px;
 }
 
 @media screen and (min-width: 768px) {
@@ -125,10 +158,10 @@
 @media screen and (max-width: 768px) {
     .nb-form-login-wrap.nb-sign-in {
         padding: 15px 15px 22px 15px;
-        width: 365px;
+        max-width: 365px;
     }
     .nb-form-login-wrap.nb-sign-up {
-        width: 365px;
+        max-width: 365px;
     }
     .nb-form-login-wrap .nb-login-left {
         padding-left: 25px;
@@ -136,17 +169,18 @@
     }
     .nb-signin-title {
         font-size: 30px;
-        line-height: 1.5;
+        line-height: 42px;
         font-family: inherit;
         font-weight: 700;
     }
     .nb-signin-desc {
         font-size: 17px;
-        line-height: 1.5;
+        line-height: 17px;
     }
     .nb-form-login-wrap .nb-login-middle {
         padding-left: 25px;
         padding-right: 25px;
+        margin: 25px 0;
     }
     .nb-form-login-wrap .nb-login-right {
         padding-left: 25px;
@@ -164,8 +198,8 @@
     .nb-social-log span:before {
         position: absolute;
         height: 1px;
-        width: calc(45% - 15px);
-        left: 15px;
+        width: calc(45% - 18px);
+        left: 20px;
         transform: translateY(-50%);
         content: '';
         background: #CBD4E6;
@@ -175,8 +209,8 @@
     .nb-social-log span:after {
         position: absolute;
         height: 1px;
-        width: calc(45% - 15px);
-        right: 15px;
+        width: calc(45% - 18px);
+        right: 20px;
         left: initial;
         transform: translateY(-50%);
         content: '';
@@ -189,5 +223,22 @@
     }
     .nb-login-remember-me {
         color: #B5B5B5;
+        margin-bottom: 15px!important;
+    }
+    .nb-form-login .woocommerce-form-login .form-check-label {
+        font-size: 12px;
+        line-height: 13px;
+    }
+    .nb-form-login .woocommerce-form-login input.form-control {
+        font-size: 9px;
+        line-height: 11px;
+    }
+    .nb-social-login .nb-sign-up-now {
+        font-size: 13px;
+        line-height: 14px;
+    }
+    .nb-form-login .woocommerce-button, .nb-button-register {
+        font-size: 13px;
+        line-height: 16px;
     }
 }
