@@ -1017,7 +1017,7 @@ function v3_generate_order_detail_pdf($order_id)
         $total_elements = 0;
         foreach ($items as $order_item_id => $item) {
             $info_1 = '';
-            $subtotal += $item['line_total'];
+            $subtotal += wc_format_decimal( $item['line_total'] , wc_get_price_decimals() );
             if (isset($item['variation_id']) && $item['variation_id'] > 0) :
                 $_product = wc_get_product($item['variation_id']);
             else :
@@ -1190,12 +1190,9 @@ function v3_generate_order_detail_pdf($order_id)
             }
             $loop ++;
         }
-        $gst = $subtotal * 7 / 100;
-        if ($order_data['shipping_total'] > 0) {
-            $gst += ($order_data['shipping_total'] * 7/100 );
-        }
-        // fix Làm tròn giá
-        $gst_1 = ($subtotal + $gst) - number_format( $subtotal, 2 );
+
+        $gst_1 = $order->get_total_tax();
+
         $invoice_product_page_02 .= $info_1s.'</div>'; // close div item
         $total_price = '<div class="title"><div class="left"><div class="line line-left"></div></div><div class="text">SUMMARY</div><div class="right"><div class="line line-right"></div></div></div><div class="wrap-line"></div><table id="total-price" style="width:100%">
             <tr><td style="width:50%; padding-top:5px"></td>
@@ -1213,7 +1210,7 @@ function v3_generate_order_detail_pdf($order_id)
             </td></tr>
             </table>
             <div class="wrap-total"><div style="width: 310px; height: 1px; background: #a0a0a0"></div><div style="height:5px"></div><div style="width: 50%; display:inline-block;float: left" class="total" align="left">Total</div>
-            <div style="width: 50%; display:inline-block;float:right;text-align:right" class="total-price">SGD $' . number_format($subtotal + $order_data['shipping_total'] + $gst , 2 ) . '</div><div style="height:5px"></div><div style="width: 310px; height: 1px; background: #a0a0a0"></div>
+            <div style="width: 50%; display:inline-block;float:right;text-align:right" class="total-price">SGD $' . $order->get_total() . '</div><div style="height:5px"></div><div style="width: 310px; height: 1px; background: #a0a0a0"></div>
             </div>';
         $html = $css.$invoice_header.$invoice_text_01 . $invoice_text_02 . $invoice_product_page_01 . $invoice_product_page_02 . $total_price;
     }
