@@ -95,16 +95,6 @@ $steps = array(
 
         echo '</div>';
     } ?>
-        <div class="nb-footer-action wc-proceed-to-checkout" style="margin-top: 20px;">
-            <div class="nb-action">
-                <div class="nb-action-right">
-                    <a class="checkout-button button alt wc-forward bt-5 btn-generate-quotation nb-btn-light current" style="cursor: pointer;">
-                        <span>Quotation</span>
-                    </a>
-                    <button type="submit" class="alt woocommerce_checkout_place_order button nb-btn-success" name="woocommerce_checkout_place_order" id="nb-submit" value="Place order" data-value="Place order">Place order</button>
-                </div> 
-            </div>
-        </div>
     </form>
 
     <?php do_action( 'woocommerce_after_checkout_form', $checkout ); ?>
@@ -114,20 +104,30 @@ $steps = array(
 
 <!-- The steps buttons -->
 
-<div class="nb-footer-action" style="max-width: 850px; margin: 20px auto 20px;">
+<div class="nb-footer-action wc-proceed-to-checkout" style="max-width: 962px; margin: 20px auto 20px;">
     <div class="row nb-action">
-        <div class="col-6 nb-action-left">
-            <a class="button nb-btn-light" data-href="<?php echo wc_get_cart_url(); ?>" id="nb-back-to-cart" class="button nb-btn-light" style="cursor: pointer;">
-                <span>Back to cart</span>
-            </a>
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-6">
+                    <a id="nb-prev" class="button nb-btn-light" style="cursor: pointer;">
+                        <span>PREVIOUS</span>
+                    </a>
+                </div>
+            </div>
         </div>
-        <div class="col-6 nb-action-right">
-            <a id="nb-prev" class="button nb-btn-light" style="cursor: pointer;">
-                <span>PREVIOUS</span>
-            </a>
-            <a id="nb-next" class="button nb-btn-success current" style="cursor: pointer;">
-                <span>NEXT</span>
-            </a>
+        <div class="col-sm-6 nb-action-right">
+            <div class="row">
+                <div class="col-sm-6">
+                    <a class="checkout-button button btn-generate-quotation nb-btn-light current" style="cursor: pointer;">
+                        <span>Quotation</span>
+                    </a>
+                </div>
+                <div class="col-sm-6">
+                    <a id="nb-next" class="button nb-btn-success current" style="cursor: pointer;">
+                        <span>CHECKOUT</span>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
