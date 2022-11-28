@@ -1016,8 +1016,9 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                     $decimals = nbdesigner_get_option('nbdesigner_number_of_decimals', 2);
                     foreach ($cart_item['nbo_meta']['option_price']['fields'] as $field) {
                         if( !isset( $field['published'] ) || $field['published'] == 'y' ){
-                            $price = floatval($field['price']) >= 0 ? '+' . wc_price( $field['price'], array( 'decimals' =>  $decimals ) ) : wc_price($field['price'], array( 'decimals' => $decimals ));
-                            if( $hide_zero_price == 'yes' && round($field['price'], $num_decimals) == 0 ) $price = '';
+                            $field_price = isset($field['price']) ? $field['price'] : 0;
+                            $price = floatval($field_price) >= 0 ? '+' . wc_price( $field_price, array( 'decimals' =>  $decimals ) ) : wc_price($field_price, array( 'decimals' => $decimals ));
+                            if( $hide_zero_price == 'yes' && round($field_price, $num_decimals) == 0 ) $price = '';
                             if( isset($field['is_upload']) ){
                                 if (strpos($field['val'], 'http') !== false) {
                                     $file_url = $field['val'];
@@ -1914,19 +1915,26 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                                     if ( $con['id'] == 'qty' ) {
                                         $con['val'] = (int) $con['val'];
                                     }
+                                    $field_value = '';
                                     if(isset($fields[$con['id']]['value'])) {
+                                        $field_value = $fields[$con['id']]['value'];
+                                    } else {
+                                        $field_value = $fields[$con['id']];
+                                    }
+
+                                    if($field_value) {
                                         switch($con['operator']){
                                             case 'i':
-                                                $checks[$key] = $fields[$con['id']]['value'] == $con['val'] ? true : false;
+                                                $checks[$key] = $field_value == $con['val'] ? true : false;
                                                 break;
                                             case 'n':
-                                                $checks[$key] = $fields[$con['id']]['value'] != $con['val'] ? true : false;
+                                                $checks[$key] = $field_value != $con['val'] ? true : false;
                                                 break;  
                                             case 'e':
-                                                $checks[$key] = $fields[$con['id']]['value'] == '' ? true : false;
+                                                $checks[$key] = $field_value == '' ? true : false;
                                                 break;
                                             case 'ne':
-                                                $checks[$key] = $fields[$con['id']]['value'] != '' ? true : false;
+                                                $checks[$key] = $field_value != '' ? true : false;
                                                 break;
                                             case 'eq':
                                                 $checks[$key] = $quantity == $con['val'] ? true : false;
@@ -2815,7 +2823,7 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                                     $image_alt          = trim( strip_tags( get_post_meta( $att_id, '_wp_attachment_image_alt', TRUE ) ) );
                                     $image_srcset       = function_exists( 'wp_get_attachment_image_srcset' ) ? wp_get_attachment_image_srcset( $att_id, 'shop_single' ) : FALSE;
                                     $image_sizes        = function_exists( 'wp_get_attachment_image_sizes' ) ? wp_get_attachment_image_sizes( $att_id, 'shop_single' ) : FALSE;
-                                    $image_caption      = $attachment_object->post_excerpt;
+                                    $image_caption      = isset($attachment_object->post_excerpt) ? $attachment_object->post_excerpt : '';
                                     $image = array(
                                         'imagep'        => 'y',
                                         'image_link'    => $image_link,

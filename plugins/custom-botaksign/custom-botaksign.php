@@ -3723,9 +3723,11 @@ function showing_sku_in_cart_items( $cart_item, $cart_item_key)
                 $select = !is_array($fvalue) ? $fvalue : $fvalue['value'];
                 foreach ($option_fields['fields'] as $data) {
                     if ($f_id === $data['id']) {
-                        $option = $data['general']['attributes']['options'][$select];
-                        if (isset($option['sku']) && $option['sku'] != '') {
-                            $sku .= $option['sku'];
+                        if( isset($data['general']) && isset($data['general']['attributes']) && isset($data['general']['attributes']['options']) && isset($data['general']['attributes']['options'][$select]) ) {
+                            $option = $data['general']['attributes']['options'][$select];
+                            if (isset($option['sku']) && $option['sku'] != '') {
+                                $sku .= $option['sku'];
+                            }
                         }
                     }
                 }
