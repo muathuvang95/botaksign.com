@@ -350,30 +350,30 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 .nb-footer-action-right .checkout-button {
 	margin-bottom: 20px;
 }
-.nb-step-item-billing {
+.nb-step-billing {
 	max-width: 730px;
     margin: 0 auto;
     border-radius: 20px;
     border: 1px solid #1BCB3F;
     padding: 25px;
 }
-.nb-step-item-billing .nb-billing-customer-details {
+.nb-step-billing .nb-billing-customer-details {
 	padding-left: 30px;
 	padding-right: 30px;
 }
-.nb-step-item-billing .shipping_address {
+.nb-step-billing .shipping_address {
 	padding-left: 30px;
 	padding-right: 30px;
 }
-.nb-step-item-billing #ship-to-different-address-checkbox {
+.nb-step-billing #ship-to-different-address-checkbox {
 	width: 30px;
     height: 30px;
     margin-right: 13px;
 }
-.nb-step-item-billing #ship-to-different-address-checkbox:checked {
+.nb-step-billing #ship-to-different-address-checkbox:checked {
 	color: #f00;
 }
-.nb-step-item-billing .woocommerce-form__label {
+.nb-step-billing .woocommerce-form__label {
 	display: flex;
 	align-items: center;
 }
@@ -406,22 +406,30 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 .nb-tabs-checkout-thankyou {
 	display: block;
 }
-.nb-step-item-billing .woocommerce-billing-fields h3 {
+.nb-step-billing .woocommerce-billing-fields h3 {
 	text-align: center;
 	font-weight: 600;
 }
-.nb-step-item-billing .woocommerce-shipping-fields h3 {
+.nb-step-billing {
+	background: transparent linear-gradient(179deg, #FFFFFF 0%, #F6F8F7 100%) 0% 0% no-repeat padding-box;
+    border: 1px solid #1BCB3F;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+.nb-step-billing .woocommerce-shipping-fields h3 {
 	text-align: left;
 	font-weight: 600;
 }
-.nb-step-item-billing .woocommerce-billing-fields .form-row label,
-.nb-step-item-billing .woocommerce-shipping-fields .form-row label {
+.nb-step-billing .woocommerce-billing-fields .form-row label,
+.nb-step-billing .woocommerce-shipping-fields .form-row label {
 	display: block;
     font-weight: bold;
     margin-bottom: 7px;
 }
-.nb-step-item-billing .woocommerce-billing-fields .form-row .woocommerce-input-wrapper input.input-text,
-.nb-step-item-billing .woocommerce-shipping-fields .form-row .woocommerce-input-wrapper input.input-text {
+.nb-step-billing .woocommerce-billing-fields .form-row .woocommerce-input-wrapper input.input-text,
+.nb-step-billing .woocommerce-shipping-fields .form-row .woocommerce-input-wrapper input.input-text {
 	border: 0.28346458077430725px solid #B5B5B5;
 	border-radius: 5px;
 	height: 45px;
@@ -430,20 +438,20 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
     padding-right: 10px;
     width: 100%;
 }
-.nb-step-item-billing .woocommerce-billing-fields .form-row.form-row-first,
-.nb-step-item-billing .woocommerce-shipping-fields .form-row.form-row-first {
+.nb-step-billing .woocommerce-billing-fields .form-row.form-row-first,
+.nb-step-billing .woocommerce-shipping-fields .form-row.form-row-first {
 	width: 50%;
     float: left;
     padding-right: 15px;
 }
-.nb-step-item-billing .woocommerce-billing-fields .form-row.form-row-last,
-.nb-step-item-billing .woocommerce-shipping-fields .form-row.form-row-last {
+.nb-step-billing .woocommerce-billing-fields .form-row.form-row-last,
+.nb-step-billing .woocommerce-shipping-fields .form-row.form-row-last {
 	padding-left: 15px;
 	width: 50%;
     float: left;
 }
-.nb-step-item-billing .woocommerce-billing-fields .form-row.form-row-wide,
-.nb-step-item-billing .woocommerce-shipping-fields .form-row.form-row-wide {
+.nb-step-billing .woocommerce-billing-fields .form-row.form-row-wide,
+.nb-step-billing .woocommerce-shipping-fields .form-row.form-row-wide {
 	width: 100%%;
 }
 .nb-woocommerce-checkout-payment {

@@ -43,7 +43,6 @@ if (count($arr_object) > 0) {
 		        		<td colspan="3">
 		        			<div class="accordion nb-accordion-quotation" id="accordionQuotation">
 								<div class="accordion-item">
-<!-- 									<button hidden class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseQuotation<?php echo $item->ID; ?>" aria-expanded="true" aria-controls="collapseQuotation<?php echo $item->ID; ?>"></button> -->
 									<div id="collapseQuotation<?php echo $item->ID; ?>" class="accordion-collapse collapse" aria-labelledby="headingBilling">
 										<div class="accordion-body">
 											<div class="wrap-detail-cart">
