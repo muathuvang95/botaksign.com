@@ -1083,6 +1083,7 @@ function nbdesigner_get_default_setting( $key = false ){
         'nbdesigner_default_dpi'                        => 96,
         'nbdesigner_show_in_cart'                       => 'yes',
         'nbdesigner_show_button_edit_design_in_cart'    => 'yes',
+        'nbdesigner_show_button_reupload_in_cart'       => 'yes',
         'nbdesigner_auto_add_cart_in_detail_page'       => 'no',
         'nbdesigner_class_design_button_catalog'        => '',
         'nbdesigner_class_design_button_detail'         => '',

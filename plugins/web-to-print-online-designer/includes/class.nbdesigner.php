@@ -3688,6 +3688,7 @@ class Nbdesigner_Plugin {
             $_show_design                   = nbdesigner_get_option('nbdesigner_show_in_cart', 'yes');
             $_show_design                   = apply_filters( 'nbd_show_design_section_in_cart', $_show_design, $cart_item );
             $enable_edit_design             = nbdesigner_get_option('nbdesigner_show_button_edit_design_in_cart', 'yes') == 'yes' ? true : false;
+            $enable_reupload                = nbdesigner_get_option('nbdesigner_show_button_reupload_in_cart', 'yes') == 'yes' ? true : false;
             $show_edit_link                 = apply_filters('nbd_show_edit_design_link_in_cart', $enable_edit_design, $cart_item);
             $product_id                     = $cart_item['product_id'];
             $variation_id                   = $cart_item['variation_id'];
@@ -3747,7 +3748,7 @@ class Nbdesigner_Plugin {
                         $html .= '<br /><a class="button nbd-edit-design" href="'.$link_edit_design.'">'. esc_html__('Edit design', 'web-to-print-online-designer') .'</a>';
                     }
                     $html .= '</div>';
-                }else if( $is_nbdesign && !$_enable_upload_without_design && $show_edit_link ){
+                }else if( $is_nbdesign && !$_enable_upload_without_design && $enable_reupload ){
                     $id = 'nbd' . $cart_item_key; 
                     $redirect = is_cart() ? 'cart' : 'checkout';
                     $link_create_design = add_query_arg(
@@ -3837,7 +3838,7 @@ class Nbdesigner_Plugin {
                         $html .= '<br /><a class="button nbd-reup-design" href="'.$link_reup_design.'">'. esc_html__('Reupload design', 'web-to-print-online-designer') .'</a>';
                     }
                     $html .= '</div>';
-                }else if( $_enable_upload && $show_edit_link ){
+                }else if( $_enable_upload && $enable_reupload ){
                     $id = 'nbd' . $cart_item_key;     
                     $redirect = is_cart() ? 'cart' : 'checkout';
                     $link_create_design = add_query_arg(

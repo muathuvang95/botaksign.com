@@ -276,8 +276,19 @@ if( !class_exists('Nbdesigner_Appearance_Settings') ) {
                         )
                     ),
                     array(
-                        'title'         => esc_html__( 'Show button edit design, reupload file in cart, checkout page', 'web-to-print-online-designer'),
+                        'title'         => esc_html__( 'Show button edit design in cart, checkout page', 'web-to-print-online-designer'),
                         'id'            => 'nbdesigner_show_button_edit_design_in_cart',
+                        'description'   => '',
+                        'default'       => 'yes',
+                        'type'          => 'radio',
+                        'options'       => array(
+                            'yes'   => esc_html__('Yes', 'web-to-print-online-designer'),
+                            'no'    => esc_html__('No', 'web-to-print-online-designer')
+                        )
+                    ),
+                    array(
+                        'title'         => esc_html__( 'Show button reupload file in cart, checkout page', 'web-to-print-online-designer'),
+                        'id'            => 'nbdesigner_show_button_reupload_in_cart',
                         'description'   => '',
                         'default'       => 'yes',
                         'type'          => 'radio',
