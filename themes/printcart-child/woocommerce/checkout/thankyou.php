@@ -24,26 +24,32 @@ if( $order->get_date_paid() || $order->get_payment_method() == 'cod') {
 	    "shipping" => array(
 	        "title" => "Shipping",
 	        "class" => "nb-step-shipping",
-	        "sections" => array(
-	            "shipping" , "billing"
-	        )
+	        "show"  => true,
+	    ),
+	    "billing" => array(
+	        "title" => "Billing",
+	        "class" => "nb-step-billing",
+	        "show"  => false,
 	    ),
 	    "payment" => array(
 	        "title" => "Payment",
 	        "class" => "nb-step-payment",
+	        "show"  => true,
 	    ),
 	    "checkout" => array(
 	        "title" => "Check Out",
 	        "class" => "nb-step-checkout",
+	        "show"  => true
 	    ),
 	);
+	$current_step_title = 'shipping';
 
 	?>
 
 	<link rel="stylesheet" type="text/css" href="<?php echo get_stylesheet_directory_uri(). '/woocommerce/checkout/nb-step-checkout/assets/css/style.css'; ?>">
 
 	<div class="nb-tabs-wrapper nb-tabs-checkout-thankyou">
-	    <div class="nb-tabs-list nb-<?php echo $number_of_steps; ?>-tabs" data-current-title="<?php echo $current_step_title; ?>">
+	    <div class="nb-tabs-list" data-current-title="<?php echo $current_step_title; ?>">
 	    <?php
 	    foreach ( $steps as $_id => $_step ) :
 	        $class = $_id == 'checkout' ? ' current' : '';

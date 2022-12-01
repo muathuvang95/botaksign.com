@@ -22,40 +22,50 @@ $steps = array(
     "shipping" => array(
         "title" => "Shipping",
         "class" => "nb-step-shipping",
-        "sections" => array(
-            "shipping" , "billing"
-        )
+        "show"  => true,
+    ),
+    "billing" => array(
+        "title" => "Billing",
+        "class" => "nb-step-billing",
+        "show"  => false,
     ),
     "payment" => array(
         "title" => "Payment",
         "class" => "nb-step-payment",
+        "show"  => true,
     ),
     "checkout" => array(
         "title" => "Check Out",
         "class" => "nb-step-checkout",
+        "show"  => true
     ),
-)
+);
+$current_step_title = 'shipping';
 
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo get_stylesheet_directory_uri(). '/woocommerce/checkout/nb-step-checkout/assets/css/style.css'; ?>">
 
 <div class="nb-tabs-wrapper">
-    <div class="nb-tabs-list nb-<?php echo $number_of_steps; ?>-tabs" data-current-title="<?php echo $current_step_title; ?>">
+    <div class="nb-tabs-list" data-current-title="<?php echo $current_step_title; ?>">
     <?php
-    foreach ( $steps as $_id => $_step ) :
-        $class = $i == 0 ? ' current' : '';
-        ?>
-        <div class="nb-tab-item<?php echo $class; ?> nb-<?php echo $_id; ?>" data-step-title="<?php echo $_id; ?>">
-            <div class="nb-tab-number"><?php echo $i = $i + 1; ?></div>
-            <div class="nb-tab-text"><?php echo $_step['title']; ?></div>   
-        </div>
-        <?php
-        if($i < count($steps)) {
-            echo '<div class="nb-tab-line"></div>';
+    $total_step = count($steps);
+    foreach ( $steps as $_id => $_step ) {
+        if($_step['show']) {
+            $class = $i == 0 ? ' current' : '';
+            ?>
+            <div class="nb-tab-item<?php echo $class; ?> nb-<?php echo $_id; ?>" data-step-title="<?php echo $_id; ?>">
+                <div class="nb-tab-number"><?php echo $i = $i + 1; ?></div>
+                <div class="nb-tab-text"><?php echo $_step['title']; ?></div>   
+            </div>
+            <?php
+            if($i < $total_step) {
+                echo '<div class="nb-tab-line"></div>';
+            }
+        } else {
+            $total_step -= 1;
         }
-        ?>
-    <?php endforeach; ?>
+    } ?>
     </div>
 </div>
 <!-- End The steps tabs -->
@@ -81,30 +91,9 @@ $steps = array(
     <?php foreach( $steps as $key => $step ) {
         echo '<!-- Step: '.$step['title'].' -->'; 
     	echo '<div class="nb-step-item '.$step['class'].'">';
-        if ( isset($step['sections'] ) ) {
-            foreach ( $step['sections'] as $section ) {
-                echo '<div class="nb-step-item-inner nb-step-item-'.$section.'">';
-
-                do_action('nb_step_content_' . $section);
-
-                echo '</div>';
-            }
-        } else {
-            do_action('nb_step_content_' . $key);
-        }
-
+        do_action('nb_step_content_' . $key);
         echo '</div>';
     } ?>
-        <div class="nb-footer-action wc-proceed-to-checkout" style="margin-top: 20px;">
-            <div class="nb-action">
-                <div class="nb-action-right">
-                    <a class="checkout-button button alt wc-forward bt-5 btn-generate-quotation nb-btn-light current" style="cursor: pointer;">
-                        <span>Quotation</span>
-                    </a>
-                    <button type="submit" class="alt woocommerce_checkout_place_order button nb-btn-success" name="woocommerce_checkout_place_order" id="nb-submit" value="Place order" data-value="Place order">Place order</button>
-                </div> 
-            </div>
-        </div>
     </form>
 
     <?php do_action( 'woocommerce_after_checkout_form', $checkout ); ?>
@@ -114,20 +103,30 @@ $steps = array(
 
 <!-- The steps buttons -->
 
-<div class="nb-footer-action" style="max-width: 850px; margin: 20px auto 20px;">
+<div class="nb-footer-action wc-proceed-to-checkout" style="max-width: 962px; margin: 20px auto 20px;">
     <div class="row nb-action">
-        <div class="col-6 nb-action-left">
-            <a class="button nb-btn-light" data-href="<?php echo wc_get_cart_url(); ?>" id="nb-back-to-cart" class="button nb-btn-light" style="cursor: pointer;">
-                <span>Back to cart</span>
-            </a>
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-6">
+                    <a id="nb-prev" class="button nb-btn-light" style="cursor: pointer;">
+                        <span>PREVIOUS</span>
+                    </a>
+                </div>
+            </div>
         </div>
-        <div class="col-6 nb-action-right">
-            <a id="nb-prev" class="button nb-btn-light" style="cursor: pointer;">
-                <span>PREVIOUS</span>
-            </a>
-            <a id="nb-next" class="button nb-btn-success current" style="cursor: pointer;">
-                <span>NEXT</span>
-            </a>
+        <div class="col-sm-6 nb-action-right">
+            <div class="row">
+                <div class="col-sm-6">
+                    <a class="checkout-button button btn-generate-quotation nb-btn-light current" style="cursor: pointer;">
+                        <span>Quotation</span>
+                    </a>
+                </div>
+                <div class="col-sm-6">
+                    <a id="nb-next" class="button nb-btn-success current" style="cursor: pointer;">
+                        <span>CHECK OUT</span>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

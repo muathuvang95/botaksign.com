@@ -269,7 +269,8 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 	padding-bottom: 5px;
 }
 
-.nb-footer-action .nb-btn-light {
+.nb-btn-light,
+.nb-btn-light:hover {
 	cursor: pointer;
     height: 45px;
     line-height: 45px;
@@ -280,8 +281,6 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 	box-shadow: 0px 20px 50px #00000029;
 	font-size: 14px;
 	padding: 0 20px;
-}
-#nb-back-to-cart, .nb-action-right .nb-btn-light {
 	border: 1px #67d844 solid;
 }
 
@@ -295,26 +294,15 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 	align-items: center;
 	justify-content: center;
 }
-.nb-action-right {
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
-}
-.nb-action-left {
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
-}
 
 .nb-footer-action .nb-btn-light span {
 	color: #000000;
 }
-#nb-back-to-cart span, .nb-action-right .nb-btn-light span{
+#nb-back-to-cart span, .nb-btn-light span{
 	color: #67d844;
 	font-weight: 600;
 }
 .nb-footer-action .btn-generate-quotation,
-.nb-footer-action #nb-submit,
 .nb-footer-action #nb-prev,
 .nb-footer-action #nb-next {
 	display: none;
@@ -322,7 +310,6 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
     margin-left: 2px;
 }
 .nb-footer-action .btn-generate-quotation.current,
-.nb-footer-action #nb-submit.current,
 .nb-footer-action #nb-prev.current,
 .nb-footer-action #nb-next.current {
 	display: inline-block;
@@ -331,6 +318,14 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 .nb-footer-action .nb-btn-success.woocommerce_checkout_place_order {
     width: 100%;
     max-width: 235px;
+}
+.nb-action .nb-btn-light,
+.nb-action .nb-btn-success {
+	width: 100%;
+}
+.nb-action .row>div {
+	margin-bottom: 10px;
+	margin-top 	: 10px;
 }
 .nb-footer-action .nb-btn-success {
 	cursor: pointer;
@@ -342,6 +337,7 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
     text-align: center;
     font-size: 14px;
     padding: 0 20px;
+    box-shadow: 0px 20px 50px #00000029;
 }
 .nb-footer-action .nb-action {
 	margin: 5px 0;
@@ -354,32 +350,36 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 .nb-footer-action-right .checkout-button {
 	margin-bottom: 20px;
 }
-.nb-step-item-billing .nb-billing-customer-details {
+.nb-step-billing {
+	max-width: 730px;
+    margin: 0 auto;
+    border-radius: 20px;
+    border: 1px solid #1BCB3F;
+    padding: 25px;
+}
+.nb-step-billing .nb-billing-customer-details {
 	padding-left: 30px;
 	padding-right: 30px;
 }
-.nb-step-item-billing .shipping_address {
+.nb-step-billing .shipping_address {
 	padding-left: 30px;
 	padding-right: 30px;
 }
-.nb-step-item-billing #ship-to-different-address-checkbox {
+.nb-step-billing #ship-to-different-address-checkbox {
 	width: 30px;
     height: 30px;
     margin-right: 13px;
 }
-.nb-step-item-billing #ship-to-different-address-checkbox:checked {
+.nb-step-billing #ship-to-different-address-checkbox:checked {
 	color: #f00;
 }
-.nb-step-item-billing .woocommerce-form__label {
+.nb-step-billing .woocommerce-form__label {
 	display: flex;
 	align-items: center;
 }
 .nb-steps-wrapper .woocommerce-checkout {
-	background: transparent linear-gradient(179deg, #FFFFFF 0%, #F6F8F7 100%) 0% 0% no-repeat padding-box;
-	border: 1px solid #1BCB3F;
-	border-radius: 10px;
 	padding: 20px;
-	max-width: 800px;
+	max-width: 962px;
 	margin: 0 auto;
 }
 .nb-step-checkout-thankyou {
@@ -406,22 +406,30 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 .nb-tabs-checkout-thankyou {
 	display: block;
 }
-.nb-step-item-billing .woocommerce-billing-fields h3 {
+.nb-step-billing .woocommerce-billing-fields h3 {
 	text-align: center;
 	font-weight: 600;
 }
-.nb-step-item-billing .woocommerce-shipping-fields h3 {
+.nb-step-billing {
+	background: transparent linear-gradient(179deg, #FFFFFF 0%, #F6F8F7 100%) 0% 0% no-repeat padding-box;
+    border: 1px solid #1BCB3F;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+.nb-step-billing .woocommerce-shipping-fields h3 {
 	text-align: left;
 	font-weight: 600;
 }
-.nb-step-item-billing .woocommerce-billing-fields .form-row label,
-.nb-step-item-billing .woocommerce-shipping-fields .form-row label {
+.nb-step-billing .woocommerce-billing-fields .form-row label,
+.nb-step-billing .woocommerce-shipping-fields .form-row label {
 	display: block;
     font-weight: bold;
     margin-bottom: 7px;
 }
-.nb-step-item-billing .woocommerce-billing-fields .form-row .woocommerce-input-wrapper input.input-text,
-.nb-step-item-billing .woocommerce-shipping-fields .form-row .woocommerce-input-wrapper input.input-text {
+.nb-step-billing .woocommerce-billing-fields .form-row .woocommerce-input-wrapper input.input-text,
+.nb-step-billing .woocommerce-shipping-fields .form-row .woocommerce-input-wrapper input.input-text {
 	border: 0.28346458077430725px solid #B5B5B5;
 	border-radius: 5px;
 	height: 45px;
@@ -430,20 +438,20 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
     padding-right: 10px;
     width: 100%;
 }
-.nb-step-item-billing .woocommerce-billing-fields .form-row.form-row-first,
-.nb-step-item-billing .woocommerce-shipping-fields .form-row.form-row-first {
+.nb-step-billing .woocommerce-billing-fields .form-row.form-row-first,
+.nb-step-billing .woocommerce-shipping-fields .form-row.form-row-first {
 	width: 50%;
     float: left;
     padding-right: 15px;
 }
-.nb-step-item-billing .woocommerce-billing-fields .form-row.form-row-last,
-.nb-step-item-billing .woocommerce-shipping-fields .form-row.form-row-last {
+.nb-step-billing .woocommerce-billing-fields .form-row.form-row-last,
+.nb-step-billing .woocommerce-shipping-fields .form-row.form-row-last {
 	padding-left: 15px;
 	width: 50%;
     float: left;
 }
-.nb-step-item-billing .woocommerce-billing-fields .form-row.form-row-wide,
-.nb-step-item-billing .woocommerce-shipping-fields .form-row.form-row-wide {
+.nb-step-billing .woocommerce-billing-fields .form-row.form-row-wide,
+.nb-step-billing .woocommerce-shipping-fields .form-row.form-row-wide {
 	width: 100%%;
 }
 .nb-woocommerce-checkout-payment {
@@ -564,7 +572,6 @@ button#nb-back-to-cart, .nb-no-back-to-cart #nb-prev {
 		width: 35px;
 		height: 35px;
 	}
-	.nb-footer-action #nb-submit,
 	.nb-footer-action .btn-generate-quotation {
 		max-width: 100%;
 	}
