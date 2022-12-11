@@ -1,4 +1,14 @@
 <?php 
+
+// cs Botak: redirect when back to the page edit item width old session 
+if( $cart_item_key && count($form_values) == 0 ) {
+    ?>
+    <script type="text/javascript">
+        window.location.href = "<?php echo home_url(). '/404.php'; ?>";
+    </script>
+    <?php
+    return;
+}
 if (!defined('ABSPATH')) exit;
 $in_quick_view  = false;
 $is_wqv         = false;
