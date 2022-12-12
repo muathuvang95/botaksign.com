@@ -4,6 +4,11 @@
 
 */
 
+if ( ! current_user_can( 'manage_options' ) ) { 
+	echo '<body id="error-page"><div class="wp-die-message">Sorry, you are not allowed to access this page.</div></body>';
+	return;
+}
+
 ?>
 
 <!doctype html>
