@@ -1,7 +1,7 @@
 <?php 
 
 // cs Botak: redirect when back to the page edit item width old session 
-if( $cart_item_key && count($form_values) == 0 ) {
+if( isset($cart_item_key) && $cart_item_key  && isset($form_values) && count($form_values) == 0 ) {
     ?>
     <script type="text/javascript">
         window.location.href = "<?php echo home_url(). '/404.php'; ?>";
