@@ -15,7 +15,7 @@
 </head>
 <body>
 <div class="change-specialist border border-primary m-4 p-4">
-	<h1 class="my-2">Change specialist</h1>
+	<h3 class="my-2">Change specialist</h3>
 	<form method="post" class="p-4">
 		<div class="mb-3">
 			<label for="exampleFormControlInput1" class="form-label">User id old</label>
@@ -92,6 +92,117 @@
 
 	?>
 </div>
+
+<div class="change-status border border-primary m-4 p-4">
+	<?php
+	$alert = '';
+	$list_status = array(
+		array(
+			"name" 	=> "Pending",
+        	"value" => "Pending"
+		),
+		array(
+			"name" 	=> "New",
+        	"value" => "New"
+		),
+		array(
+			"name"	=> "Ongoing",
+        	"value"	=> "Ongoing"
+		),
+		array(
+			"name"	=> "Completed",
+        	"value"	=> "Completed"
+		),
+		array(
+			"name"	=> "Collected",
+        	"value"	=> "Collected"
+		),
+		array(
+			"name"	=> "Cancelled",
+        	"value"	=> "Cancelled"
+		),
+	);
+
+	if(isset($_POST['change-status']) && $_POST['change-status'] == 'change-status' ) {
+		$order_id = isset($_POST['order-id']) ? $_POST['order-id'] : '';
+		$status = isset($_POST['order-status']) ? $_POST['order-status'] : '';
+		if($order_id && $status) {
+			$wc_status = '';
+			switch ($status) {
+				case 'Pending':
+					$wc_status = 'wc-pending';
+					break;
+				case 'New':
+					$wc_status = 'wc-pending';
+					break;
+				case 'Ongoing':
+					$wc_status = 'wc-processing';
+					break;
+				case 'Completed':
+					$wc_status = 'wc-completed';
+					break;
+				case 'Collected':
+					$wc_status = 'wc-completed';
+					break;
+				case 'Cancelled':
+					$wc_status = 'wc-cancelled';
+					break;
+				
+				default:
+					// code...
+					break;
+			}
+			$order = wc_get_order($order_id);
+			if($order) {
+				update_post_meta( $order_id , '_order_status' , $status);
+				$args = array(
+					'comment_post_ID' => $order_id,
+					'comment_author' => 'admin',
+					'comment_agent' => 'Manual update',
+					'comment_content' => $status,
+					'comment_author_email' => '',
+					'comment_type' => 'order_log',
+					'comment_approved' => 2,
+
+				);
+				wp_insert_comment($args);
+				if( $wc_status ) {
+					wp_update_post(array(
+					    'ID'    =>  $order_id,
+					    'post_status'   =>  $wc_status
+					));
+				}
+				$alert = 'Updated!';
+			}
+		}
+	}
+	?>
+	<h3 class="my-2">Change status</h3>
+	<?php 
+	if($alert) {
+		echo '<div class="alert alert-success" role="alert">'. $alert .'</div>';
+	}
+	?>
+	<form method="post" class="p-4">
+		<div class="mb-3">
+			<label for="exampleFormControlInput1" class="form-label">Order ID</label>
+			<input type="text" name="order-id" class="form-control" id="exampleFormControlInput1">
+		</div>
+		<div class="mb-3">
+			<select class="form-select" name="order-status" aria-label="Default select example">
+				<option selected>Open this select menu</option>
+				<?php
+				foreach ($list_status as $key => $value) {
+					echo '<option value="'. $value['value'] .'">'. $value['name'] .'</option>';
+				}
+				?>
+			</select>
+		</div>
+		<input type="hidden" name="change-status" value="change-status">
+		<button class="btn btn-primary">Submit</button>
+	</form>
+</div>
+
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
