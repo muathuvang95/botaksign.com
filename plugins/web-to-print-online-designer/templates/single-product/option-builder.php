@@ -4,7 +4,7 @@
 if( isset($cart_item_key) && $cart_item_key  && isset($form_values) && count($form_values) == 0 ) {
     ?>
     <script type="text/javascript">
-        window.location.href = "<?php echo home_url(). '/404.php'; ?>";
+        window.location.href = window.location.origin + window.location.pathname;
     </script>
     <?php
     return;
