@@ -165,9 +165,6 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
             $option_fields = unserialize($options['fields']);  
             $option_fields = $this->recursive_stripslashes( $option_fields );
             $fields = isset($option_fields['fields']) ? $option_fields['fields'] : array();
-            echo '<pre>';
-                    var_dump($nbd_field);
-                    echo '</pre>';
             if( is_array($fields) && count($fields) > 0) {
                 foreach ($fields as $key => $field) {
                     if( $field['conditional']['enable'] == 'n' || !isset($field['conditional']['depend']) || count($field['conditional']['depend']) == 0 ){
@@ -181,8 +178,7 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                         foreach($field['conditional']['depend'] as $key => $con){
                             $check[$key] = true;
                             if( $con['id'] != '' && isset($nbd_field[$con['id']]) ){
-                                $field_value = isset($nbd_field[$con['id']]['value']) ? $nbd_field[$con['id']]['value'] : $fields[$con['id']];
-                                
+                                $field_value = isset($nbd_field[$con['id']]['value']) ? $nbd_field[$con['id']]['value'] : $nbd_field[$con['id']];
                                 switch( $con['operator'] ){
                                     case 'i':
                                         $check[$key] = $field_value == $con['val'] ? true : false;
@@ -197,22 +193,23 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                                         $check[$key] = $field_value != '' ? true : false;
                                         break;
                                 }
+                            } else {
+                                $check[$key] = false;
                             }
                         }
                         foreach ($check as $c){
                             $total_check = $logic == 'a' ? ($total_check && $c) : ($total_check || $c);
                         }
+                        $total_check = $show == 'y' ? $total_check : !$total_check;
                         if($total_check ) {
-                            echo '<pre>';
-                            var_dump($field['id']);
-                            var_dump($field['general']['title']);
-                            echo '</pre>';
+                            if(!isset($nbd_field[$field['id']])) {
+                                return false;
+                            }
+                            
                         }
                     }
                 }
             }
-            
-            return false;
 
             // $has_design         = false;
             // $has_upload         = false;
