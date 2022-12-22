@@ -161,6 +161,56 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
             $product            = $variation_id ? wc_get_product( $variation_id ) : wc_get_product( $product_id );
             $original_price     = (float)$product->get_price('edit');
             $nbd_field          = isset($post_data['nbd-field']) ? $post_data['nbd-field'] : array();
+
+            $option_fields = unserialize($options['fields']);  
+            $option_fields = $this->recursive_stripslashes( $option_fields );
+            $fields = isset($option_fields['fields']) ? $option_fields['fields'] : array();
+            if( is_array($fields) && count($fields) > 0) {
+                foreach ($fields as $key => $field) {
+                    if( $field['conditional']['enable'] == 'n' || !isset($field['conditional']['depend']) || count($field['conditional']['depend']) == 0 ){
+                        continue;
+                    }
+                    $show = $field['conditional']['show'];
+                    $logic = $field['conditional']['logic'];
+                    $total_check = $logic == 'a' ? true : false;
+                    $check = array();
+                    if(count($field['conditional']['depend']) > 0) {
+                        foreach($field['conditional']['depend'] as $key => $con){
+                            $check[$key] = true;
+                            if( $con['id'] != '' && isset($nbd_field[$con['id']]) ){
+                                $field_value = isset($nbd_field[$con['id']]['value']) ? $nbd_field[$con['id']]['value'] : $nbd_field[$con['id']];
+                                switch( $con['operator'] ){
+                                    case 'i':
+                                        $check[$key] = $field_value == $con['val'] ? true : false;
+                                        break;
+                                    case 'n':
+                                        $check[$key] = $field_value != $con['val'] ? true : false;
+                                        break;
+                                    case 'e':
+                                        $check[$key] = $field_value == '' ? true : false;
+                                        break;
+                                    case 'ne':
+                                        $check[$key] = $field_value != '' ? true : false;
+                                        break;
+                                }
+                            } else {
+                                $check[$key] = false;
+                            }
+                        }
+                        foreach ($check as $c){
+                            $total_check = $logic == 'a' ? ($total_check && $c) : ($total_check || $c);
+                        }
+                        $total_check = $show == 'y' ? $total_check : !$total_check;
+                        if($total_check ) {
+                            if(!isset($nbd_field[$field['id']])) {
+                                return false;
+                            }
+                            
+                        }
+                    }
+                }
+            }
+
             // $has_design         = false;
             // $has_upload         = false;
             $nbd_item_cart_key  = ($variation_id > 0) ? $product_id . '_' . $variation_id : $product_id;
@@ -1146,7 +1196,7 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                         if($_role_options) {
                             $value_option_pt = $val['value'];
                             $product_time_option = $_role_options['options'][$value_option_pt];
-                            $price_production_time = $adjusted_price * (int) $product_time_option['markup_percent'] / 100;
+                            $price_production_time = $_adjusted_price * (int) $product_time_option['markup_percent'] / 100;
                             if($price_production_time < (int)$product_time_option['min_markup_percent']/$quantity) {
                                 $price_production_time = (int)$product_time_option['min_markup_percent']/$quantity;
                             }
