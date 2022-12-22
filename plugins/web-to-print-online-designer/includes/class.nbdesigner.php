@@ -3748,7 +3748,7 @@ class Nbdesigner_Plugin {
                         $html .= '<br /><a class="button nbd-edit-design" href="'.$link_edit_design.'">'. esc_html__('Edit design', 'web-to-print-online-designer') .'</a>';
                     }
                     $html .= '</div>';
-                }else if( $is_nbdesign && !$_enable_upload_without_design && $enable_reupload ){
+                }else if( $is_nbdesign && !$_enable_upload_without_design && $show_edit_link ){
                     $id = 'nbd' . $cart_item_key; 
                     $redirect = is_cart() ? 'cart' : 'checkout';
                     $link_create_design = add_query_arg(
@@ -3822,7 +3822,7 @@ class Nbdesigner_Plugin {
                     }
                     $upload_html = apply_filters('nbu_cart_item_html', $upload_html, $cart_item, $nbu_session);
                     $html .= $upload_html;
-                    if( $show_edit_link ){
+                    if( $enable_reupload ){
                         $link_reup_design = add_query_arg(
                             array(
                                 'task'          => 'reup',
