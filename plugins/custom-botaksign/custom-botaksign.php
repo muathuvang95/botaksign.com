@@ -4228,7 +4228,7 @@ function botak_show_production_time($shipping_method_label = '')
     $have_role_use = false;
     $have_check_default = false;
     foreach ($order_items as $item_id => $item) {
-        if ($item['nbo_meta']) {
+        if (isset($item['nbo_meta'])) {
             $qty = $item['quantity'];
             if( nbd_is_base64_string( $item['nbo_meta']['options']['fields'] ) ){
                 $item['nbo_meta']['options']['fields'] = base64_decode( $item['nbo_meta']['options']['fields'] );

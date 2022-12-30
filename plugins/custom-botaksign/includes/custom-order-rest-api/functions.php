@@ -1010,14 +1010,14 @@ function v3_generate_order_detail_pdf($order_id)
         $invoice_text_02 = '<table class="content-customer-detail"><tbody><tr><td style="width: 50%; padding-bottom: 20px;"><div class="ul"><div class="li name"><span>' . $order_data['billing']['first_name'] . ' ' . $order_data['billing']['last_name'] . '</span></div><div style="display: block;font-size: 4px">&nbsp;</div><div class="li"><span class="key">Email: </span><span class="value">' . $order->get_billing_email() . '</span></div><div style="display: block;font-size: 4px">&nbsp;</div><div class="li"><span class="key">Tel: </span><span class="value">' . $order->get_billing_phone() . '</span></div></div></td><td style="width: 50%;padding-bottom: 20px; padding-left: 65px"><div class="ul"><div class="li"><span class="key">Payment: </span><span class="value">' . $order->get_payment_method_title() . '</span></div><div style="display: block;font-size: 4px">&nbsp;</div><div class="li"><span class="key">Order date: </span><span class="value">'.date_format($order->get_date_created() , "d/m/Y").'</span></div><div style="display: block;font-size: 4px">&nbsp;</div><div class="li"><span class="key">Shipping Method: </span><span class="value">' . $order->get_shipping_method() . '</span></div></div></td></tr><tr><td style="width: 50%"><span class="address-title">Billing Address: </span><div class="ul address-detail"><div style="display: block;font-size: 4px">&nbsp;</div><div class="li"><span class="value">' . $order->get_billing_address_1() . '</span></div><div style="display: block;font-size: 4px">&nbsp;</div><div class="li"><span class="value">' . $order->get_billing_address_2() . '</span></div><div style="display: block;font-size: 4px">&nbsp;</div><div class="li"><span class="value">' . $order->get_billing_country() . ' ' . $order->get_billing_postcode() . '</span></div></div></td><td style="width: 50%;padding-left: 60px"><span class="address-title">Shipping Address: </span><div class="ul address-detail"><div style="display: block;font-size: 4px">&nbsp;</div><div class="li"><span class="value">' . $order->get_shipping_address_1() . '</span></div><div style="display: block;font-size: 4px">&nbsp;</div><div class="li"><span class="value">' . $order->get_shipping_address_2() . '</span><div style="display: block;font-size: 4px">&nbsp;</div></div><div class="li"><span class="value">' . $order->get_shipping_country() . ' ' . $order->get_shipping_postcode() . '</span></div></div></td></tr></tbody></table>';
         $invoice_product_page_01 = '<div class="title"><div class="left"><div class="line line-left"></div></div><div class="text">ORDER DETAILS</div><div class="right"><div class="line line-right"></div></div></div>';
         // $invoice_product_page_01 = '<div class="title"><div class="line line-left"></div><div class="text">ORDER DETAILS</div><div class="line line-right"></div></div>';
-        $subtotal = 0;
+        // $subtotal = 0;
         $loop = 1;
         $invoice_product_page_02 = '<div class="items-detail">';
         $info_1s = '';
         $total_elements = 0;
         foreach ($items as $order_item_id => $item) {
             $info_1 = '';
-            $subtotal += wc_format_decimal( $item['line_total'] , wc_get_price_decimals() );
+            // $subtotal += wc_format_decimal( $item['line_total'] , wc_get_price_decimals() );
             if (isset($item['variation_id']) && $item['variation_id'] > 0) :
                 $_product = wc_get_product($item['variation_id']);
             else :
@@ -1190,21 +1190,24 @@ function v3_generate_order_detail_pdf($order_id)
             }
             $loop ++;
         }
-
-        $gst_1 = $order->get_total_tax();
+        $gst = 0;
+        $taxs = array_slice($order->get_taxes(), 0, 1);
+        if($taxs) {
+            $gst = array_shift($taxs)->get_rate_percent( 'view' );
+        }
 
         $invoice_product_page_02 .= $info_1s.'</div>'; // close div item
         $total_price = '<div class="title"><div class="left"><div class="line line-left"></div></div><div class="text">SUMMARY</div><div class="right"><div class="line line-right"></div></div></div><div class="wrap-line"></div><table id="total-price" style="width:100%">
             <tr><td style="width:50%; padding-top:5px"></td>
             <td style="width:50%; padding-top:5px; padding-left:30px" align="left"><table><tbody><tr>
             <td style="width:20%;padding-top:5px" class="subtotal" align="left">Subtotal</td>
-            <td style="width:50%;text-align: right;padding-top:5px" class="subtotal-price" >' . wc_price($subtotal) . '</td>
+            <td style="width:50%;text-align: right;padding-top:5px" class="subtotal-price" >' . wc_price($order->get_subtotal()) . '</td>
             </tr>
             <tr><td style="width:20%;padding-top:5px" class="subtotal" align="left">Shipping</td>
             <td style="width:80%;padding-top:5px;text-align: right;" class="subtotal-price">' . $order->get_payment_method_title() . ' (' . wc_price($order_data['shipping_total']) . ')</td>
             </tr>
-            <tr><td style="width:20%" class="gst" align="left">GST (7%)</td>
-            <td style="width:50%;text-align: right;" class="gst-price">' . wc_price($gst_1) . '</td>
+            <tr><td style="width:20%" class="gst" align="left">GST ('.$gst.'%)</td>
+            <td style="width:50%;text-align: right;" class="gst-price">' . wc_price($order->get_total_tax()) . '</td>
             </tr>
             </tbody></table>
             </td></tr>
