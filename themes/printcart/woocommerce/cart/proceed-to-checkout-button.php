@@ -30,5 +30,5 @@ if( 'cart-layout-1' === printcart_get_options('nbcore_cart_layout') ) {
 ?>
 
 <a href="<?php echo esc_url( wc_get_checkout_url() );?>" class="checkout-button button alt wc-forward bt-5 <?php echo esc_attr($button_class); ?>">
-	<?php esc_html_e( 'QUOTATION / CHECK OUT', 'printcart' ); ?>
+	<?php esc_html_e( 'Proceed to checkout', 'printcart' ); ?>
 </a>
