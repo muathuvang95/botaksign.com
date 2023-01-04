@@ -202,10 +202,9 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                         }
                         $total_check = $show == 'y' ? $total_check : !$total_check;
                         if($total_check ) {
-                            if(!isset($nbd_field[$field['id']])) {
+                            if(!isset($nbd_field[$field['id']]) && $field['nbd_type'] != 'terms_conditions' ) {
                                 return false;
-                            }
-                            
+                            }  
                         }
                     }
                 }
