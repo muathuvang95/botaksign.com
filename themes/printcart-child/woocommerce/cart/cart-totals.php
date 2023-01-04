@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 ?>
-<div class="cart_totals btk-cart_totals <?php if (WC()->customer->has_calculated_shipping()) echo 'calculated_shipping'; ?>">
+<div class="cart_totals <?php if (WC()->customer->has_calculated_shipping()) echo 'calculated_shipping'; ?>">
 
     <?php do_action('woocommerce_before_cart_totals'); ?>
 
@@ -29,7 +29,7 @@ if (!defined('ABSPATH')) {
             <table cellspacing="0" class="shop_table shop_table_responsive">
 
                 <tr class="cart-subtotal">
-                    <th><?php esc_html_e('SUBTOTAL', 'printcart'); ?></th>
+                    <th><?php esc_html_e('Items', 'printcart'); ?></th>
                     <td data-title="<?php esc_attr_e('Subtotal', 'printcart'); ?>"><?php wc_cart_totals_subtotal_html(); ?></td>
                 </tr>
 
@@ -45,7 +45,7 @@ if (!defined('ABSPATH')) {
                     </tr>
                 <?php endforeach; ?>
 
-               <!--  <?php if (WC()->cart->needs_shipping() && WC()->cart->show_shipping()) : ?>
+                <?php if (WC()->cart->needs_shipping() && WC()->cart->show_shipping()) : ?>
 
                     <?php do_action('woocommerce_cart_totals_before_shipping'); ?>
 
@@ -67,7 +67,7 @@ if (!defined('ABSPATH')) {
                         <th><?php echo esc_html($fee->name); ?></th>
                         <td data-title="<?php echo esc_attr($fee->name); ?>"><?php wc_cart_totals_fee_html($fee); ?></td>
                     </tr>
-                <?php endforeach; ?> -->
+                <?php endforeach; ?>
 
                 <?php
                 if (wc_tax_enabled() && 'excl' === WC()->cart->tax_display_cart) :
@@ -93,17 +93,15 @@ if (!defined('ABSPATH')) {
                 <?php do_action('woocommerce_cart_totals_before_order_total'); ?>
 
                 <tr class="order-total">
-                    <th><?php esc_html_e('TOTAL(incl. tax)', 'printcart'); ?></th>
-                    <td data-title="<?php esc_attr_e('TOTAL(incl. tax)', 'printcart'); ?>"><?php wc_cart_totals_order_total_html(); ?></td>
+                    <th><?php esc_html_e('Subtotal (incl. tax)', 'printcart'); ?></th>
+                    <td data-title="<?php esc_attr_e('Subtotal (incl. tax)', 'printcart'); ?>"><?php wc_cart_totals_order_total_html(); ?></td>
                 </tr>
 
                 <?php do_action('woocommerce_cart_totals_after_order_total'); ?>
 
             </table>
 
-            <?php botak_show_production_time(); ?>
-
-         <!--    <?php if (is_user_logged_in()) { ?>
+            <?php if (is_user_logged_in()) { ?>
                 <div class="wc-proceed-to-checkout">
                     <a class="checkout-button button alt wc-forward bt-5 nb-wide-button btn-generate-quotation" style="cursor: pointer;">
                         <span>
@@ -112,7 +110,7 @@ if (!defined('ABSPATH')) {
                         </span>
                     </a>
                 </div>
-            <?php } ?> -->
+            <?php } ?>
 
             <div class="wc-continue-shiping">
                 <a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ) ?>" class="wc-backward checkout-button button alt wc-forward bt-5 nb-wide-button btn-continue-shiping"><?php echo __( 'Continue shopping', 'woocommerce' ); ?></a>

@@ -53,7 +53,6 @@ foreach ($list_item as $item_id => $item) {
             }
         }
     }
-    
 
     if ($item->get_meta('_parent_cart_item_key')) {
         $items_service[] = $item;
@@ -266,6 +265,18 @@ $est_time = show_est_completion($order);
     //cs botak fix time completed
     $order_data = $order->get_data();
 
+    function botak_convert_format_time($time) {
+        $_time= explode(':' , $time );
+        $hourse = (int)$_time[0];
+        if( $hourse < 12 ) {
+            return $time.'am';
+        } elseif( $hourse == 12 ) {
+            return $time.'pm';
+        } else {
+            $hourse = $hourse - 12;
+            return $hourse.':'.$_time[1].'pm';
+        }
+    }
     $plotting_options = unserialize(get_option('plotting_options'));
     $order_completed = get_post_meta($order->get_id() , '_order_time_completed' , true);
     $order_completed_str = get_post_meta($order->get_id() , '_order_time_completed_str' , true);

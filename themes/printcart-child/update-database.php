@@ -1,8 +1,9 @@
 <?php
-/**
-* Template Name: Update DataBase
 
-*/
+/**
+ * Template Name: Update DataBase
+
+ */
 // get_header();
 // global $wpdb;
 // $sql = "SELECT ID FROM wp_posts WHERE wp_posts.post_type = 'shop_order'";
@@ -52,7 +53,7 @@
             $.ajax({
                 type : "post",
                 dataType : "json", 
-                url : '<?php echo admin_url('admin-ajax.php');?>', 
+                url : '<?php echo admin_url('admin-ajax.php'); ?>', 
                 data : {
                     action: "update_database",
                 },
@@ -76,7 +77,7 @@
 </script>
 
  -->
-<?php 
+<?php
 // global $wpdb;
 // $sql = "SELECT ID FROM wp_users";
 // $results = $wpdb->get_results($sql);
@@ -214,8 +215,8 @@
 // $folder_download = 'C:\Users\NetBase\Desktop\design_template';
 // $folder_download = NBDESIGNER_CUSTOMER_DIR;
 // $folder = '00805341621494253';
-// $awsAccessKey = 'AKIAX4QORCYMGSQXVT55';
-// $awsSecretKey = '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';
+// $awsAccessKey = '';
+// $awsSecretKey = '';
 // $amazonRegion = 'ap-southeast-1';
 // use Aws\S3\S3Client;
 // use Aws\Credentials\Credentials;
@@ -343,7 +344,7 @@
 // echo '<pre>';
 // var_dump(test_get_delivery_plotter());
 // echo '</pre>';
-
+// echo 'Check link s3';
 // $order_id = 63199;
 // $order = wc_get_order($order_id);
 // if($order ) {
@@ -369,7 +370,7 @@
 //                             $resources[$k1]->objects[$k2]->height = $height;
 //                             $resources[$k1]->objects[$k2]->origin_width = $width;
 //                             $resources[$k1]->objects[$k2]->origin_height = $height;
-                            
+
 //                             $json = json_encode($resources);
 //                             // file_put_contents($path. '/design.json', $json);
 //                         }
@@ -381,7 +382,7 @@
 // }
 // 
 
-$keys = array('a5598861647590597', '823a7891647591076', '6d590391647620413', '7f5bc221647620505', 'bb407631647620759', '2331d991647620948', '0485151647621607', '7d59f241647622384', '0d878561647622434', '2e5c9201647623359');
+// $keys = array('a5598861647590597', '823a7891647591076', '6d590391647620413', '7f5bc221647620505', 'bb407631647620759', '2331d991647620948', '0485151647621607', '7d59f241647622384', '0d878561647622434', '2e5c9201647623359');
 
 // if( $result ){
 //     if(move_uploaded_file($_FILES['file']["tmp_name"],$path['full_path'])){
@@ -401,7 +402,7 @@ $keys = array('a5598861647590597', '823a7891647591076', '6d590391647620413', '7f
 // if( $result ){
 //     $res['src']     = $link_s3;
 //     $res['flag']    = 1;
-    
+
 //     if( $ext == 'pdf' ){
 //         $new_pdf_width          = $new_pdf_height = 880;
 //         $_dpi                   = 300;
@@ -497,19 +498,154 @@ $keys = array('a5598861647590597', '823a7891647591076', '6d590391647620413', '7f
 // }
 // echo '<pre>';
 // var_dump($newUrlList);
+
+// echo 'Test remove object s3';
+
+// $url = 'https://botaksignorder.s3.amazonaws.com/reupload-design/6fb21861658800693/1658800777download.png';
+
+// $uri = 'reupload-design/6fb21861658800693/1658800777download.png';
+
+// $awsAccessKey = get_option('nbdesigner_aws_access_key', false);
+// $awsSecretKey = get_option('nbdesigner_aws_secret_key', false);
+// $amazonRegion = get_option('nbdesigner_aws_region', false);
+// $bucket = get_option('nbdesigner_aws_bucket', false);
+
+// $s3 = new Aws\S3\S3Client([
+//     'version' => 'latest',
+//     'region'  => $amazonRegion,
+//     'credentials' => array(
+//         'key' => $awsAccessKey,
+//         'secret' => $awsSecretKey
+//     )
+// ]);
+
+// $result = $s3->deleteObject(array(
+//     'Bucket' => $bucket,
+//     'Key'    => $uri
+// ));
+// echo '<pre>';
+// return $result;
+// echo '</pre>';
+
+// $data = unserialize(get_post_meta(82686, '_cxecrt_cart_data', true));
+
+// global $botakit;
+// $result = [];
+// $result['link_down'] = '';
+
+// $html = generate_quote_pdf(82686);
+// //write_log($html);
+// $botakit->_content = $html;
+// $filename = 'quotation-' . $_POST['quo_id'] . '.pdf';
+// $botakit->generate_pdf_template($filename);
+// $pdf_path = $botakit->_file_to_save . '/' . $filename;
+// $result['link_down'] = convertLinkDesign($pdf_path);
+// $result['filename'] = $filename;
+
+// var_dump($result);
 // 
 
-
-
-//Test 
+//Test email
 //
-$order = wc_get_order(44719);
 
-include(CUSTOM_BOTAKSIGN_PATH . "includes/email-templates/email_header.php");
+// $titles = array(
+//    "A1" => 'Order Confirmed',
+//    "A2" => 'Order Complete',
+//    "C1" => 'Artwork Amendment',
+//    "C2" => 'Order Processed',
+//    "D1" => 'Well come',
+//    "E1" => 'Password Reset',
+//    "I1" => 'Payment Failed',
+//    "K1" => 'Order Refunded',
+// );
+
+// if( isset($_POST['action']) && $_POST['action'] == 'submit' ) {
+//     $order_id   = isset($_POST['order_id']) ? $_POST['order_id']: '';
+//     $email      = isset($_POST['email']) ? $_POST['email']: '';
+//     $template   = isset($_POST['template']) ? $_POST['template']: '';
+//     if(!$order_id) return;
+//     $order = wc_get_order($order_id);
+
+//     $to = $email;
+//     $subject = isset($titles[$template]) ? $titles[$template] . ' TEST' : "ORDER COMPLETED TEST";
+//     $content_type = 'text/html; charset=UTF-8';
+//     $from_name = 'ratruong2.5@gmail.com';
+//     $from_address = get_option( 'woocommerce_email_from_address' );
+//     add_filter( 'wp_mail_from', 'nb_get_from_address' );
+//     add_filter( 'wp_mail_from_name', 'nb_get_from_name' );
+//     add_filter( 'wp_mail_content_type', 'nb_get_content_type' );
+
+//     $headers = 'Content-Type: ' . $content_type . "\r\n";
+//     $headers .= 'Reply-To: ' . $from_name . ' <' . $to . ">\r\n";
+//     ob_start();
+
+//     include(CUSTOM_BOTAKSIGN_PATH . "includes/email-test/email_header.php");
 
 
-include(CUSTOM_BOTAKSIGN_PATH . "includes/email-templates/D1.php");
+//     include(CUSTOM_BOTAKSIGN_PATH . "includes/email-test/". $template .".php");
 
-include(CUSTOM_BOTAKSIGN_PATH . "includes/email-templates/email_footer.php");
+//     include(CUSTOM_BOTAKSIGN_PATH . "includes/email-test/email_footer.php");
+//     $message = ob_get_contents();
+//     ob_end_clean();
+//     wp_mail($to, $subject, $message, $headers);
+// }
 
-// echo v3_generate_order_detail_pdf(44719);
+?>
+
+<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+<form action="" method="post">
+    <div class="row">
+        <div class="col-sm-3">
+            <label><b>To email</b></label>
+            <input type="email" name="email" class="form-control" id="email" width="120px" value="on9opera@hotmail.com">
+        </div>
+        <div class="col-sm-3">
+            <label><b>Order Id</b></label>
+            <input type="number" name="order_id" class="form-control" id="input-order-id" width="120px" value="0">
+        </div>
+        <div class="col-sm-3">
+            <label><b>Email template</b></label>
+            <select class="form-select" name="template">
+                <option value="A1">Order Confirmed</option>
+                <option value="A2">Order Complete</option>
+                <option value="C1">Artwork Amendment</option>
+                <option value="C2">Order Processed</option>
+                <option value="D1">Well come</option>
+                <option value="E1">Password Reset</option>
+                <option value="I1">Payment Failed</option>
+                <option value="K1">Order Refunded</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <input type="hidden" name="action" value="submit">
+        <button type="submit" class="btn btn-primary mb-3">Send email</button>
+    </div>
+</form>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script> -->
+<?php
+
+// $order_id = 101220;
+// $order = wc_get_order($order_id);
+// $get_tax_totals = $order->get_tax_totals();
+// $get_taxes = $order->get_taxes();
+// $get_total_tax = $order->get_total_tax();
+// $get_total = $order->get_total();
+// $get_subtotal = $order->get_subtotal();
+// echo '$get_tax_totals: ' . $get_tax_totals. '<br>';
+// echo '$get_taxes: ' . $get_taxes. '<br>';
+// echo '$get_total_tax: ' . $get_total_tax. '<br>';
+// echo '$get_total: ' . $get_total. '<br>';
+// echo '$get_subtotal: ' . $get_subtotal. '<br>';
+
+
+$enable_edit_design             = nbdesigner_get_option('nbdesigner_show_button_edit_design_in_cart', 'yes');
+$option = get_option( 'nbdesigner_show_button_edit_design_in_cart1', false );
+$option1 = get_option( 'nbdesigner_show_button_edit_design_in_cart', false );
+
+var_dump($enable_edit_design );
+echo '<br>';
+var_dump($option );
+echo '<br>';
+var_dump($option1 );
+ echo strtotime('now');
