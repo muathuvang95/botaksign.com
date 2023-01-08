@@ -504,11 +504,11 @@ class WC_REST_Custom_Controller {
 	    $specialist = get_userdata($id_specialist)->display_name;
 	    $data['specialist']['name'] = $specialist ? $specialist : 'No Specialist' ;
 	    $data['specialist']['id'] = $id_specialist ? $id_specialist : '-1' ;
-		$specialist_roles = get_userdata($id_specialist)->roles;
-		if(!in_array('specialist', $specialist_roles, true)) {
-			$data['specialist']['name'] = 'No Specialist' ;
-			$data['specialist']['id'] = '-1';
-		}
+			$specialist_roles = get_userdata($id_specialist)->roles;
+			if(!in_array('specialist', $specialist_roles, true)) {
+					$data['specialist']['name'] = 'No Specialist' ;
+					$data['specialist']['id'] = '-1';
+			}
 
 		return $data;
 
@@ -1103,7 +1103,7 @@ class WC_REST_Custom_Controller {
 					$note_log = true;
 				}
 			}
-			if($completed == $count_item && $collected != $completed) {
+			if( ($completed == $count_item || ($cancelled > 0 && $completed > 0 && $completed + $cancelled == $count_item) ) && $collected != $completed ) {
 				update_post_meta( $order_id , '_order_status', 'Completed' );
 				update_post_meta( $order_id , '_order_time_out', date("d/m/Y H:i a" , strtotime("now") + 8*3600 ) );
 				$_method = $order->get_shipping_method();
@@ -1120,7 +1120,7 @@ class WC_REST_Custom_Controller {
 				$_order_status = 'Completed';
 				$ongoing = false;
 			}
-			if($collected == $count_item) {
+			if($collected == $count_item || ($cancelled > 0 && $collected > 0 && $collected + $cancelled == $count_item) ) {
 				update_post_meta( $order_id , '_order_status', 'Collected' );
 				// update status order WC
 				wp_update_post(array(
@@ -1352,6 +1352,13 @@ class WC_REST_Custom_Controller {
 			$query_last .= " AND ( ( YEAR( wp_posts.post_date ) = ${date_in_y} AND MONTH( wp_posts.post_date ) = ${date_in_m} AND DAYOFMONTH( wp_posts.post_date ) = ${date_in_d} ) )";
 		}
 		if($date_out != '') {
+			$datas = array();
+			$datas['orders'] = array();
+			$datas['total'] = 0;
+			$datas['shipping_method'] = $this->get_shipping_method();
+			$response = rest_ensure_response( $datas );
+			return $response;
+
 			$query_first .= " INNER JOIN wp_postmeta AS mt2 ON ( wp_posts.ID = mt2.post_id )";
 			$query_last .= " AND ( ( mt2.meta_key = '_order_time_out' AND mt2.meta_value LIKE '%".$date_out_str."%') )";
 		}
@@ -1373,8 +1380,8 @@ class WC_REST_Custom_Controller {
 			$query_last .= "AND ( ( mt5.meta_key = '_order_time_completed_str' AND mt5.meta_value BETWEEN '0' AND '${time_from}' ) ) AND ( ( wp_postmeta.meta_key = '_order_status' AND wp_postmeta.meta_value != 'Completed' ) ) AND ( ( wp_postmeta.meta_key = '_order_status' AND wp_postmeta.meta_value != 'Collected' ) ) ";
 		}
 		if($name != '') {
-			//$query_last .= " AND ( ( ( ( wp_postmeta.meta_key = '_billing_first_name' AND wp_postmeta.meta_value LIKE '%${name}%' ) OR ( wp_postmeta.meta_key = '_billing_last_name' AND wp_postmeta.meta_value LIKE '%${name}%' ) ) ) )";
 			$name = esc_sql($name);
+			//$query_last .= " AND ( ( ( ( wp_postmeta.meta_key = '_billing_first_name' AND wp_postmeta.meta_value LIKE '%${name}%' ) OR ( wp_postmeta.meta_key = '_billing_last_name' AND wp_postmeta.meta_value LIKE '%${name}%' ) ) ) )";
 			$query_first .= " INNER JOIN wp_postmeta AS mt6 ON ( wp_posts.ID = mt6.post_id )";
 			$query_last .= " INNER JOIN wp_usermeta ON (mt6.meta_key = '_customer_user' AND mt6.meta_value = wp_usermeta.user_id) WHERE ( wp_usermeta.meta_key = 'billing_first_name' AND  wp_usermeta.meta_value LIKE '%${name}%' ) OR (  wp_usermeta.meta_key = 'billing_last_name' AND  wp_usermeta.meta_value LIKE '%${name}%' )";
 		}

@@ -30,7 +30,7 @@ if ($order) {
     </style>
     <table id="header-infor" style="border-collapse: collapse; width: 100%;" width="100%">
         <tr>
-            <td style="width:100%;padding-top:30px;" class="bill-to-th" align="left"><img style="width:100%" class="confim" src="https://botaksign.com/wp-content/plugins/custom-botaksign/assets/images/received.jpg"></td>
+            <td style="width:100%;padding-top:30px;" class="bill-to-th" align="left"><img style="width:100%" class="confim" src="https://botaksign.com/wp-content/plugins/custom-botaksign/assets/images/delay.jpg"></td>
         </tr>
     </table>
     <div id="infor" style="margin-top: 20px; width: 100%; height: auto; margin-right: 25px; margin-left: 25px;">
@@ -51,19 +51,11 @@ if ($order) {
         $subtotal = 0;
         foreach ($items as $item) {
             $subtotal+=$item['line_total'];
-            if (function_exists('get_product')) {
-                if (isset($item['variation_id']) && $item['variation_id'] > 0):
-                    $_product = get_product($item['variation_id']);
-                else:
-                    $_product = get_product($item['product_id']);
-                endif;
-            } else {
-                if (isset($item['variation_id']) && $item['variation_id'] > 0):
-                    $_product = new WC_Product_Variation($item['variation_id']);
-                else:
-                    $_product = new WC_Product($item['product_id']);
-                endif;
-            }
+            if (isset($item['variation_id']) && $item['variation_id'] > 0):
+                $_product = wc_get_product($item['variation_id']);
+            else:
+                $_product = wc_get_product($item['product_id']);
+            endif;
             if (isset($_product) && $_product != false) {
                 ?>
                 <tr>

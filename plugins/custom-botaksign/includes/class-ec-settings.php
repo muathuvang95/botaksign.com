@@ -165,7 +165,7 @@ if (!class_exists('WC_Email_Cart_Settings')):
         {
             // add_menu_page('Order Dashboard', 'Order Dashboard', 'manage_options', 'mybts/order_dashboard', array($this, 'order_dashboard_admin_page'), 'dashicons-tickets', 6);
             $user = get_userdata(get_current_user_id());
-            if (in_array('administrator', $user->roles)) {
+            if ($user->roles[0] == 'administrator') {
                 add_submenu_page(
                     'edit.php?post_type=stored-carts', __("Settings", 'email-cart'), __("Settings", 'email-cart'), 'manage_options', $this->id, array($this, 'admin_page')
                 );

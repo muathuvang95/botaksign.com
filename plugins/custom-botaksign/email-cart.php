@@ -1947,7 +1947,7 @@ function cxecrt_add_cart_post_type() {
 			'label' => 'Emailed Carts',
 			'description' => '',
 			'show_ui' => TRUE,
-			'show_in_menu' => ($user->roles[0] == 'administrator' || $user->roles[0] == 'specialist'?true:false),
+			'show_in_menu' => ( isset($user->roles[0]) && ($user->roles[0] == 'administrator' || $user->roles[0] == 'specialist') ? true : false),
 			'capability_type' => 'post',
 			'map_meta_cap' => true,
 			'hierarchical' => false,

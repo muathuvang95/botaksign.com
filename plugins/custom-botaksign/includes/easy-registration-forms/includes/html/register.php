@@ -16,14 +16,11 @@ if (!empty($login_form_enabled)) {
     }
 }
 $side_by_side = false;
-
-
 if (!empty($login_form_enabled) && !empty($form['login_and_register'])) {
     $side_by_side = true;
     $reg_form_active = true;
 }
 ?>
-
 <div id="erf_form_container_<?php echo $form['id']; ?>" class="erf-container erf-label-<?php echo $label_position ?> erf-layout-<?php echo $layout ?> erf-style-<?php echo $form['field_style']; ?> <?php echo $side_by_side ? 'erf-login-register-form' : ''; ?> <?php echo!empty($form['login_and_register']) ? 'erf-login-register' : ''; ?>">
     <?php
     if ($side_by_side) {
@@ -33,8 +30,8 @@ if (!empty($login_form_enabled) && !empty($form['login_and_register'])) {
     <div class="erf-reg-form-container" style="<?php echo empty($reg_form_active) ? 'display:none;' : ''; ?>">
         <?php include('layout_options.php'); ?>
         <?php if ($success) : ?>
-            <div class="erf-success text-center">
-                 <?php echo $form['success_msg']; ?>
+            <div class="erf-success">
+                <?php echo $form['success_msg']; ?>
             </div> 
         <?php else: ?>
 

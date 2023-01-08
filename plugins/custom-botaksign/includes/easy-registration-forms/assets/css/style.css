@@ -139,7 +139,7 @@
 }
 .erf-style-rounded-corner .erf-form .form-control,
 .erf-style-rounded-corner .erf-form .other-option+label input[type="text"] {
-  border-radius: 5px!important
+  border-radius: 4px!important
 }
 .erf-style-border-bottom .erf-form .form-control,
 .erf-style-border-bottom .erf-form .other-option+label input[type="text"] {
