@@ -28,6 +28,7 @@ function printcart_child_enqueue_styles()
         wp_get_theme()->get('Version')
     );
     wp_enqueue_style('botak-style', get_stylesheet_directory_uri() . '/botak-style.css');
+    wp_enqueue_style('Roboto-googlefonts', 'https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap', array(), null);
     wp_enqueue_script('fontawesome', 'https://kit.fontawesome.com/54ed714a8b.js', array(), 'latest', false);
     wp_enqueue_script('printcart-custom-js', get_stylesheet_directory_uri() . '/js/customize.js', array(), 'latest', false);
 }
@@ -815,6 +816,163 @@ if ( !wp_next_scheduled('botak_cancel_unpaid_orders') ) {
 }
 
 // add_action( 'woocommerce_cancel_unpaid_orders', 'botak_cancel_unpaid_orders' );
+
+add_action('woocommerce_register_form_end', 'NextendSocialLogin::addLoginFormButtons');
+
+add_action( 'wp_ajax_nb_update_order_review' , 'nb_update_order_review' );
+add_action( 'wp_ajax_nopriv_nb_update_order_review' , 'nb_update_order_review' );
+
+function nb_update_order_review() {
+
+    $chosen_shipping_methods = WC()->session->get( 'chosen_shipping_methods' );
+
+    $posted_shipping_methods = isset( $_POST['shipping_method'] ) ? wc_clean( wp_unslash( $_POST['shipping_method'] ) ) : array();
+
+    if ( is_array( $posted_shipping_methods ) ) {
+        foreach ( $posted_shipping_methods as $i => $value ) {
+            $chosen_shipping_methods[ $i ] = $value;
+        }
+    }
+
+    $rate = WC()->session->get('shipping_for_package_0')['rates'];
+
+    $shipping_method_label = '';
+    if ( isset($posted_shipping_methods[0]) && isset($rate[$posted_shipping_methods[0]]) && $rate[$posted_shipping_methods[0]]->label ) {
+        $shipping_method_label = $rate[$posted_shipping_methods[0]]->label;
+    }
+
+    WC()->session->set( 'chosen_shipping_methods', $chosen_shipping_methods );
+
+    WC()->customer->save();
+
+    // Calculate shipping before totals. This will ensure any shipping methods that affect things like taxes are chosen prior to final totals being calculated. Ref: #22708.
+    WC()->cart->calculate_shipping();
+    WC()->cart->calculate_totals();
+
+    ob_start();
+    botak_show_production_time($shipping_method_label);
+    $botak_show_production_time = ob_get_clean();
+
+    wp_send_json(
+        array(
+            'result'    => count( $posted_shipping_methods ) > 0 ? 'success' : 'failure',
+            'totals_price' => WC()->cart->get_total(),
+            'time_delivery' => $botak_show_production_time,
+        )
+    );
+
+    wp_die();
+
+}
+
+add_filter( 'woocommerce_account_menu_items', 'nb_custom_account_menu_item', 10 , 2 );
+
+function nb_custom_account_menu_item($items, $endpoints) {
+    $new_items = array();
+
+    foreach($items as $end_point => $item) {
+        if($end_point == 'dashboard') {
+            $new_items[$end_point] = 'Account';
+        } else {
+            $new_items[$end_point] = $item;
+        }
+    }
+    // remove Addresses
+    unset($new_items['edit-address']);
+
+    // remove Account details
+    unset($new_items['edit-account']);
+
+    // remove Submissions
+    unset($new_items['erf-my-account']);
+
+    // remove Logout
+    unset($new_items['customer-logout']);
+
+    return $new_items;
+}
+
+
+add_action( 'template_redirect', 'nb_save_account_password' );
+
+function nb_save_account_password() {
+    $nonce_value = wc_get_var( $_REQUEST['save-account-change-password-nonce'], wc_get_var( $_REQUEST['_wpnonce'], '' ) ); // @codingStandardsIgnoreLine.
+
+    if ( ! wp_verify_nonce( $nonce_value, 'nb_save_account_password' ) ) {
+        return;
+    }
+
+    if ( empty( $_POST['action'] ) || 'nb_save_account_password' !== $_POST['action'] ) {
+        return;
+    }
+
+    wc_nocache_headers();
+
+    $user_id = get_current_user_id();
+
+    if ( $user_id <= 0 ) {
+        return;
+    }
+
+    $pass_cur             = ! empty( $_POST['password_current'] ) ? $_POST['password_current'] : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+    $pass1                = ! empty( $_POST['password_1'] ) ? $_POST['password_1'] : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+    $pass2                = ! empty( $_POST['password_2'] ) ? $_POST['password_2'] : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+    $save_pass            = true;
+
+    $current_user       = get_user_by( 'id', $user_id );
+
+    $user               = new stdClass();
+    $user->ID           = $user_id;
+
+    if ( ! empty( $pass_cur ) && empty( $pass1 ) && empty( $pass2 ) ) {
+        wc_add_notice( __( 'Please fill out all password fields.', 'woocommerce' ), 'error' );
+        $save_pass = false;
+    } elseif ( ! empty( $pass1 ) && empty( $pass_cur ) ) {
+        wc_add_notice( __( 'Please enter your current password.', 'woocommerce' ), 'error' );
+        $save_pass = false;
+    } elseif ( ! empty( $pass1 ) && empty( $pass2 ) ) {
+        wc_add_notice( __( 'Please re-enter your password.', 'woocommerce' ), 'error' );
+        $save_pass = false;
+    } elseif ( ( ! empty( $pass1 ) || ! empty( $pass2 ) ) && $pass1 !== $pass2 ) {
+        wc_add_notice( __( 'New passwords do not match.', 'woocommerce' ), 'error' );
+        $save_pass = false;
+    } elseif ( ! empty( $pass1 ) && ! wp_check_password( $pass_cur, $current_user->user_pass, $current_user->ID ) ) {
+        wc_add_notice( __( 'Your current password is incorrect.', 'woocommerce' ), 'error' );
+        $save_pass = false;
+    }
+
+    if ( $pass1 && $save_pass ) {
+        $user->user_pass = $pass1;
+    }
+
+    // Allow plugins to return their own errors.
+    $errors = new WP_Error();
+
+    if ( $errors->get_error_messages() ) {
+        foreach ( $errors->get_error_messages() as $error ) {
+            wc_add_notice( $error, 'error' );
+        }
+    }
+
+    if ( wc_notice_count( 'error' ) === 0 ) {
+        wp_update_user( $user );
+
+        // Update customer object to keep data in sync.
+        $customer = new WC_Customer( $user->ID );
+
+        if ( $customer ) {
+            // Keep billing data in sync if data changed.
+
+            $customer->save();
+        }
+        wc_add_notice( __( 'Password changed successfully.', 'woocommerce' ) );
+
+        do_action( 'woocommerce_save_account_details', $user->ID );
+
+        wp_safe_redirect( wc_get_page_permalink( 'myaccount' ) );
+        exit;
+    }
+}
 
 add_filter( 'yith_wcas_ajax_search_products_search_query', 'nb_format_search_query', 10 , 1 );
 function nb_format_search_query($search_query) {

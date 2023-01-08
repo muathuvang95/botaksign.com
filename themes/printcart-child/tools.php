@@ -19,6 +19,8 @@ if ( ! current_user_can( 'manage_options' ) ) {
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
+
+<!-- Change specialist -->
 <div class="change-specialist border border-primary m-4 p-4">
 	<h3 class="my-2">Change specialist</h3>
 	<form method="post" class="p-4">
@@ -98,6 +100,8 @@ if ( ! current_user_can( 'manage_options' ) ) {
 	?>
 </div>
 
+
+<!-- Change status for order -->
 <div class="change-status border border-primary m-4 p-4">
 	<?php
 	$alert = '';
@@ -208,6 +212,50 @@ if ( ! current_user_can( 'manage_options' ) ) {
 	</form>
 </div>
 
+
+<!-- Get invoice & quotation template -->
+<div class="invoice-template border border-primary m-4 p-4">
+	<?php
+	$quotation_url = '';
+	$invoice_url = '';
+
+	if(isset($_POST['pdf-template']) && $_POST['pdf-template'] == 'pdf-template' ) {
+		$order_id = isset($_POST['order-id']) ? $_POST['order-id'] : '';
+		$quotation_id = isset($_POST['quotation-id']) ? $_POST['quotation-id'] : '';
+		if($order_id) {
+			$invoice_url = 'muathuvang';
+		} else if($quotation_id) {
+			global $botakit;
+	        $html = generate_quote_pdf($quotation_id);
+	        $botakit->_content = $html;
+	        $filename = 'quotation-' . $quotation_id . '.pdf';
+	        $botakit->generate_pdf_template($filename);
+	        $pdf_path = $botakit->_file_to_save . '/' . $filename;
+	        $quotation_url = convertLinkDesign($pdf_path);
+		}
+	}
+	?>
+	<h3 class="my-2">Invoice & quotation template</h3>
+	<?php 
+	if($quotation_url ) {
+		echo '<div class="alert alert-success" role="alert"><a href="' . $quotation_url .'"><b>View</b></a></div>';
+	} else if($invoice_url) {
+		echo '<div class="alert alert-success" role="alert"><a href="' . $invoice_url .'"><b>View</b></a></div>';
+	}
+	?>
+	<form method="post" class="p-4">
+		<div class="mb-3">
+			<label for="exampleFormControlInput1" class="form-label">Order ID</label>
+			<input type="text" name="order-id" class="form-control" id="exampleFormControlInput1">
+		</div>
+		<div class="mb-3">
+			<label for="exampleFormControlInput1" class="form-label">Quotation ID</label>
+			<input type="text" name="quotation-id" class="form-control" id="exampleFormControlInput1">
+		</div>
+		<input type="hidden" name="pdf-template" value="pdf-template">
+		<button class="btn btn-primary">Get pdf file</button>
+	</form>
+</div>
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
