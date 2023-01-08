@@ -16,7 +16,7 @@
 <div id="tex-info-2" style="width: 100%; height: 142px; padding-top: 20px; margin-top: 20px; background: #fffbcc; text-align: center;"><span class="tex-info-2-title" style="color: #27793d; display: block; font-family: segoe-bold; font-size: 17pt;">Take a look around our site and see what we have to offer!</span>
     <table style="border-collapse: collapse;">
         <tbody><tr>
-                <td style="padding-left:100px;padding-top:5px;"><img src="https://botaksign.cmsmart.net/wp-content/plugins/custom-botaksign/assets/images/D1-img2.png"></td><td>
+                <td style="padding-left:100px;padding-top:5px;"><img src="https://botaksign.com/wp-content/plugins/custom-botaksign/assets/images/D1-img2.png"></td><td>
                 </td>
                 <td><div class="tex-info-2-button" style="width: 200px; padding-top: 15px; padding-bottom: 15px; color: #ffffff; font-family: segoe-bold; background: #a3cf62; margin-left: 28px;font-size: 15pt;">
                         <a href="#" style="display: block; color: #ffffff; text-decoration: none;">GET STARTED</a>

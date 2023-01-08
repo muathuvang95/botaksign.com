@@ -25,19 +25,11 @@ if ($order) {
             $subtotal = 0;
             foreach ($items as $item) {
                 $subtotal+=$item['line_total'];
-                if (function_exists('get_product')) {
-                    if (isset($item['variation_id']) && $item['variation_id'] > 0):
-                        $_product = get_product($item['variation_id']);
-                    else:
-                        $_product = get_product($item['product_id']);
-                    endif;
-                } else {
-                    if (isset($item['variation_id']) && $item['variation_id'] > 0):
-                        $_product = new WC_Product_Variation($item['variation_id']);
-                    else:
-                        $_product = new WC_Product($item['product_id']);
-                    endif;
+                $_product = wc_get_product($item['product_id']);
+                if (isset($item['variation_id']) && $item['variation_id'] > 0) {
+                    $_product = wc_get_product($item['variation_id']);
                 }
+                
                 if (isset($_product) && $_product != false) {
                     ?>
                     <tr>

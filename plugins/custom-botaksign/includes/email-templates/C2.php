@@ -12,7 +12,7 @@ if ($order) {
             </tr>
         </tbody></table>
     <div id="infor" style="margin-top: 20px;width: 95%;height: auto;margin-right: 25px;margin-left: 25px;">
-        <span class="info-title" style="color: #27793d; display: block; font-family: segoe-bold; font-size: 15pt;">Hi <?php echo $order_data['billing']['first_name'] . ' ' . $order_data['billing']['last_name']; ?>,</span><br>
+        <span class="info-title" style="color: #27793d; display: block; font-family: segoe-bold; font-size: 15pt;">Hi <?php echo $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(); ?>,</span><br>
         <span class="info-subtext" style="font-family: Myriad-Pro-Semibold; color: #231f20; font-size: 15pt;">Your order <span class="order_id" style="color: #231f20;/* display: block; */font-size: 15pt;font-family: segoe-bold;"> #<?php echo $order->get_id(); ?> </span>has been sent for printing! You’ll receive another email notifying
             you when your order is ready for delivery/collection.</span>
     </div>

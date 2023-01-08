@@ -2,9 +2,10 @@
 if ($order) {
     $pay_now_url = esc_url( $order->get_checkout_payment_url() );
     $order_data = $order->get_data();
-    $rate_percent = 7;
-    foreach ( $order->get_items('tax') as $tax_item ) {
-        $rate_percent = (int)$tax_item->get_rate_percent();
+    $gst = 0;
+    $taxs = array_slice($order->get_taxes(), 0, 1);
+    if($taxs) {
+        $gst = array_shift($taxs)->get_rate_percent( 'view' );
     }
     ?>
     <table id="header-infor" style="border-collapse: collapse; width: 100%;" width="100%">
@@ -29,7 +30,6 @@ if ($order) {
 
             $order_items = $order->get_items('line_item');
             $d = 1;
-            $subtotal = 0;
             foreach ( $order_items as $item_id => $item ) {  
                 if( wc_get_product($item->get_product_id())->is_type( 'service' ) ){
                     $_product = wc_get_product($item->get_product_id());
@@ -39,7 +39,6 @@ if ($order) {
                             $product_name = $_item->get_name();
                         }
                     }
-                    $subtotal += $_product->get_price();
                     if (isset($_product) && $_product != false) {
                         ?>
                         <tr>
@@ -59,7 +58,6 @@ if ($order) {
                     }
                 } 
             }
-            $gst = $subtotal * $rate_percent / 100;
            
             ?>
         </tbody>
@@ -71,17 +69,17 @@ if ($order) {
                     <span>Kindly choose one of the two options below if that is the case for your artwork.</span>
                 </td>
                 <td style="color: #27793d;/* display: block; */font-size: 13pt;font-family: segoe-bold;width: 80px;padding-top: 5px;padding-bottom: 5px;border-bottom: 1px solid #27793d;" class="subtotal" align="right" width="80">Subtotal</td>
-                <td style="font-size: 13pt; color: #231f20; width: 80px; padding-top: 5px; padding-bottom: 5px; border-bottom: 1px solid #27793d; font-family: Myriad-Pro-Semibold,segoe-bold;" class="subtotal-price" align="right" width="80"><?php echo wc_price($subtotal); ?></td>
+                <td style="font-size: 13pt; color: #231f20; width: 80px; padding-top: 5px; padding-bottom: 5px; border-bottom: 1px solid #27793d; font-family: Myriad-Pro-Semibold,segoe-bold;" class="subtotal-price" align="right" width="80"><?php echo wc_price($order->get_subtotal()); ?></td>
             </tr>
             <tr>
-                <td style="color: #27793d;/* display: block; */font-size: 13pt;font-family: segoe-bold;width: 80px;padding-top: 5px;padding-bottom: 5px;border-bottom: 1px solid #27793d;" class="gst" align="right" width="80">7% GST</td>
-                <td style="font-size: 13pt; color: #231f20; width: 80px; padding-top: 5px; padding-bottom: 5px; border-bottom: 1px solid #27793d; font-family: Myriad-Pro-Semibold,segoe-bold;" class="gst-price" align="right" width="80"><?php echo wc_price($gst); ?></td>
+                <td style="color: #27793d;/* display: block; */font-size: 13pt;font-family: segoe-bold;width: 80px;padding-top: 5px;padding-bottom: 5px;border-bottom: 1px solid #27793d;" class="gst" align="right" width="80"><?php echo $gst; ?>% GST</td>
+                <td style="font-size: 13pt; color: #231f20; width: 80px; padding-top: 5px; padding-bottom: 5px; border-bottom: 1px solid #27793d; font-family: Myriad-Pro-Semibold,segoe-bold;" class="gst-price" align="right" width="80"><?php echo wc_price($order->get_total_tax()); ?></td>
             </tr>
             <tr>
                 <td style="color: #27793d;/* display: block; */font-family: segoe-bold;width: 80px;padding-top: 5px;padding-bottom: 5px;border-bottom: 1px solid #27793d;font-size: 15pt;" class="total" align="right" width="80">Total</td>
-                <td style="font-size: 15pt; color: #231f20; width: 80px; padding-top: 5px; padding-bottom: 5px; border-bottom: 1px solid #27793d; font-family: Myriad-Pro-Semibold,segoe-bold;" class="total-price" align="right" width="80"><?php echo wc_price($subtotal + $gst); ?></td>
+                <td style="font-size: 15pt; color: #231f20; width: 80px; padding-top: 5px; padding-bottom: 5px; border-bottom: 1px solid #27793d; font-family: Myriad-Pro-Semibold,segoe-bold;" class="total-price" align="right" width="80"><?php echo wc_price($order->get_total()); ?></td>
             </tr>
-        </tbody></table><div class="pay-here" style="width: 96%; text-align: right; padding-top: 15px; padding-right: 50px;"><a href="<?php echo $pay_now_url; ?>"><img style="width:200px" src="https://botaksign.cmsmart.net/wp-content/plugins/custom-botaksign/assets/images/pay-here.png"></a></div>
+        </tbody></table><div class="pay-here" style="width: 96%; text-align: right; padding-top: 15px; padding-right: 50px;"><a href="<?php echo $pay_now_url; ?>"><img style="width:200px" src="https://botaksign.com/wp-content/plugins/custom-botaksign/assets/images/pay-here.png"></a></div>
     <div style="padding-left: 25px;padding-right: 25px;padding-top: 25px;font-size: 15pt;width: 95%;" id="view-order-text"><span class="view-order-text">We are able to adjust your artwork for you for a fee. If you’d like us to adjust it for you,
             kindly click the ‘<a href="<?php echo esc_url( $order->get_checkout_payment_url() ); ?>">PAY HERE</a>’ button to make payment. Otherwise, you may either:</span></div>
     <div style="padding-left: 50px; padding-right: 50px; padding-top: 25px; font-size: 15pt; width: 100%;" id="view-order-text-2">
