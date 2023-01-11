@@ -367,10 +367,6 @@ if( !class_exists('Nbdesigner_Output') ){
                         'part_index'    => false
                     );
                 }
-                echo $html_url;
-                echo '<pre>';
-                var_dump($requests);
-                echo '</pre>';
                 $_has_raw_pdf   = false;
                 if( isset( $config->originPDFs ) && isset( $config->originPDFs[$key] ) && isset( $config->pdfStacks ) ){
                     $resource_pdfs = (array)$config->originPDFs[$key];
@@ -425,6 +421,10 @@ if( !class_exists('Nbdesigner_Output') ){
                     }
                 }
             }
+            $result['files'] = Nbdesigner_IO::get_list_files( $folder );
+            $result['html_url'] = $html_url;
+            $result['requests'] = $requests;
+            return $result;
             die('---- ok ----');
             $pdfs = self::request_create_pdf( $requests, $folder, $nbd_item_key );
             foreach( $pdfs as $key => $pdf ){
