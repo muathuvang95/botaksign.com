@@ -26,12 +26,12 @@ class Botaksign_Invoice_Template {
 		$this->_header = '<div class="main-page-number"><span class="page-number">Page {PAGENO} of {nb}</span></div>
             <table style="width:100%" id="header-logo">
                 <tr>
-                    <td align="left" style="width:50%"><img class="logo" src="' . (cxecrt_get_option('cxecrt_admin_url_logo') != ''?cxecrt_get_option('cxecrt_admin_url_logo'):plugin_dir_path(__FILE__) . '/assets/images/logo.png') . '"></td>
+                    <td align="left" style="width:50%"><img style="max-height: 70px" class="logo" src="' . (cxecrt_get_option('cxecrt_admin_url_logo') != ''?cxecrt_get_option('cxecrt_admin_url_logo'):plugin_dir_path(__FILE__) . '/assets/images/logo.png') . '"></td>
                 </tr>
             </table>';
 		$this->_content = 'No content.';
 		$this->_footer = '<div id="footer-text"> 
-                <h1 class="footer-title">Botak Sign Pte Ltd</h1>
+                <h1 style="font-weight:600" class="footer-title">Botak Sign Pte Ltd</h1>
                 <span class="footer-text-1">22 Yio Chu Kang Road, #01-34 Highland Centre, Singapore 545535</span>
                 <span class="footer-text-2">&emsp;Tel: 6286 2298</span>
                 <span class="footer-text-3">&emsp;Fax: 6383 5071</span>

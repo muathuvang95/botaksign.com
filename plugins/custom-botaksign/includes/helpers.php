@@ -242,8 +242,8 @@ function generate_quote_pdf($quote_id)
             font-family: roboto;
         }
         .order-number {
-            font-size: 22px;
-            line-height: 25px;
+            font-size: 18px;
+            line-height: 21px;
             font-family: robotom;
             color: #1BCB3F;
         }
@@ -522,6 +522,7 @@ function generate_quote_pdf($quote_id)
                 <td style="width:50%; padding-top:5px; padding-left:35px" align="left">
                     <table class="w-100">
                     <tbody>
+                    <tr style="width: 100%; height: 1px; background: #707070"></tr>
                     <tr>
                         <td style="width:20%;padding-top:5px;" class="subtotal text-15" align="left">SUBTOTAL</td>
                         <td style="width:50%;text-align: right;padding-top:5px;" class="subtotal-price text-15" >' . wc_price($subtotal) . '</td>
