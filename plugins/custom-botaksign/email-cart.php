@@ -300,6 +300,16 @@ class WC_Email_Cart {
             update_post_meta($saved_cart->cart_id, '_cxecrt_ship_method', $_POST['ship_method']);
         }
 
+        $tax_percent = 0;
+		$taxs = array_slice(WC_Tax::get_rates(), 0, 1);
+		if($taxs) {
+			$tax = array_shift($taxs);
+		    $tax_percent = isset($tax['rate']) ? $tax['rate'] : 0;
+		}
+		if($tax_percent) {
+			update_post_meta($saved_cart->cart_id, '_cxecrt_tax_percent', $tax_percent);
+		}
+
 		$woocommerce->cart->empty_cart();
 		$this->send_cart_email($saved_cart->cart_id, 0, 'admin');
 
