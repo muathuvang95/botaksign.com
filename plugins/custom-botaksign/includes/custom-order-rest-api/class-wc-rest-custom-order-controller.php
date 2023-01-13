@@ -893,8 +893,19 @@ class WC_REST_Custom_Controller {
 		);
 		if($type == 'fix-design-pdf' && $value) {
 			require_once( NBDESIGNER_PLUGIN_DIR.'includes/class-output.php' );
-    		$design_dettal = Nbdesigner_Output::_export_pdfs( $nbd_item_key);
-    		$data['flag'] = 1;
+    		$design_dettal = Nbdesigner_Output::_export_pdfs( $value);
+    		if(isset($design_dettal['files']) && isset($design_dettal['files'])) {
+    			$check = true;
+    			foreach ($design_dettal['files'] as $key => $file) {
+    				if(!$file || !file_exists($file)) {
+    					$check = false;
+    					break;
+    				}
+    			}
+    			if($check) {
+	    			$data['flag'] = 1;
+	    		}
+    		}
     		$data['design_dettal'] = $design_dettal;
 		}
 		$response = rest_ensure_response( $data);
