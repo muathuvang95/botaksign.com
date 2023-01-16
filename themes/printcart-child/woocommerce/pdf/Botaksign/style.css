@@ -91,11 +91,11 @@ td.no-borders {
 
 /* Header */
 table.head {
-	margin-bottom: 12mm;
+	margin-bottom: 10mm;
 }
 
 td.header img {
-	max-height: 3cm;
+	max-height: 80px;
 	width: auto;
 }
 
@@ -152,8 +152,8 @@ table.order-details {
 
 .order-details td,
 .order-details th {
-	border-bottom: 1px #ccc solid;
-	border-top: 1px #ccc solid;
+	border-bottom: 2px #1BCB3F solid;
+	border-top: 2px #1BCB3F solid;
 	padding: 0.375em;
 }
 
@@ -163,9 +163,9 @@ table.order-details {
 }
 
 .order-details thead th {
-	color: #27793d;
+	color: #1BCB3F;
 	/*background-color: black;*/
-	border-color: #bedd8d;
+	border-color: #1BCB3F;
 }
 
 /* product bundles compatibility */
@@ -220,7 +220,7 @@ dd:after {
 	margin-top: 5mm;
 }
 .customer-notes h3 {
-	color: #2f7e44;
+	color: #1BCB3F;
 	padding-bottom: 5px;
 }
 
@@ -231,9 +231,7 @@ table.totals {
 
 table.totals th,
 table.totals td {
-	border: 0;
-	border-top: 1px solid #a3cf62;
-	border-bottom: 1px solid #a3cf62;
+	border: none;
 }
 
 table.totals th.description,
@@ -243,8 +241,8 @@ table.totals td.price {
 
 table.totals tr.order_total td,
 table.totals tr.order_total th {
-	border-top: 2px solid #a3cf62;
-	border-bottom: 2px solid #a3cf62;
+	border-top: 2px solid #1BCB3F;
+	border-bottom: 2px solid #1BCB3F;
 	font-weight: bold;
 }
 
@@ -255,7 +253,7 @@ table.totals .cart_subtotal th, table.totals .cart_subtotal td {
 	border: none;
 }
 table.totals .rm-border th.description {
-	color: #27793d;
+	color: #221F1F;
 }
 
 	/* Footer Imprint */
@@ -280,18 +278,22 @@ table.totals .rm-border th.description {
 }
 
 .order-status-paid {
-	color: #a3cf62;
-	border: 3px solid #a3cf62;
+	color: #FFFFFF;
+	border: none;
 	text-align: center;
 	font-size: 30px;
-	font-weight: bolder;
-	padding: 20px 0 10px;
-	width: 200px;
-	float: right;
+	font-weight: 600;
+	padding: 25px 0 15px;
+	background: #1BCB3F;
+	width: 150px;
+	border-radius: 15px;
+	position: absolute;
+	right: 0;
+	top: 20px;
 }
 .billing-address h3, .invoice-number h3 {
 	font-size: 15px;
-	color: #27793d;
+	color: #1BCB3F;
 }
 .order-data table {
 	float: right;
@@ -309,10 +311,9 @@ table.totals .rm-border th.description {
 	padding-bottom: 3px;
 }
 #footer h4 {
-	color: #37834b;
+	color: #1BCB3F;
 	font-size: 16px;
-	font-family: 'CooperBlackRegular';
-	font-weight: bold;
+	font-weight: 500;
 }
 #footer .footer-text span {
 	padding: 0 10px;

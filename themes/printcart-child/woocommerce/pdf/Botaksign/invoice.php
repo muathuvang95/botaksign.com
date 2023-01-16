@@ -107,7 +107,7 @@
 				<?php do_action( 'wpo_wcpdf_after_item_meta', $this->type, $item, $this->order  ); ?>
 			</td>
 			<td class="quantity"><strong><?php echo $item['quantity']; ?></strong></td>
-			<td class="price" align="right"><strong><?php echo $item['single_line_total']; ?></strong></td>
+			<td class="price" align="right"><strong><?php echo $item['order_price']; ?></strong></td>
             <td align="right"><strong><?php echo $item['line_total']; ?></strong></td>
 		</tr>
 		<?php
@@ -117,13 +117,6 @@
 	<tfoot>
 		<tr class="no-borders">
 			<td class="no-borders" colspan="3">
-				<div class="customer-notes">
-					<h3><?php _e( 'DISCLAIMER:', 'woocommerce-pdf-invoices-packing-slips' ); ?></h3>
-					<ul>
-                        <li><strong>1.</strong> Goods sold are not returnable nor exchangeable.</li>
-                        <li><strong>2.</strong> This is a computer-generated invoice. No signature is required.</li>
-                    </ul>
-				</div>				
 			</td>
 			<td class="no-borders" colspan="2">
 				<table class="totals">
@@ -139,6 +132,17 @@
 						<?php endforeach; ?>
 					</tfoot>
 				</table>
+			</td>
+		</tr>
+		<tr class="no-borders">
+			<td class="no-borders" colspan="3">
+				<div class="customer-notes">
+					<h3><?php _e( 'DISCLAIMER:', 'woocommerce-pdf-invoices-packing-slips' ); ?></h3>
+					<ul>
+                        <li><strong>1.</strong> Goods sold are not returnable nor exchangeable.</li>
+                        <li><strong>2.</strong> This is a computer-generated invoice. No signature is required.</li>
+                    </ul>
+				</div>				
 			</td>
 		</tr>
 	</tfoot>
