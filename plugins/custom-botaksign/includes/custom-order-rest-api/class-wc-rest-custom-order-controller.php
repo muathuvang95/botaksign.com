@@ -487,7 +487,7 @@ class WC_REST_Custom_Controller {
 			'billing'              => array(),
 			'shipping'             => array(),
 			'full_name'			   => $order->get_formatted_billing_full_name(),
-			'user_link'			   => get_edit_user_link($order->get_user_id()),
+			'user_link'			   => add_query_arg( 'user_id', $order->get_user_id(), self_admin_url( 'user-edit.php' ) ),
 			'shipping_method'      => $order->get_shipping_method(),
 			'payment_status'       => $payment_status,
 			'payment_method'       => $order->get_payment_method(),
