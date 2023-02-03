@@ -21,7 +21,6 @@ $email_button_color = "transparent linear-gradient(0deg, #1BCB3F 0%, #45D242 33%
 
 if ($order) {
     $order_id = $order->get_id();
-    $order_data = $order->get_data();
     $link_order = get_permalink(get_option('woocommerce_myaccount_page_id')) . '/view-order/' . $order_id;
     $est_time = show_est_completion($order);
     $plotting_options = unserialize(get_option('plotting_options'));
@@ -128,12 +127,12 @@ if ($order) {
                         </div>
                         <div class="stt" align="left" style="padding-bottom:5px; font-size:14px; line-height: 19px;">
                             <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:17px;">Deliver to : </div>
-                            <div><?php echo $order_data['billing']['first_name'] . ' ' . $order_data['billing']['last_name']; ?></div>
-                            <div><?php echo $order_data['billing']['address_1']; ?></div>
-                            <div><?php echo $order_data['billing']['address_2']; ?></div>
-                            <div><?php echo $order_data['billing']['country'] . ' ' . $order_data['billing']['postcode']; ?></div>
-                            <div><?php echo $order_data['billing']['email']; ?></div>
-                            <div><?php echo $order_data['billing']['phone']; ?></div>
+                            <div><?php echo $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(); ?></div>
+                            <div><?php echo $order->get_billing_address_1(); ?></div>
+                            <div><?php echo $order->get_billing_address_2(); ?></div>
+                            <div><?php echo $order->get_billing_company() . ' ' . $order->get_billing_postcode(); ?></div>
+                            <div><?php echo $order->get_billing_email(); ?></div>
+                            <div><?php echo $order->get_billing_phone(); ?></div>
                         </div>
                     </div>
                     <div style="width: 50%;display: flex;justify-content: flex-end;">

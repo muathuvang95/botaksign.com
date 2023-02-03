@@ -1,6 +1,5 @@
 <?php
 if ($order) {
-    $order_data = $order->get_data();
     $link_order = get_permalink(get_option('woocommerce_myaccount_page_id')) . '/view-order/' . $order->get_id();
     $est_time = show_est_completion($order);
     
@@ -34,7 +33,7 @@ if ($order) {
         </tr>
     </table>
     <div id="infor" style="margin-top: 20px; width: 100%; height: auto; margin-right: 25px; margin-left: 25px;">
-        <span class="info-title" style="color: #27793d; display: block; font-family: segoe-bold; font-size: 15pt;">Hi <?php echo $order_data['billing']['first_name'] . ' ' . $order_data['billing']['last_name']; ?>,</span><br>
+        <span class="info-title" style="color: #27793d; display: block; font-family: segoe-bold; font-size: 15pt;">Hi <?php echo $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(); ?>,</span><br>
         <span class="info-subtext" style="font-family: Myriad-Pro-Semibold; color: #231f20; font-size: 15pt;">Thanks for ordering with us! Your order <span class="order_id" style="color: #231f20; font-size: 15pt; font-family: segoe-bold;">#<?php echo $order->get_id(); ?></span> has been placed succesfully. You’ll
             receive another email notifying you when your order is ready for delivery.</span>
     </div>
@@ -47,15 +46,11 @@ if ($order) {
         </tr>
         <?php
         $items = $order->get_items();
-        $d = 1;
-        $subtotal = 0;
         foreach ($items as $item) {
-            $subtotal+=$item['line_total'];
-            if (isset($item['variation_id']) && $item['variation_id'] > 0):
+            $_product = wc_get_product($item['product_id']);
+            if (isset($item['variation_id']) && $item['variation_id'] > 0) {
                 $_product = wc_get_product($item['variation_id']);
-            else:
-                $_product = wc_get_product($item['product_id']);
-            endif;
+            }
             if (isset($_product) && $_product != false) {
                 ?>
                 <tr>
@@ -68,28 +63,28 @@ if ($order) {
                 </tr>
                 <?php
             }
-            $d++;
         }
-        $gst = $subtotal * 7 / 100;
         ?>
     </table>
     <?php
-    if ($order_data['shipping_total'] > 0) {
-        $gst += ($order_data['shipping_total'] * 7/100 );
-    }
+        $gst = 0;
+        $taxs = array_slice($order->get_taxes(), 0, 1);
+        if($taxs) {
+            $gst = array_shift($taxs)->get_rate_percent( 'view' );
+        }
     ?>
     <table id="total-price" style="width: 100%;border-collapse:collapse">
         <tbody>
             <tr>
                 <td align="left" style="width: 60%; padding-top: 10px;" width="60%">
-                    <span class="disclaimer" style="display: block; color: #27793d; font-family: segoe-bold; font-size: 15pt;">Order Date:</span><span class="disclaimer-sub" style="display: block; color: #231f20; font-family: segoe-bold; font-size: 15pt;"> <?php echo $order_data['date_created']->date('d F Y'); ?></span><br>
+                    <span class="disclaimer" style="display: block; color: #27793d; font-family: segoe-bold; font-size: 15pt;">Order Date:</span><span class="disclaimer-sub" style="display: block; color: #231f20; font-family: segoe-bold; font-size: 15pt;"> <?php echo $order->get_date_created()->date('d F Y'); ?></span><br>
                 </td>
                 <td align="right" style="padding-top: 10px; width: 40%;" width="40%">
                     <table style="border-collapse: collapse; border-bottom: 1px solid #27793d;">
                         <tbody>
                             <tr>
                                 <td class="subtotal" align="right" style="width: 80px; padding-top: 5px; padding-bottom: 8px; color: #27793d; display: block; font-size: 13pt; font-family: segoe-bold;" width="80">Subtotal</td>
-                                <td class="subtotal-price" align="right" style="width: 120px; padding-top: 5px; padding-bottom: 5px; font-size: 13pt; color: #231f20; font-family: Myriad-Pro-Semibold,segoe-bold;" width="80"><?php echo wc_price($subtotal); ?></td>
+                                <td class="subtotal-price" align="right" style="width: 120px; padding-top: 5px; padding-bottom: 5px; font-size: 13pt; color: #231f20; font-family: Myriad-Pro-Semibold,segoe-bold;" width="80"><?php echo wc_price($order->get_subtotal()); ?></td>
                             </tr>
                         </tbody></table>
                 </td>
@@ -103,7 +98,7 @@ if ($order) {
                         <tbody>
                             <tr>
                                 <td class="gst" align="right" style="width: 80px; padding-top: 5px; padding-bottom: 5px; color: #27793d; display: block; font-size: 13pt; font-family: segoe-bold;" width="80">Delivery</td>
-                                <td class="gst-price" align="right" style="width: 120px; padding-top: 5px; padding-bottom: 5px; border-bottom-width: 1px; font-size: 13pt; color: #231f20; font-family: Myriad-Pro-Semibold,segoe-bold;" width="80"><?php echo wc_price($order_data['shipping_total']); ?></td>
+                                <td class="gst-price" align="right" style="width: 120px; padding-top: 5px; padding-bottom: 5px; border-bottom-width: 1px; font-size: 13pt; color: #231f20; font-family: Myriad-Pro-Semibold,segoe-bold;" width="80"><?php echo wc_price($order->get_shipping_total()); ?></td>
                             </tr>
                         </tbody></table>
                 </td>
@@ -113,8 +108,8 @@ if ($order) {
                     <table style="border-collapse: collapse; border-bottom: 1px solid #27793d;">
                         <tbody>
                             <tr>
-                                <td class="gst" align="right" style="width: 80px; padding-top: 5px; padding-bottom: 5px; color: #27793d; display: block; font-size: 13pt; font-family: segoe-bold;" width="80">7% GST</td>
-                                <td class="gst-price" align="right" style="width: 120px; padding-top: 5px; padding-bottom: 5px; font-size: 13pt; color: #231f20; font-family: Myriad-Pro-Semibold,segoe-bold;" width="80"><?php echo wc_price($gst); ?></td>
+                                <td class="gst" align="right" style="width: 80px; padding-top: 5px; padding-bottom: 5px; color: #27793d; display: block; font-size: 13pt; font-family: segoe-bold;" width="80"><?php echo $gst; ?>% GST</td>
+                                <td class="gst-price" align="right" style="width: 120px; padding-top: 5px; padding-bottom: 5px; font-size: 13pt; color: #231f20; font-family: Myriad-Pro-Semibold,segoe-bold;" width="80"><?php echo wc_price($order->get_total_tax()); ?></td>
                             </tr>
                         </tbody></table>
                 </td>
@@ -125,7 +120,7 @@ if ($order) {
                         <tbody>
                             <tr>
                                 <td class="total" align="right" style="position: relative; top: 1px; width: 80px; padding-top: 5px; padding-bottom: 5px; color: #27793d; display: block; font-family: segoe-bold; font-size: 15pt;" width="80">Total</td>
-                                <td class="total-price" align="right" style="width: 120px; padding-top: 5px; padding-bottom: 5px; border-bottom-width: 1px; font-size: 15pt; color: #231f20; font-family: Myriad-Pro-Semibold,segoe-bold;" width="80"><?php echo wc_price($subtotal + $gst + $order_data['shipping_total']); ?></td>
+                                <td class="total-price" align="right" style="width: 120px; padding-top: 5px; padding-bottom: 5px; border-bottom-width: 1px; font-size: 15pt; color: #231f20; font-family: Myriad-Pro-Semibold,segoe-bold;" width="80"><?php echo wc_price($order->get_total()); ?></td>
                             </tr>
                         </tbody></table>
                 </td>
@@ -136,18 +131,18 @@ if ($order) {
         <tr>
             <td style="width:60%;padding-top:20px;" align="left">
                 <span class="information-title" style="color: #27793d; display: block; font-family: segoe-bold; font-size: 17pt;">Customer Information</span><br>
-                <span class="information-sub-title" style="color: #231f20; display: block; font-family: segoe-bold; font-size: 14pt;"><?php echo $order_data['billing']['first_name'] . ' ' . $order_data['billing']['last_name']; ?></span>
-                <span class="information-sub" style="font-size:14pt !important;"><?php echo $order_data['billing']['address_1']; ?> <br>
-                    <?php echo $order_data['billing']['address_2']; ?><br>
-                    <?php echo $order_data['billing']['country'] . ' ' . $order_data['billing']['postcode']; ?></span><br>
-                <span class="information-sub" style="font-size:14pt !important;"><?php echo $order_data['billing']['email']; ?></span><br>
-                <span class="information-sub" style="font-size:14pt !important;"><?php echo $order_data['billing']['phone']; ?></span><br>
+                <span class="information-sub-title" style="color: #231f20; display: block; font-family: segoe-bold; font-size: 14pt;"><?php echo $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(); ?></span>
+                <span class="information-sub" style="font-size:14pt !important;"><?php echo $order->get_billing_address_1(); ?> <br>
+                    <?php echo $order->get_billing_address_2(); ?><br>
+                    <?php echo $order->get_billing_country() . ' ' . $order->get_billing_postcode(); ?></span><br>
+                <span class="information-sub" style="font-size:14pt !important;"><?php echo $order->get_billing_email(); ?></span><br>
+                <span class="information-sub" style="font-size:14pt !important;"><?php echo $order->get_billing_phone(); ?></span><br>
             </td>
             <td style="width:40%;padding-top:-20px;" align="right">
                 <span class="information-title-2" style="color: #27793d; display: block; font-family: segoe-bold; font-size: 17pt;">Shipping Method</span><br>
                 <span class="information-sub-title-3" style="color: #231f20; display: block; font-family: segoe-bold; font-size: 14pt;">Self-collection</span><br><br>
                 <span class="information-title-3" style="color: #27793d; display: block; font-family: segoe-bold; font-size: 17pt;">Payment Method</span><br>
-                <span class="information-sub-title-2" style="color: #231f20; display: block; font-family: segoe-bold; font-size: 14pt;"><?php echo $order_data['payment_method_title']; ?></span><br>
+                <span class="information-sub-title-2" style="color: #231f20; display: block; font-family: segoe-bold; font-size: 14pt;"><?php echo $order->get_payment_method_title(); ?></span><br>
             </td>
         </tr>
     </table>
