@@ -27,7 +27,7 @@ if(is_array($items)) {
     $f_product = wc_get_product($items[0]['id']);
 }
 if ($product->is_in_stock()) :
-    if( $f_product && !$f_product->is_in_stock() ) { 
+    if( isset($f_product) && $f_product && !$f_product->is_in_stock() ) { 
         echo '<div class="hidden" style="display: none!important">'; 
     }
     ?>
@@ -60,7 +60,7 @@ if ($product->is_in_stock()) :
     </form>
 
     <?php do_action('woocommerce_after_add_to_cart_form'); 
-    if( $f_product && !$f_product->is_in_stock() ) { 
+    if( isset($f_product) && $f_product && !$f_product->is_in_stock() ) { 
         echo '</div>'; 
         $options_settings = get_option( NBT_NOTI_SETTINGS );
         $stock = $product->get_stock_quantity();
