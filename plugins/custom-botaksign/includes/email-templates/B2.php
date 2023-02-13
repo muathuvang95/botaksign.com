@@ -97,7 +97,7 @@ if ($order) {
                     <div style="font-size:14px;line-height:17px;">22 Yio Chu Kang Road #01-19 Highland Centre Singapore 545535</div>
                 </div>
                 <div style="width: 100%; display: flex;">
-                    <div style="width: 50%;">
+                    <div style="width: 65%;">
                         <div class="stt" align="left" style="padding-bottom:5px;">
                             <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:17px;">Operation Hours : </div>
                             <div style="font-size:14px;line-height:17px;">Open Mon - Fri 9am - 5pm, Sat 9am - 1pm</div>
@@ -108,7 +108,7 @@ if ($order) {
                             <div style="font-size:14px;line-height:17px;">Kindly show this email upon collection as proof of purchase.</div>
                         </div>
                     </div>
-                    <div style="width: 50%;display: flex;justify-content: flex-end;">
+                    <div style="width: 35%;display: flex;justify-content: flex-end; align-items: flex-end;">
                         <div style="width: 100%;height: 0;padding-bottom: 100%; position: relative;overflow: hidden;">
                             <img style="width: 100%; height: auto; position: absolute;" src="<?php echo esc_attr(CUSTOM_BOTAKSIGN_URL.'assets/images/gif3.gif'); ?>" alt="">
                         </div>
@@ -120,7 +120,7 @@ if ($order) {
          ?>
             <div style="border: 1px solid #ECECEC; box-shadow: 0px 0px 12px #0000001F; border-radius: 1em; padding: 20px; overflow: hidden; background: #fafafa;color:#000000;font-weight: 400;font-size:14px; line-height: 24px;">
                 <div style="display: flex;">
-                    <div style="width: 50%;">
+                    <div style="width: 65%;">
                         <div class="stt" align="left" style="padding-bottom:5px;">
                             <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:17px;">Estimated Delivery Date : </div>
                             <div><?php echo $time_completed_display; ?></div>
@@ -135,7 +135,7 @@ if ($order) {
                             <div><?php echo $order->get_billing_phone(); ?></div>
                         </div>
                     </div>
-                    <div style="width: 50%;display: flex;justify-content: flex-end;">
+                    <div style="width: 35%;display: flex;justify-content: flex-end; align-items: flex-end;">
                         <div style="width: 100%;height: 0;padding-bottom: 100%; position: relative;overflow: hidden;">
                             <img style="width: 100%; height: auto;position: absolute;" src="<?php echo esc_attr(CUSTOM_BOTAKSIGN_URL.'assets/images/gif3.gif'); ?>" alt="">
                         </div>
@@ -146,6 +146,4 @@ if ($order) {
     }
 }
 ?>
-<div style="display: flex; justify-content: center; width: 100%;">
-    <div style="border-top-width: 2px; border-top-style: solid; border-top-color: #ECECEC; width: 200px;"></div>
-</div>
+

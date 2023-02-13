@@ -1,15 +1,15 @@
 <div style="border: 1px solid #ECECEC; box-shadow: 0px 0px 12px #0000001F; border-radius: 1em; padding: 20px 20px 0 20px; overflow: hidden; background: #fafafa;color:#000000;font-weight: 400;font-size:15px; line-height: 24px;">
     <div style="display: flex;">
-        <div style="width: 50%;">
+        <div style="width: 65%;">
             <div class="stt" align="left" style="padding-bottom:40px;">
                 <img class="logo" src="<?php echo CUSTOM_BOTAKSIGN_URL . '/assets/images/logo-transparent.png'; ?>" style="margin-left:0px;margin-top:0px;height: 56px; width: auto;">
             </div>
-            <div class="stt" align="left" style="padding-bottom:70px;">
+            <div class="stt" align="left" style="padding-bottom:20px;">
                 <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:35px;line-height: 43px;">Welcome!</div>
                 <div>You’re now part of us.</div>
             </div>
         </div>
-        <div style="width: 50%;display: flex;justify-content: flex-end;">
+        <div style="width: 35%;display: flex;justify-content: flex-end; align-items: flex-end;padding-bottom:20px;">
             <div style="width: 100%;height: 0;padding-bottom: 100%; position: relative;overflow: hidden;">
                 <img style="width: 100%; height: auto; position: absolute;" src="<?php echo esc_attr(CUSTOM_BOTAKSIGN_URL.'assets/images/gif1.gif'); ?>" alt="">
             </div>

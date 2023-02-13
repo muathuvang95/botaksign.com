@@ -20,6 +20,6 @@ $email_button_color = "transparent linear-gradient(0deg, #1BCB3F 0%, #45D242 33%
     <span class="info-subtext" style="font-size:14px !important; line-height: 24px; color:#231f20;">We have refunded your order <span style="font-weight: 500;">#<?php echo $order->get_id(); ?></span>. We will automatically credit the funds to your bank account / credit card. Please note that it might take up to 7 working days.</span>
 </div>
 
-<div style="display: flex; justify-content: center; width: 100%;">
-    <div style="border-top-width: 2px; border-top-style: solid; border-top-color: #ECECEC; width: 200px;"></div>
+<div style="text-align: center; width: 100%;">
+    <div style="display:inline-block; border-top-width: 2px; border-top-style: solid; border-top-color: #ECECEC; width: 200px;"></div>
 </div>

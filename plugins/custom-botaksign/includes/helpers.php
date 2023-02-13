@@ -385,9 +385,11 @@ function generate_quote_pdf($quote_id)
         if(count( WC()->cart->get_cart()) <= 0) return;
         $loop = 1;
         $subtotal = 0;
-
+        $gst = 0;
+        $info_1 = '';
         foreach ( WC()->cart->get_cart() as $order_item_id => $cart_item ) {
             $subtotal += $cart_item['line_total'];
+            $gst += $cart_item['line_tax'];
             $_product   = $cart_item['data'];
             $product_id = $cart_item['product_id'];
 
@@ -447,7 +449,7 @@ function generate_quote_pdf($quote_id)
                     $info_1 .= '<div class="product-name text-bold text-15 my-2">'.$loop.'. '.$_product->get_name().'</div>';
                     $style_right = 'style="width: 670px; margin-left: 0; height: 130px;padding: 10px"';
                     if( $src ) {
-                        $info_1 .= '<div style="width: 150px;height: 150px;display: inline-block; float: left; margin-right: 10px"><a href="'.$file.'" class="thumbnail" target="_blank"><img style="width: 150px;height: 150px;" src="'.$src.'"></a></div>';
+                        $info_1 .= '<div style="width: 150px;height: 150px;display: inline-block; float: left; margin-right: 10px"><a href="'.$src.'" class="thumbnail" target="_blank"><img style="width: 150px;height: 150px;" src="'.$src.'"></a></div>';
                         $style_right = 'style="width: 500px; height: 130px; display: inline-block; float: right; padding: 10px; margin-left: 10px"';
                     }
 
@@ -493,10 +495,18 @@ function generate_quote_pdf($quote_id)
             }
             $loop ++;
         }
-        $gst = $subtotal * 7 / 100;
         $fee_ship = 0;
         $ship_method = get_post_meta($quote_id, '_cxecrt_ship_method', true);
-
+        $tax_percent = (int) get_post_meta($quote_id, '_cxecrt_tax_percent', true);
+        $post_date = strtotime(get_post($quote_id)->post_date);
+        $date_check = 1672531200; // Date 00:00:00 01/01/2023
+        if(!$tax_percent) {
+            if($post_date < $date_check) {
+                $tax_percent = 7;
+            } else {
+                $tax_percent = 8;
+            }
+        }
         foreach (WC()->cart->get_shipping_packages() as $package_id => $package) {
             // Check if a shipping for the current package exist
             if (WC()->session->__isset('shipping_for_package_' . $package_id)) {
@@ -506,14 +516,13 @@ function generate_quote_pdf($quote_id)
                 foreach (WC()->session->get('shipping_for_package_' . $package_id)['rates'] as $shipping_rate_id => $shipping_rate) {
                     if ($shipping_rate->get_id() == $ship_method) {
                         $fee_ship = $shipping_rate->get_cost();
-                        $shipping_method .= $shipping_rate->get_label();
                         break;
                     }
                 }
             }
         }
         if ($fee_ship > 0) {
-            $gst += ($fee_ship * 7/100 );
+            $gst += ($fee_ship * $tax_percent/100 );
         }
         $total_price = '<table id="total-price" style="width:100%">
             <tr>
@@ -531,7 +540,7 @@ function generate_quote_pdf($quote_id)
                         <td style="width:50%;padding-top:5px;text-align: right;" class="subtotal-price text-15">' . $fee_ship . '</td>
                     </tr>
                     <tr>
-                        <td style="width:20%;padding-top:5px;" class="subtotal text-15" align="left">GST 7%</td>
+                        <td style="width:20%;padding-top:5px;" class="subtotal text-15" align="left">GST '.$tax_percent.'%</td>
                         <td style="width:50%;text-align: right;padding-top:5px;" class="subtotal-price text-15" >' . wc_price($gst) . '</td>
                     </tr>
                     </tbody>
@@ -556,7 +565,6 @@ function generate_quote_pdf($quote_id)
             </div>';
 
         // Quotation detail end
-
 
         $cxecrt->restore_current_cart();
 
@@ -989,7 +997,7 @@ function show_est_completion($order)
     $user_id = $order->get_user_id();
     $user_meta =get_userdata($user_id);
     $role_use = '';
-    if(isset($user_meta)) {
+    if(isset($user_meta) && $user_meta) {
         $role_use = $user_meta->roles[0];
     }
     $have_role_use = false;
