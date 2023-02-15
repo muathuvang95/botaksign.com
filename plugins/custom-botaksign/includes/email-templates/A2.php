@@ -25,7 +25,7 @@ if ($order) {
     $est_time = show_est_completion($order);
     $plotting_options = unserialize(get_option('plotting_options'));
     $shippting_method = $order->get_shipping_method();
-    $shippting_method = 'Muathvuang95';
+
     $order_completed_str = get_post_meta($order->get_id() , '_order_time_completed_str' , true);
     $order_completed_str = $order_completed_str ? $order_completed_str : strtotime('now');
     $time_completed_display = get_post_meta($order_id, '_order_time_completed', true);
@@ -77,7 +77,7 @@ if ($order) {
         if($check_day) {
             $order_completed_str += 24*60*60;
         }
-        $time_completed_display = date("d/m/Y" , $order_completed_str). ' (' . $period_display . ')';
+        $time_completed_display = date("d M Y" , $order_completed_str);
     }
 
     // end
@@ -135,13 +135,11 @@ if ($order) {
                     <div style="width: 65%;">
                         <div class="stt" align="left" style="padding-top:15px;">
                             <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:17px;">Delivery Method : </div>
-                            <div><?php echo $time_completed_display; ?></div>
                             <div><?php echo $shippting_method; ?></div>
                         </div>
                         <div class="stt" align="left" style="padding-top:15px;">
                             <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:17px;">Estimated Delivery Date : </div>
                             <div><?php echo $time_completed_display; ?></div>
-                            <div><?php echo $shippting_method; ?></div>
                         </div>
                         <div class="stt" align="left" style="padding-top:15px; font-size:14px; line-height: 19px;">
                             <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:17px;">Deliver to : </div>
