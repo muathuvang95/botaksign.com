@@ -156,4 +156,6 @@ if ($order) {
         </div>
     </div>
 <?php } ?>
-
+<div style="display: flex; justify-content: center; width: 100%;">
+    <div style="border-top-width: 2px; border-top-style: solid; border-top-color: #ECECEC; width: 200px;"></div>
+</div>
