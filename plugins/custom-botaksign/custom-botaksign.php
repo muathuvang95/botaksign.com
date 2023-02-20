@@ -5484,7 +5484,7 @@ function my_save_extra_profile_fields( $user_id ) {
 
 add_filter('woocommerce_email_recipient_new_order', 'wc_change_admin_new_order_email_recipient', 10, 2);
 
-add_action( 'woocommerce_view_order' , 'nb_custom_pay_paynow' , 9 );
+// add_action( 'woocommerce_view_order' , 'nb_custom_pay_paynow' , 9 );
 function nb_custom_pay_paynow($order_id) {
     $order = wc_get_order($order_id);
     $url_check_out = wc_get_checkout_url();
@@ -5495,18 +5495,25 @@ function nb_custom_pay_paynow($order_id) {
     }
     ?>
     <style type="text/css">
-        .nb-custom-pay-paynow {
-            margin-bottom: 5px;
-        }
         .nb-custom-pay-paynow a {
-            padding: 5px 30px;
-            color: #fff;
-            font-size: 20px;
+            background: transparent linear-gradient(0deg, #919191 0%, #a5a5a5 51%, #c1c0c0 100%) 0% 0% no-repeat padding-box;;
+            box-shadow: 0px 10px 20px #00000029;
+            border-radius: 10px;
+            border: none;
+            color: #ffffff;
             font-weight: 600;
-            background: #28c475;
-            cursor: pointer;
-            border-radius: 0.25rem;
-            border-color: #28c475;
+            display: inline-block;
+            font-weight: 400;
+            text-align: center;
+            vertical-align: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            padding: 0.375rem 30px;
+            font-size: 1rem;
+            line-height: 1.5;
+            transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
         }
         .nb-custom-pay-paynow a:hover {
             text-decoration: none;
