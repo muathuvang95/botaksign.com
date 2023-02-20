@@ -1046,6 +1046,11 @@ class WC_REST_Custom_Controller {
 			send_botaksign_email($order_id , 'ORDER RECEIVED', 'G1.php');
 		}
 		if( isset($status) && $status != '') {
+			$_order_status_df = get_post_meta( $order_id , '_order_status', true );
+			// botak block user change status to cancel when order not New or Pending 20/02/2023
+			if( $_order_status_df != 'New' && $_order_status_df != 'Pending' && $status == 'cancelled' ) {
+				return;
+			}
 			wc_update_order_item_meta($item_id , '_item_status' , $status);
 			$data = array();
 			$order_items = $order->get_items('line_item');
@@ -1058,7 +1063,6 @@ class WC_REST_Custom_Controller {
 			$collected = 0;
 			$cancelled = 0;
 			$count_item_service = 0;
-			$_order_status_df = get_post_meta( $order_id , '_order_status', true );
 			$note_log = false;
 			foreach ( $order_items as $key => $value ) {
 				if( wc_get_product($value->get_product_id())->is_type( 'service' ) ){
