@@ -20,6 +20,6 @@ $email_button_color = "transparent linear-gradient(0deg, #FF0000 0%, #F78F8F 100
     <span class="info-subtext" style="font-size:14px !important; line-height: 24px; color:#231f20;">The order you have placed is not successful as payment has failed. If you’d like to proceed with this order, click <a href="<?php echo wc_get_page_permalink( 'myaccount' ).'view-order/'.$order->get_id(); ?>" class="order-link-here" style="color: #1BCB3F; font-size: 15x;"> HERE</a> to make the payment again.</span>
 </div>
 
-<div style="display: flex; justify-content: center; width: 100%;">
-    <div style="border-top-width: 2px; border-top-style: solid; border-top-color: #ECECEC; width: 200px;"></div>
+<div style="text-align: center; width: 100%;">
+    <div style="display:inline-block; border-top-width: 2px; border-top-style: solid; border-top-color: #ECECEC; width: 200px;"></div>
 </div>
