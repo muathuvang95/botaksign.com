@@ -77,33 +77,42 @@ if ($order) {
         if($check_day) {
             $order_completed_str += 24*60*60;
         }
-        $time_completed_display = date("d/m/Y" , $order_completed_str). ' (' . $period_display . ')';
+        $time_completed_display = date("d F Y" , $order_completed_str);
     }
 
     // end
-    $shippting_method = 'Self-collection';
     ?>
      <div style="margin-bottom: 25px;">
         <span class="info-title" style="display:block;font-size:17px; line-height: 20px; font-weight: 500; margin-bottom: 12px;"><?php printf( esc_html__( 'Hi %s,', 'woocommerce' ), esc_html( $order->get_billing_first_name() ) ); ?></span>
-        <span class="info-subtext" style="font-size:17px !important; line-height: 24px; color:#231f20;">Your order <span style="font-size:20px;font-weight: 600;">#<?php echo $order->get_id(); ?></span> is on its way to you! Here are the <?php echo $shippting_method == 'Self-collection' ? 'collection' : 'delivery'; ?> details :</span>
+        <?php
+            if($shippting_method == 'Self-collection') {
+                ?>
+                <span class="info-subtext" style="font-size:17px !important; line-height: 24px; color:#231f20;">Your order <span style="font-size:20px;font-weight: 600;">#<?php echo $order->get_id(); ?></span> is ready for collection! Here are the collection details :</span>
+                <?php
+            } else {
+               ?>
+                <span class="info-subtext" style="font-size:17px !important; line-height: 24px; color:#231f20;">Your order <span style="font-size:20px;font-weight: 600;">#<?php echo $order->get_id(); ?></span> is on its way to you! Here are the delivery details :</span>
+                <?php 
+            }
+        ?> 
     </div>
 
     <?php
     if($shippting_method == 'Self-collection') {
         ?>
             <div style="border: 1px solid #ECECEC; box-shadow: 0px 0px 12px #0000001F; border-radius: 1em; padding: 20px; overflow: hidden; background: #fafafa;color:#000000;font-weight: 400;font-size:14px; line-height: 24px;">
-                <div class="stt" align="left" style="padding-bottom:5px;">
+                <div class="stt" align="left" style="padding-bottom:15px;">
                     <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:17px;">Collection at : </div>
                     <div style="font-size:14px;line-height:17px;">22 Yio Chu Kang Road #01-19 Highland Centre Singapore 545535</div>
                 </div>
                 <div style="width: 100%; display: flex;">
                     <div style="width: 65%;">
-                        <div class="stt" align="left" style="padding-bottom:5px;">
+                        <div class="stt" align="left" style="padding-bottom:15px;">
                             <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:17px;">Operation Hours : </div>
                             <div style="font-size:14px;line-height:17px;">Open Mon - Fri 9am - 5pm, Sat 9am - 1pm</div>
                             <div style="font-size:14px;line-height:17px;">Closed on Sundays and public holidays</div>
                         </div>
-                        <div class="stt" align="left" style="padding-bottom:5px;">
+                        <div class="stt" align="left" style="padding-bottom:15px;">
                             <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:17px;">Note : </div>
                             <div style="font-size:14px;line-height:17px;">Kindly show this email upon collection as proof of purchase.</div>
                         </div>
@@ -121,6 +130,10 @@ if ($order) {
             <div style="border: 1px solid #ECECEC; box-shadow: 0px 0px 12px #0000001F; border-radius: 1em; padding: 20px; overflow: hidden; background: #fafafa;color:#000000;font-weight: 400;font-size:14px; line-height: 24px;">
                 <div style="display: flex;">
                     <div style="width: 65%;">
+                        <div class="stt" align="left" style="padding-top:15px;">
+                            <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:17px;">Delivery Method : </div>
+                            <div><?php echo $shippting_method; ?></div>
+                        </div>
                         <div class="stt" align="left" style="padding-top:15px;">
                             <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:17px;">Estimated Delivery Date : </div>
                             <div><?php echo $time_completed_display; ?></div>
