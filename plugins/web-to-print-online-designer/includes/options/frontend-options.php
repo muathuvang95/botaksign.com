@@ -1443,30 +1443,32 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                 //CS botak pricing option
                 if (isset($origin_field['nbd_type']) && $origin_field['nbd_type'] === 'size') {
                     if ($origin_field['general']['attributes']['same_size'] === 'n') {
-                        $size_product_width = $origin_field['general']['attributes']['options'][$val['value']]['product_width'];
-                        $size_product_height = $origin_field['general']['attributes']['options'][$val['value']]['product_height'];
+                        if(isset($origin_field['general']['attributes']['options'][$val['value']])) {
+                            $size_product_width = $origin_field['general']['attributes']['options'][$val['value']]['product_width'];
+                            $size_product_height = $origin_field['general']['attributes']['options'][$val['value']]['product_height'];
 
-                        //Calc price by size option
-                        foreach ($fields as $tmp_key => $tmp_val) {
-                            foreach ($option_fields['fields'] as &$tmp_origin_field) {
-                                if ($tmp_origin_field['id'] === $tmp_key && isset($tmp_origin_field['nbd_type']) && $tmp_origin_field['nbd_type'] === 'pricing_rates') {
-                                    foreach ($tmp_origin_field['general']['attributes']['options'] as &$tmp_option) {
-                                        switch ($tmp_option['calc_method']) {
-                                            case 'area':
-                                                $tmp_option['price'][0] = strval((float) $size_product_width * (float) $size_product_height * (float) $tmp_option['rate']);
-                                                break;
-                                            case 'perimeter':
-                                                $tmp_option['price'][0] = strval(2 * ((float) $size_product_width + (float) $size_product_height) * (float) $tmp_option['rate']);
-                                                break;
-                                            case 'quantity':
-                                                $tmp_option['price'][0] = strval((int) $tmp_option['quantity']* (float) $tmp_option['rate']);
-                                                break;
+                            //Calc price by size option
+                            foreach ($fields as $tmp_key => $tmp_val) {
+                                foreach ($option_fields['fields'] as &$tmp_origin_field) {
+                                    if ($tmp_origin_field['id'] === $tmp_key && isset($tmp_origin_field['nbd_type']) && $tmp_origin_field['nbd_type'] === 'pricing_rates') {
+                                        foreach ($tmp_origin_field['general']['attributes']['options'] as &$tmp_option) {
+                                            switch ($tmp_option['calc_method']) {
+                                                case 'area':
+                                                    $tmp_option['price'][0] = strval((float) $size_product_width * (float) $size_product_height * (float) $tmp_option['rate']);
+                                                    break;
+                                                case 'perimeter':
+                                                    $tmp_option['price'][0] = strval(2 * ((float) $size_product_width + (float) $size_product_height) * (float) $tmp_option['rate']);
+                                                    break;
+                                                case 'quantity':
+                                                    $tmp_option['price'][0] = strval((int) $tmp_option['quantity']* (float) $tmp_option['rate']);
+                                                    break;
+                                            };
                                         };
-                                    };
+                                    }
                                 }
                             }
+                            //End calc price by size option
                         }
-                        //End calc price by size option
                     }
                 }
                 //End CS botak pricing option
