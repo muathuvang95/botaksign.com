@@ -66,7 +66,7 @@ if (count($arr_object) > 0) {
 					        <div class="wrap-action-quotation">
 					            <div class="col-right">
 						            <?php if ($cart_status == 1) { ?>
-					                <a href="#" rel="' . $item->ID . '" class="btn btn-load-cart">
+					                <a href="#" rel="<?php echo $item->ID; ?>" class="btn btn-load-cart">
 					                	<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
 								        width="19.000000pt" height="19.000000pt" viewBox="0 0 114.000000 90.000000"
 								        preserveAspectRatio="xMidYMid meet">
