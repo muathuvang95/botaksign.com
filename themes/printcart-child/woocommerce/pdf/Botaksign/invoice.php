@@ -107,7 +107,7 @@
 				<?php do_action( 'wpo_wcpdf_after_item_meta', $this->type, $item, $this->order  ); ?>
 			</td>
 			<td class="quantity"><strong><?php echo $item['quantity']; ?></strong></td>
-			<td class="price" align="right"><strong><?php echo $item['order_price']; ?></strong></td>
+			<td class="price" align="right"><strong><?php echo $item['single_line_total']; ?></strong></td>
             <td align="right"><strong><?php echo $item['line_total']; ?></strong></td>
 		</tr>
 		<?php
