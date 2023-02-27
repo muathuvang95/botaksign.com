@@ -1048,7 +1048,8 @@ class WC_REST_Custom_Controller {
 		if( isset($status) && $status != '') {
 			$_order_status_df = get_post_meta( $order_id , '_order_status', true );
 			// botak block user change status to cancel when order not New or Pending 20/02/2023
-			if( $_order_status_df != 'New' && $_order_status_df != 'Pending' && $status == 'cancelled' ) {
+			$user = get_userdata($user_id);
+			if( $_order_status_df != 'New' && $_order_status_df != 'Pending' && $status == 'cancelled' && !in_array('administrator', $user->roles) && !in_array('customer_service', $user->roles) ) {
 				return;
 			}
 			wc_update_order_item_meta($item_id , '_item_status' , $status);
