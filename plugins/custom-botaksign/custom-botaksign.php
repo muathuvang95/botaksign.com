@@ -5576,7 +5576,7 @@ function nb_set_date_order_status_changed_onhold_to_processing($order_id , $stat
             v3_add_order_notes($order_id , $status_order , 'update_status_order');
             update_post_meta( $order_id , '_order_status' , $status_order);
             foreach ( $order_items as $item_id => $item ) {
-                if( !wc_get_product($item->get_product_id())->is_type( 'service' ) ){
+                if( wc_get_product($item->get_product_id()) && !wc_get_product($item->get_product_id())->is_type( 'service' ) ){
                     wc_update_order_item_meta($item_id , '_item_status' , $status_item);
                 }
             }
