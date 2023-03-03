@@ -17,7 +17,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$user_id = get_current_user_id()
+$user_id = get_current_user_id();
 $current_user = get_user_by( 'id', $user_id );
 ?>
 
