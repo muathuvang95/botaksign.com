@@ -2739,7 +2739,6 @@ footer.site-footer .footer-top-section .form .submit_b {
     color: #696969;
 }
 .woocommerce-cart-form .cart_totals .order-total td, .woocommerce-cart-form .cart_totals .order-total th {
-    padding-top: 10px;
     min-width: 100px;
 }
 .woocommerce-cart-form .cart_totals .tax-rate td, .woocommerce-cart-form .cart_totals .tax-rate th {
@@ -3034,6 +3033,9 @@ footer.site-footer .footer-top-section .form .submit_b {
 }
 .woocommerce-cart-form .product-item .btk-action-table a {
     color: #696969;
+}
+.woocommerce-cart-form .btk-product-thumbnail .nbd-cart-item-design {
+    margin-top: 0;
 }
 .btk-cart_totals .order-time-info {
     border: none;

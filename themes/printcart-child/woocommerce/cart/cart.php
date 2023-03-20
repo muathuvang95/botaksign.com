@@ -161,13 +161,13 @@ function render_product_and_service($cart_item_key, $cart_item, $_product, $prod
             <div class="row">
                 <div class="col-4 btk-product-thumbnail">
                     <?php
-                    $thumbnail = apply_filters('woocommerce_cart_item_thumbnail', $_product->get_image(), $cart_item, $cart_item_key);
-
-                    if (!$product_permalink) {
-                        echo $thumbnail; // PHPCS: XSS ok.
-                    } else {
-                        printf('<a href="%s">%s</a>', esc_url($product_permalink), $thumbnail); // PHPCS: XSS ok.
-                    }
+                    $thumbnail = apply_filters('btk_cart_item_thumbnail', $_product->get_image(), $cart_item, $cart_item_key);
+                    echo $thumbnail;
+                    // if (!$product_permalink) {
+                    //     echo $thumbnail; //  PHPCS: XSS ok.
+                    // } else {
+                    //     printf('<a href="%s">%s</a>', esc_url($product_permalink), $thumbnail); // PHPCS: XSS ok.
+                    // }
                     ?>
                 </div>
 
