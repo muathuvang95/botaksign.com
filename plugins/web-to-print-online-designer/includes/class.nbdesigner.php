@@ -3883,7 +3883,7 @@ class Nbdesigner_Plugin {
                     $html .= '<p id="nbx'.$cart_item_key.'">' . esc_html__('Extra price for design','web-to-print-online-designer') . ' + ' .  $extra_price . '</p>';
                 }
                 if($first_design) {
-                    return $first_design . '<div class="collapse" id="' . $cart_item_key . '">' . $html . '</div>';
+                    return $first_design . '<div class="collapse btk-collapse-'. $cart_item_key . '" id="btk-collapse-' . $cart_item_key . '-left">' . $html . '</div>';
                 }
                 return $html;
             }

@@ -178,8 +178,7 @@ function render_product_and_service($cart_item_key, $cart_item, $_product, $prod
                     } else {
                         echo wp_kses_post(apply_filters('woocommerce_cart_item_name', sprintf('<a href="%s" class="product-link">%s<span></span></a>', esc_url($product_permalink), $_product->get_name()), $cart_item, $cart_item_key));
                     }
-
-                    echo '<div class="collapse mt-3" id="'. $cart_item_key .'">';
+                    echo '<div class="collapse mt-3 btk-collapse-'. $cart_item_key . '" id="btk-collapse-'. $cart_item_key .'-right">';
                     do_action('woocommerce_after_cart_item_name', $cart_item, $cart_item_key);
                     // Meta data.
                     echo wc_get_formatted_cart_item_data($cart_item); // PHPCS: XSS ok.
@@ -249,7 +248,7 @@ function render_product_and_service($cart_item_key, $cart_item, $_product, $prod
                         );
                         ?>
                     </div>
-                    <div class="btk-product-remove mb-1" data-toggle="collapse" data-target="#<?php echo esc_attr($cart_item_key); ?>" aria-expanded="false" aria-controls="<?php echo esc_attr($cart_item_key); ?>">
+                    <div class="btk-product-remove mb-1" data-toggle="collapse" data-target=".btk-collapse-<?php echo esc_attr($cart_item_key); ?>" aria-expanded="false" aria-controls="btk-collapse-<?php echo esc_attr($cart_item_key); ?>-left btk-collapse-<?php echo esc_attr($cart_item_key); ?>-right">
                         <div class="btk-target-show-more-item btk-button-down active" >
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
