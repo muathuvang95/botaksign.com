@@ -153,6 +153,13 @@ class WC_REST_Custom_Controller {
 				'callback' => array( $this, 'get_setting_options' ),
 			)
 		));
+		// Tools support design
+		register_rest_route( $this->namespace, '/' . $this->rest_base . '/tools', array(
+			array(
+				'methods'  => WP_REST_Server::READABLE,
+				'callback' => array( $this, 'get_tools' ),
+			)
+		));
 
 		// API Delivery Plotter
 		register_rest_route( $this->namespace, '/' . $this->rest_base . '/plotter', array(
@@ -304,6 +311,8 @@ class WC_REST_Custom_Controller {
 				$items['name']				= $item->get_name();
 				$items['qty']				= $item->get_quantity();
 				$items['status']			= $opt_status;
+				$items['nbu']				= $nbu_item_key ? $nbu_item_key : '';
+				$items['nbd']				= $nbd_item_key ? $nbd_item_key : '';
 				$items['production_time']	= v3_get_production_time_item($item ,$order , false);
 				$items['date_completed']	= $time_completed;
 				$items['date_out']			= wc_get_order_item_meta($item_id, '_item_date_out');
@@ -482,6 +491,7 @@ class WC_REST_Custom_Controller {
 			'billing'              => array(),
 			'shipping'             => array(),
 			'full_name'			   => $order->get_formatted_billing_full_name(),
+			'user_link'			   => add_query_arg( 'user_id', $order->get_user_id(), self_admin_url( 'user-edit.php' ) ),
 			'shipping_method'      => $order->get_shipping_method(),
 			'payment_status'       => $payment_status,
 			'payment_method'       => $order->get_payment_method(),
@@ -879,7 +889,32 @@ class WC_REST_Custom_Controller {
 		$response = rest_ensure_response( $data);
 		return $response;
 	}
-
+	public function get_tools($request) {
+		$type = $request['type'];
+		$value = $request['value'];
+		$data = array(
+			'flag' => 0
+		);
+		if($type == 'fix-design-pdf' && $value) {
+			require_once( NBDESIGNER_PLUGIN_DIR.'includes/class-output.php' );
+    		$design_dettal = Nbdesigner_Output::_export_pdfs( $value);
+    		if(isset($design_dettal['files']) && isset($design_dettal['files'])) {
+    			$check = true;
+    			foreach ($design_dettal['files'] as $key => $file) {
+    				if(!$file || !file_exists($file)) {
+    					$check = false;
+    					break;
+    				}
+    			}
+    			if($check) {
+	    			$data['flag'] = 1;
+	    		}
+    		}
+    		$data['design_dettal'] = $design_dettal;
+		}
+		$response = rest_ensure_response( $data);
+		return $response;
+	}
 	public function update_artwork($request) {
 		$order_id = (int) $request['id'];
 		$data = json_decode($request['artworks']);
@@ -1107,7 +1142,7 @@ class WC_REST_Custom_Controller {
 					$note_log = true;
 				}
 			}
-			if($completed == $count_item && $collected != $completed) {
+			if( ($completed == $count_item || ($cancelled > 0 && $completed > 0 && $completed + $cancelled == $count_item) ) && $collected != $completed ) {
 				update_post_meta( $order_id , '_order_status', 'Completed' );
 				update_post_meta( $order_id , '_order_time_out', date("d/m/Y H:i a" , strtotime("now") + 8*3600 ) );
 				$_method = $order->get_shipping_method();
@@ -1124,7 +1159,7 @@ class WC_REST_Custom_Controller {
 				$_order_status = 'Completed';
 				$ongoing = false;
 			}
-			if($collected == $count_item) {
+			if($collected == $count_item || ($cancelled > 0 && $collected > 0 && $collected + $cancelled == $count_item) ) {
 				update_post_meta( $order_id , '_order_status', 'Collected' );
 				// update status order WC
 				wp_update_post(array(
@@ -1360,6 +1395,13 @@ class WC_REST_Custom_Controller {
 			$query_last .= " AND ( ( YEAR( wp_posts.post_date ) = ${date_in_y} AND MONTH( wp_posts.post_date ) = ${date_in_m} AND DAYOFMONTH( wp_posts.post_date ) = ${date_in_d} ) )";
 		}
 		if($date_out != '') {
+			$datas = array();
+			$datas['orders'] = array();
+			$datas['total'] = 0;
+			$datas['shipping_method'] = $this->get_shipping_method();
+			$response = rest_ensure_response( $datas );
+			return $response;
+
 			$query_first .= " INNER JOIN wp_postmeta AS mt2 ON ( wp_posts.ID = mt2.post_id )";
 			$query_last .= " AND ( ( mt2.meta_key = '_order_time_out' AND mt2.meta_value LIKE '%".$date_out_str."%') )";
 		}
