@@ -24,7 +24,7 @@ function botak_export_pdfs( $nbd_item_key){
 function botak_cloud_export_pdfs( $nbd_item_key){
     require_once( NBDESIGNER_PLUGIN_DIR.'includes/class-output.php' );
 
-    Nbdesigner_Output::_export_pdfs( $nbd_item_key);
+    return Nbdesigner_Output::_export_pdfs( $nbd_item_key);
 }
 if ( ! current_user_can( 'manage_options' ) ) { 
 	echo '<body id="error-page"><div class="wp-die-message">Sorry, you are not allowed to access this page.</div></body>'; 
@@ -124,7 +124,10 @@ if ( ! current_user_can( 'manage_options' ) ) {
 			echo "log Imagick";
 		}
 		if( $key_id_api ) {
-			botak_cloud_export_pdfs($key_id_api); 
+			$design_detail = botak_cloud_export_pdfs($key_id_api);
+			echo '<pre>';
+			var_dump($design_detail);
+			echo '</pre>';
 			echo "log Api";
 		}
 	}

@@ -367,66 +367,61 @@ if( !class_exists('Nbdesigner_Output') ){
                         'part_index'    => false
                     );
                 }
-                echo $html_url;
-                echo '<pre>';
-                var_dump($requests);
-                echo '</pre>';
-                $_has_raw_pdf   = false;
-                if( isset( $config->originPDFs ) && isset( $config->originPDFs[$key] ) && isset( $config->pdfStacks ) ){
-                    $resource_pdfs = (array)$config->originPDFs[$key];
-                    if( count( $resource_pdfs ) && $config->pdfStacks[$key] != '' ){
-                        $has_raw_pdf                    = true;
-                        $pages[$key]['has_raw_pdf']     = true;
-                        $stack                          = explode( '_', $config->pdfStacks[$key] );
-                        $pdf_index                      = 0;
-                        $pages[$key]['stack']           = array();
-                        $part_folder                    = $folder . '/part/';
-                        $_page_settings                 = $page_settings;
-                        $_page_settings['include_bg']   = false;
+                // $_has_raw_pdf   = false;
+                // if( isset( $config->originPDFs ) && isset( $config->originPDFs[$key] ) && isset( $config->pdfStacks ) ){
+                //     $resource_pdfs = (array)$config->originPDFs[$key];
+                //     if( count( $resource_pdfs ) && $config->pdfStacks[$key] != '' ){
+                //         $has_raw_pdf                    = true;
+                //         $pages[$key]['has_raw_pdf']     = true;
+                //         $stack                          = explode( '_', $config->pdfStacks[$key] );
+                //         $pdf_index                      = 0;
+                //         $pages[$key]['stack']           = array();
+                //         $part_folder                    = $folder . '/part/';
+                //         $_page_settings                 = $page_settings;
+                //         $_page_settings['include_bg']   = false;
 
-                        if( !file_exists( $part_folder ) ) {
-                            wp_mkdir_p( $part_folder );
-                        }
+                //         if( !file_exists( $part_folder ) ) {
+                //             wp_mkdir_p( $part_folder );
+                //         }
 
-                        foreach( $stack as $pos ){
-                            if( $pos == 'P' ){
-                                $resource_pdf   = (array)$resource_pdfs[$pdf_index];
-                                $pages[$key]['stack'][] = array(
-                                    'top'       => $pages[$key]['design_top'] + floatval( $resource_pdf['top'] ) * $unit_ratio,
-                                    'left'      => $pages[$key]['design_left'] + floatval( $resource_pdf['left'] ) * $unit_ratio,
-                                    'width'     => floatval( $resource_pdf['width'] ) * $unit_ratio,
-                                    'height'    => floatval( $resource_pdf['height'] ) * $unit_ratio,
-                                    'src'       => NBDESIGNER_TEMP_DIR . $resource_pdf['origin_pdf'],
-                                    'raw'       => true
-                                );
-                                $pdf_index++;
-                            } else {
-                                $svg_path           = NBDESIGNER_CUSTOMER_DIR .'/'. $nbd_item_key. '/part/frame_'. $key . '_svg_part_' . $pos . '.svg';
-                                $html_url           = self::build_html_page( $nbd_item_key, $key .'_part_' . $pos, $svg_path, $_page_settings, $font_css );
-                                $url_segment        = urlencode( $html_url );
+                //         foreach( $stack as $pos ){
+                //             if( $pos == 'P' ){
+                //                 $resource_pdf   = (array)$resource_pdfs[$pdf_index];
+                //                 $pages[$key]['stack'][] = array(
+                //                     'top'       => $pages[$key]['design_top'] + floatval( $resource_pdf['top'] ) * $unit_ratio,
+                //                     'left'      => $pages[$key]['design_left'] + floatval( $resource_pdf['left'] ) * $unit_ratio,
+                //                     'width'     => floatval( $resource_pdf['width'] ) * $unit_ratio,
+                //                     'height'    => floatval( $resource_pdf['height'] ) * $unit_ratio,
+                //                     'src'       => NBDESIGNER_TEMP_DIR . $resource_pdf['origin_pdf'],
+                //                     'raw'       => true
+                //                 );
+                //                 $pdf_index++;
+                //             } else {
+                //                 $svg_path           = NBDESIGNER_CUSTOMER_DIR .'/'. $nbd_item_key. '/part/frame_'. $key . '_svg_part_' . $pos . '.svg';
+                //                 $html_url           = self::build_html_page( $nbd_item_key, $key .'_part_' . $pos, $svg_path, $_page_settings, $font_css );
+                //                 $url_segment        = urlencode( $html_url );
 
-                                $settings_segment   = base64_encode( json_encode( array(
-                                    'width'         => $data['product_width'] * $unit_ratio . 'in',
-                                    'height'        => $data['product_height'] * $unit_ratio . 'in'
-                                ) ) );
+                //                 $settings_segment   = base64_encode( json_encode( array(
+                //                     'width'         => $data['product_width'] * $unit_ratio . 'in',
+                //                     'height'        => $data['product_height'] * $unit_ratio . 'in'
+                //                 ) ) );
             
-                                $requests[] = array(
-                                    'index'         => $key,
-                                    'url'           => 'https://api.cloud2print.net/pdf/' . $url_segment . '/' . $settings_segment,
-                                    'part_index'    => $pos
-                                );
+                //                 $requests[] = array(
+                //                     'index'         => $key,
+                //                     'url'           => 'https://api.cloud2print.net/pdf/' . $url_segment . '/' . $settings_segment,
+                //                     'part_index'    => $pos
+                //                 );
 
-                                $pages[$key]['stack'][] = array(
-                                    'src'       => $part_folder . $key . '_part_' . $pos . '.pdf',
-                                    'raw'       => false
-                                );
-                            }
-                        }
-                    }
-                }
+                //                 $pages[$key]['stack'][] = array(
+                //                     'src'       => $part_folder . $key . '_part_' . $pos . '.pdf',
+                //                     'raw'       => false
+                //                 );
+                //             }
+                //         }
+                //     }
+                // }
             }
-            die('---- ok ----');
-            $pdfs = self::request_create_pdf( $requests, $folder, $nbd_item_key );
+            $pdfs = self::_request_create_pdf( $requests, $folder, $nbd_item_key );
             foreach( $pdfs as $key => $pdf ){
                 $pages[$key]['file'] = $pdf;
             }
@@ -436,6 +431,50 @@ if( !class_exists('Nbdesigner_Output') ){
             }
 
             $result = Nbdesigner_IO::get_list_files( $folder );
+            return $result;
+        }
+        public static function _request_create_pdf( $requests, $folder, $nbd_item_key ){
+            $files = glob($folder . '/*');
+            foreach($files as $file){
+                if(is_file($file)) {
+                    unlink($file); 
+                }
+            }
+
+            $result     = array();
+            $mh         = curl_multi_init();
+            $multiCurl  = array();
+
+            foreach( $requests as $i => $request ){
+                $multiCurl[$i] = curl_init();
+                curl_setopt( $multiCurl[$i], CURLOPT_URL, $request['url'] );
+                curl_setopt( $multiCurl[$i], CURLOPT_RETURNTRANSFER, 1 );
+                curl_setopt( $multiCurl[$i], CURLOPT_USERAGENT, "Mozilla/4.0 (compatible;)" );
+                curl_setopt( $multiCurl[$i], CURLOPT_TIMEOUT, 30 );
+                curl_setopt( $multiCurl[$i], CURLOPT_HEADER, 0 );
+                curl_multi_add_handle( $mh, $multiCurl[$i] );
+            }
+
+            $index = null;
+            do {
+                curl_multi_exec( $mh, $index );
+            } while( $index > 0 );
+
+            foreach( $multiCurl as $k => $ch ) {
+                $res            = curl_multi_getcontent( $ch);
+                $return         = true;
+                if( $requests[$k]['part_index'] === false ){
+                    $output_file    = $folder . '/' . $nbd_item_key . '_' . $requests[$k]['index'] . '.pdf';
+                }else{
+                    $output_file    = $folder . '/part/' . $requests[$k]['index'] . '_part_' . $requests[$k]['part_index'] . '.pdf';
+                    $return         = false;
+                }
+                $download       = nbd_download_remote_file( $res, $output_file );
+                if( $download && $return ){
+                    $result[$requests[$k]['index']] = $output_file;
+                }
+            }
+
             return $result;
         }
         public static function get_unit_ratio( $dpi, $unit ){
