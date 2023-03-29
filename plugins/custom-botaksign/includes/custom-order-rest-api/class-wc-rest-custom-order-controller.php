@@ -292,6 +292,10 @@ class WC_REST_Custom_Controller {
 				if($expiring <= 2 && ( $opt_status != 'collection_point' && $opt_status != 'collected' ) ) {
 					$check_expiring = 'expiring';
 				}
+				$roles = get_userdata($user_id)->roles;
+				if(in_array('specialist', $roles) && $opt_status != 'order_received' && $opt_status != 'cancelled' ) {
+			        unset($user_can['cancelled']);
+			    }
 				$items['order_no']			= $order_no;
 				$items['item_id']			= $item_id;
 				$items['download']			= $download;
@@ -1191,6 +1195,10 @@ class WC_REST_Custom_Controller {
 				if(!isset($time_completed_item) || $time_completed_item == '') {
 					$time_completed_item = date( 'd/m/Y H:i a' , strtotime( v3_get_time_completed_item($production_time ,$order)['production_datetime_completed'] ) );
 				}
+				$roles = get_userdata($user_id)->roles;
+				if(in_array('specialist', $roles) && $_status != 'order_received' && $_status != 'cancelled' ) {
+			        unset($user_can['cancelled']);
+			    }
 				$items['item_id'] = $item_id;
 				$items['download'] = $download;
 				$items['order_id'] = $order_id;

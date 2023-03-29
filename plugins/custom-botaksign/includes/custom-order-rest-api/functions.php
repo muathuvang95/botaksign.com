@@ -1257,7 +1257,6 @@ function v3_get_role_status_by_user($user_id) {
             $user_can[$key] =  $list_status[$key];
         }  
     }
-
     return $user_can;
 }
 
