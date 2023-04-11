@@ -55,16 +55,16 @@ wp_enqueue_style('nb-custom-style', get_stylesheet_directory_uri().'/css/nb-cust
 					</div>
 
 					<?php do_action( 'woocommerce_login_form' ); ?>
-					<div class="form-check mb-5 nb-login-remember-me">
+					<div class="form-check mb-4 nb-login-remember-me">
 					    <input class="form-check-input" name="rememberme" type="checkbox" id="rememberme" value="forever" />
 					    <label class="form-check-label" for="rememberme"><?php esc_html_e( 'Remember me', 'woocommerce' ); ?></label>
 					</div>
 					<?php wp_nonce_field( 'woocommerce-login', 'woocommerce-login-nonce' ); ?>
 					<input type="hidden" name="redirect" value="<?php echo esc_attr(wc_get_page_permalink( 'myaccount' )); ?>">
 					<button type="submit" class="woocommerce-button btn btn-success w-100" name="login" value="<?php esc_attr_e( 'Sign in', 'woocommerce' ); ?>"><?php esc_html_e( 'Sign in', 'woocommerce' ); ?></button>
-<!-- 					<p class="woocommerce-LostPassword lost_password">
+					<div class="woocommerce-LostPassword lost_password">
 						<a href="<?php echo esc_url( wp_lostpassword_url() ); ?>"><?php esc_html_e( 'Lost your password?', 'woocommerce' ); ?></a>
-					</p> -->
+					</div>
 
 				</form>
 
