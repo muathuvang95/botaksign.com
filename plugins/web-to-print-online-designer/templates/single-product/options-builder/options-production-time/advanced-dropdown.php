@@ -58,7 +58,7 @@
                     <div class="nbo-ad-item-main">
                         <?php if($attr['name']): ?>
                             <div class="nbo-ad-item-title"><?php echo $attr['name']; ?> - <span><b>{{time_work[<?php echo $key; ?>]}} Hours</b></span></div>
-                            <div class="nbo-ad-item-description"><?php echo $attr['des']; ?></div>
+                            <div class="nbo-ad-item-description"><?php echo isset($attr['des']) ? $attr['des']: ''; ?></div>
                         <?php endif; ?>
                     </div>
                     <?php if( isset($attr['check_default']) && ( $attr['check_default'] == 'on' || $attr['check_default'] == '1' ) ): ?>
