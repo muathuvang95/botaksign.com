@@ -22,9 +22,11 @@ $product_id = $product->get_id();
 $items = nbd_get_items_product_grouped($product_id);
 if(is_array($items)) {
     $f_product = wc_get_product($items[0]['id']);
-    $f_availability = $f_product->get_availability();
-    $class = $f_availability['class'];
-    $availability = $f_availability['availability'];
+    if( isset($f_product) && $f_product ) {
+        $f_availability = $f_product->get_availability();
+        $class = $f_availability['class'];
+        $availability = $f_availability['availability'];
+    }
 }
 ?>
 <style type="text/css">

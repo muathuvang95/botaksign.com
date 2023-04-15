@@ -32,7 +32,9 @@ $items = nbd_get_items_product_grouped($product_id);
         $availability = $product->get_availability(); 
         if(is_array($items)) {
             $f_product = wc_get_product($items[0]['id']);
-            $availability = $f_product->get_availability();
+            if( isset($f_product) && $f_product ) {
+                $availability = $f_product->get_availability();
+            }
         }
     ?>
     <div class="wc-availability">
