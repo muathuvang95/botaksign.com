@@ -980,3 +980,11 @@ function nb_format_search_query($search_query) {
     $search_query = str_replace("'", "", $search_query);
     return $search_query;
 }
+
+add_filter( 'request', 'botak_query_vars' );
+function botak_query_vars( $request ) {
+    if(isset($_POST['btk_edit_address']) && $_POST['btk_edit_address'] == 'shipping' ) {
+        $request['edit-address'] = 'shipping';
+    }
+    return $request;
+}

@@ -43,6 +43,7 @@ do_action( 'woocommerce_before_edit_account_address_form' ); ?>
 				<button type="submit" class="button" name="save_address" value="<?php esc_attr_e( 'Save address', 'woocommerce' ); ?>"><?php esc_html_e( 'Update', 'woocommerce' ); ?></button>
 				<?php wp_nonce_field( 'woocommerce-edit_address', 'woocommerce-edit-address-nonce' ); ?>
 				<input type="hidden" name="action" value="edit_address" />
+				<input type="hidden" name="btk_edit_address" value="<?php echo 'billing' === $load_address ? 'billing' : 'shipping'; ?>" />
 			</p>
 		</div>
 
