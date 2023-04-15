@@ -39,16 +39,8 @@ $notes = $order->get_customer_order_notes();
 ?>
 <!--</p>-->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<style type="text/css">
-    button.btn.btn-completed {
-        color: #26181b;
-        background: #fff200;
-    }
-    button.btn.btn-status {
-        font-weight: 600;
-    }
-</style>
-<div class="view-order-header">
+
+<!-- <div class="view-order-header">
     <div class="order-id">
         Order #<?php echo $order->get_order_number(); ?>
     </div>
@@ -82,7 +74,7 @@ $notes = $order->get_customer_order_notes();
         ?>
 
     </div>
-</div>
+</div> -->
 
 <?php if ( $notes ) : ?>
     <h2><?php esc_html_e( 'Order updates', 'woocommerce' ); ?></h2>
