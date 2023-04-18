@@ -10,7 +10,7 @@ $email_button_color = "transparent linear-gradient(0deg, #1BCB3F 0%, #45D242 33%
             <td align="left" style="width:50%;"><img class="logo" src="<?php echo CUSTOM_BOTAKSIGN_URL . '/assets/images/logo-transparent.png'; ?>" style="margin-left:0px;margin-top:0px;height: 56px; width: auto;"></td>
             <td align="right" style="width:50%;">
                 <?php if($email_button_title && $email_button_color) {
-                    echo '<button class="status-button" style="background: '. $email_button_color .';box-shadow: 0px 10px 20px #00000029; border: none; color: #fff; padding: 14px 40px; font-size: 22px; line-height: 28px; border-radius: 10px;">'. $email_button_title .'</button>';
+                    echo '<button class="status-button" style="background: '. $email_button_color .';box-shadow: 0px 10px 20px #00000029; border: none; color: #fff; padding: 14px 25px; font-size: 20px; line-height: 28px; border-radius: 10px;">'. $email_button_title .'</button>';
                 } ?>
             </td>
         </tr>
@@ -21,7 +21,6 @@ $email_button_color = "transparent linear-gradient(0deg, #1BCB3F 0%, #45D242 33%
 
 if ($order) {
     $order_id = $order->get_id();
-    $order_data = $order->get_data();
     $link_order = get_permalink(get_option('woocommerce_myaccount_page_id')) . '/view-order/' . $order_id;
     $est_time = show_est_completion($order);
     $plotting_options = unserialize(get_option('plotting_options'));
@@ -78,38 +77,47 @@ if ($order) {
         if($check_day) {
             $order_completed_str += 24*60*60;
         }
-        $time_completed_display = date("d/m/Y" , $order_completed_str). ' (' . $period_display . ')';
+        $time_completed_display = date("d F Y" , $order_completed_str);
     }
 
     // end
-
     ?>
      <div style="margin-bottom: 25px;">
         <span class="info-title" style="display:block;font-size:17px; line-height: 20px; font-weight: 500; margin-bottom: 12px;"><?php printf( esc_html__( 'Hi %s,', 'woocommerce' ), esc_html( $order->get_billing_first_name() ) ); ?></span>
-        <span class="info-subtext" style="font-size:17px !important; line-height: 24px; color:#231f20;">Your order <span style="font-weight: 600;">#<?php echo $order->get_id(); ?></span> is on its way to you! Here are the <?php echo $shippting_method == 'Self-collection' ? 'collection' : 'delivery'; ?> details :</span>
+        <?php
+            if($shippting_method == 'Self-collection') {
+                ?>
+                <span class="info-subtext" style="font-size:17px !important; line-height: 24px; color:#231f20;">Your order <span style="font-size:20px;font-weight: 600;">#<?php echo $order->get_id(); ?></span> is ready for collection! Here are the collection details :</span>
+                <?php
+            } else {
+               ?>
+                <span class="info-subtext" style="font-size:17px !important; line-height: 24px; color:#231f20;">Your order <span style="font-size:20px;font-weight: 600;">#<?php echo $order->get_id(); ?></span> is on its way to you! Here are the delivery details :</span>
+                <?php 
+            }
+        ?> 
     </div>
 
     <?php
     if($shippting_method == 'Self-collection') {
         ?>
             <div style="border: 1px solid #ECECEC; box-shadow: 0px 0px 12px #0000001F; border-radius: 1em; padding: 20px; overflow: hidden; background: #fafafa;color:#000000;font-weight: 400;font-size:14px; line-height: 24px;">
-                <div class="stt" align="left" style="padding-bottom:5px;">
+                <div class="stt" align="left" style="padding-bottom:15px;">
                     <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:17px;">Collection at : </div>
-                    <div>22 Yio Chu Kang Road #01-19 Highland Centre Singapore 545535</div>
+                    <div style="font-size:14px;line-height:17px;">22 Yio Chu Kang Road #01-19 Highland Centre Singapore 545535</div>
                 </div>
                 <div style="width: 100%; display: flex;">
-                    <div style="width: 50%;">
-                        <div class="stt" align="left" style="padding-bottom:5px;">
+                    <div style="width: 65%;">
+                        <div class="stt" align="left" style="padding-bottom:15px;">
                             <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:17px;">Operation Hours : </div>
-                            <div>Open Mon - Fri 9am - 5pm, Sat 9am - 1pm</div>
-                            <div>Closed on Sundays and public holidays</div>
+                            <div style="font-size:14px;line-height:17px;">Open Mon - Fri 9am - 5pm, Sat 9am - 1pm</div>
+                            <div style="font-size:14px;line-height:17px;">Closed on Sundays and public holidays</div>
                         </div>
-                        <div class="stt" align="left" style="padding-bottom:5px;">
+                        <div class="stt" align="left" style="padding-bottom:15px;">
                             <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:17px;">Note : </div>
-                            <div>Kindly show this email upon collection as proof of purchase.</div>
+                            <div style="font-size:14px;line-height:17px;">Kindly show this email upon collection as proof of purchase.</div>
                         </div>
                     </div>
-                    <div style="width: 50%;display: flex;justify-content: flex-end;">
+                    <div style="width: 35%;display: flex;justify-content: flex-end; align-items: flex-end;">
                         <div style="width: 100%;height: 0;padding-bottom: 100%; position: relative;overflow: hidden;">
                             <img style="width: 100%; height: auto; position: absolute;" src="<?php echo esc_attr(CUSTOM_BOTAKSIGN_URL.'assets/images/gif3.gif'); ?>" alt="">
                         </div>
@@ -121,22 +129,26 @@ if ($order) {
          ?>
             <div style="border: 1px solid #ECECEC; box-shadow: 0px 0px 12px #0000001F; border-radius: 1em; padding: 20px; overflow: hidden; background: #fafafa;color:#000000;font-weight: 400;font-size:14px; line-height: 24px;">
                 <div style="display: flex;">
-                    <div style="width: 50%;">
-                        <div class="stt" align="left" style="padding-bottom:5px;">
-                            <div style="padding-bottom:5px;color:#000000;font-weight: 500;font-size:17px;">Estimated Delivery Date : </div>
+                    <div style="width: 65%;">
+                        <div class="stt" align="left" style="padding-top:15px;">
+                            <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:17px;">Delivery Method : </div>
+                            <div><?php echo $shippting_method; ?></div>
+                        </div>
+                        <div class="stt" align="left" style="padding-top:15px;">
+                            <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:17px;">Estimated Delivery Date : </div>
                             <div><?php echo $time_completed_display; ?></div>
                         </div>
-                        <div class="stt" align="left" style="padding-bottom:5px; font-size:14px; line-height: 19px;">
-                            <div style="padding-bottom:5px;color:#000000;font-weight: 500;font-size:17px;">Deliver to : </div>
-                            <div><?php echo $order_data['billing']['first_name'] . ' ' . $order_data['billing']['last_name']; ?></div>
-                            <div><?php echo $order_data['billing']['address_1']; ?></div>
-                            <div><?php echo $order_data['billing']['address_2']; ?></div>
-                            <div><?php echo $order_data['billing']['country'] . ' ' . $order_data['billing']['postcode']; ?></div>
-                            <div><?php echo $order_data['billing']['email']; ?></div>
-                            <div><?php echo $order_data['billing']['phone']; ?></div>
+                        <div class="stt" align="left" style="padding-top:15px; font-size:14px; line-height: 19px;">
+                            <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:17px;">Deliver to : </div>
+                            <div><?php echo $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(); ?></div>
+                            <div><?php echo $order->get_billing_address_1(); ?></div>
+                            <div><?php echo $order->get_billing_address_2(); ?></div>
+                            <div><?php echo $order->get_billing_company() . ' ' . $order->get_billing_postcode(); ?></div>
+                            <div><?php echo $order->get_billing_email(); ?></div>
+                            <div><?php echo $order->get_billing_phone(); ?></div>
                         </div>
                     </div>
-                    <div style="width: 50%;display: flex;justify-content: flex-end;">
+                    <div style="width: 35%;display: flex;justify-content: flex-end; align-items: flex-end;">
                         <div style="width: 100%;height: 0;padding-bottom: 100%; position: relative;overflow: hidden;">
                             <img style="width: 100%; height: auto;position: absolute;" src="<?php echo esc_attr(CUSTOM_BOTAKSIGN_URL.'assets/images/gif3.gif'); ?>" alt="">
                         </div>
@@ -147,6 +159,4 @@ if ($order) {
     }
 }
 ?>
-<div style="display: flex; justify-content: center; width: 100%;">
-    <div style="border-top-width: 2px; border-top-style: solid; border-top-color: #ECECEC; width: 200px;"></div>
-</div>
+

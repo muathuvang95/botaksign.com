@@ -242,8 +242,8 @@ function generate_quote_pdf($quote_id)
             font-family: roboto;
         }
         .order-number {
-            font-size: 18px;
-            line-height: 21px;
+            font-size: 22px;
+            line-height: 25px;
             font-family: robotom;
             color: #1BCB3F;
         }
@@ -444,20 +444,20 @@ function generate_quote_pdf($quote_id)
                 $product_image = wp_get_attachment_image_src( get_post_thumbnail_id( $product_id ), 'single-post-thumbnail' );
                 $src = $product_image && isset($product_image[0]) && $product_image[0] ? $product_image[0] : '';
                 
+
+                $info_1 .= '<div class="product-name text-bold text-15 my-2">'.$loop.'. '.$_product->get_name().'</div>';
+                $style_right = 'style="width: 670px; margin-left: 0; height: 130px;padding: 10px"';
+                if( $src ) {
+                    $info_1 .= '<div style="width: 150px;height: 150px;display: inline-block; float: left; margin-right: 10px"><a href="'.$src.'" class="thumbnail" target="_blank"><img style="width: 150px;height: 150px;" src="'.$src.'"></a></div>';
+                    $style_right = 'style="width: 500px; height: 130px; display: inline-block; float: right; padding: 10px; margin-left: 10px"';
+                }
+
+                $item_detail = '';
+                $item_detail1 = '';
+                $item_detail2 = '';
+                $count_item = 0;
+                $production_time = '';
                 if(count($item_data) > 0) {
-
-                    $info_1 .= '<div class="product-name text-bold text-15 my-2">'.$loop.'. '.$_product->get_name().'</div>';
-                    $style_right = 'style="width: 670px; margin-left: 0; height: 130px;padding: 10px"';
-                    if( $src ) {
-                        $info_1 .= '<div style="width: 150px;height: 150px;display: inline-block; float: left; margin-right: 10px"><a href="'.$src.'" class="thumbnail" target="_blank"><img style="width: 150px;height: 150px;" src="'.$src.'"></a></div>';
-                        $style_right = 'style="width: 500px; height: 130px; display: inline-block; float: right; padding: 10px; margin-left: 10px"';
-                    }
-
-                    $item_detail = '';
-                    $item_detail1 = '';
-                    $item_detail2 = '';
-                    $count_item = 0;
-                    $production_time = '';
                     foreach ($item_data as $k => $v) {
 
                         if($v['key'] == "Quantity Discount" || $v['key'] == "Production Time" || $v['key'] == "SKU" || $v['key'] == "item_status") {
@@ -479,18 +479,17 @@ function generate_quote_pdf($quote_id)
                     if( $item_detail2 ) $item_detail2 = '<td style="vertical-align: top" class="w-50">'.$item_detail2.'</td>';
 
                     $info_1 .= '<div '.$style_right.' class="item-order-detail"><table class="w-100"><tbody><tr>' . $item_detail1 . $item_detail2 . '</tr></tbody></table></div>';
-
-                    $sub_infor = '<div class="my-2">';
-
-                    $sub_infor .= '<div style="margin-bottom: 4px"><span class="text-13">SKU : </span><span class="text-13 text-bold">' . nb_get_product_sku_quotation($cart_item) . '</span></div>';
-                    $sub_infor .= '<div style="margin-bottom: 4px"><span class="text-13">Quantity : </span><span class="text-13 text-bold">' . $cart_item['quantity'] . '</span></div>';
-                    $sub_infor .= '<div style="margin-bottom: 4px"><span class="text-13">Price : </span><span class="text-13 text-bold">SGD $' . number_format($cart_item['line_total'] , 2) . '</span></div>';
-                    $sub_infor .= '<div style="margin-bottom: 4px"><span class="text-13">Production Time : </span><span class="text-13 text-bold">' .  $production_time . '</span></div>';
-                    // $sub_infor .= '<div style="margin-bottom: 4px"><span class="key">Estimated Completion Time : </span><span class="value">' . wc_get_order_item_meta($order_item_id, '_item_time_completed') . '</span></div>';
-                    $sub_infor .= '</div>';
-                    $info_1 .= '</div></div>'.$sub_infor;
-
                 }
+                $sub_infor = '<div class="my-2">';
+
+                $sub_infor .= '<div style="margin-bottom: 4px"><span class="text-13">SKU : </span><span class="text-13 text-bold">' . nb_get_product_sku_quotation($cart_item) . '</span></div>';
+                $sub_infor .= '<div style="margin-bottom: 4px"><span class="text-13">Quantity : </span><span class="text-13 text-bold">' . $cart_item['quantity'] . '</span></div>';
+                $sub_infor .= '<div style="margin-bottom: 4px"><span class="text-13">Price : </span><span class="text-13 text-bold">SGD $' . number_format($cart_item['line_total'] , 2) . '</span></div>';
+                $sub_infor .= '<div style="margin-bottom: 4px"><span class="text-13">Production Time : </span><span class="text-13 text-bold">' .  $production_time . '</span></div>';
+                // $sub_infor .= '<div style="margin-bottom: 4px"><span class="key">Estimated Completion Time : </span><span class="value">' . wc_get_order_item_meta($order_item_id, '_item_time_completed') . '</span></div>';
+                $sub_infor .= '</div>';
+                $info_1 .= '</div></div>'.$sub_infor;
+
 
             }
             $loop ++;
@@ -531,7 +530,6 @@ function generate_quote_pdf($quote_id)
                 <td style="width:50%; padding-top:5px; padding-left:35px" align="left">
                     <table class="w-100">
                     <tbody>
-                    <tr style="width: 100%; height: 1px; background: #707070"></tr>
                     <tr>
                         <td style="width:20%;padding-top:5px;" class="subtotal text-15" align="left">SUBTOTAL</td>
                         <td style="width:50%;text-align: right;padding-top:5px;" class="subtotal-price text-15" >' . wc_price($subtotal) . '</td>
@@ -998,7 +996,7 @@ function show_est_completion($order)
     $user_id = $order->get_user_id();
     $user_meta =get_userdata($user_id);
     $role_use = '';
-    if(isset($user_meta)) {
+    if(isset($user_meta) && $user_meta) {
         $role_use = $user_meta->roles[0];
     }
     $have_role_use = false;

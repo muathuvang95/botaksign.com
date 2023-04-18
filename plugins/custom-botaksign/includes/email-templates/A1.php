@@ -146,7 +146,7 @@ if ($order) {
                 </td>
                 <td align="right" style="width:40%;/*padding-top:20px;*/">
                     <span class="information-title-2" style="color:#27793d;display:block;font-size:16pt !important;font-family:segoe-bold;">Shipping Method</span><br>
-                    <span class="information-sub-title-3" style="color:black;display:block;font-size:14pt !important;font-family:segoe-bold;">Delivery: <?php echo $shipping_days_text; ?></span><br>
+                    <span class="information-sub-title-3" style="color:black;display:block;font-size:14pt !important;font-family:segoe-bold;">Delivery: <?php echo $order->get_shipping_method(); ?></span><br>
                     <span class="information-sub-title-4" style="color:black;display:block;font-size:14pt !important;font-family:segoe-bold;">Track your order <a class="information-sub-title-4-link" href="<?php echo $link_order; ?>" style="font-family:segoe-bold;color:#fcaf17;">HERE</a></span><br>
                     <span class="information-title-3" style="color:#27793d;display:block;font-size:16pt !important;font-family:segoe-bold;">Deliver to:</span><br>
                     <span class="information-sub-title-2" style="color:black;display:block;font-size:14pt !important;font-family:segoe-bold;"><?php echo $order_data['shipping']['first_name'] . ' ' . $order_data['shipping']['last_name']; ?></span>

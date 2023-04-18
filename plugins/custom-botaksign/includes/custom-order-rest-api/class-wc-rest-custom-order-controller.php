@@ -299,6 +299,10 @@ class WC_REST_Custom_Controller {
 				if($expiring <= 2 && ( $opt_status != 'collection_point' && $opt_status != 'collected' ) ) {
 					$check_expiring = 'expiring';
 				}
+				$roles = get_userdata($user_id)->roles;
+				if(in_array('specialist', $roles) && $opt_status != 'order_received' && $opt_status != 'cancelled' ) {
+			        unset($user_can['cancelled']);
+			    }
 				$items['order_no']			= $order_no;
 				$items['item_id']			= $item_id;
 				$items['download']			= $download;
@@ -893,10 +897,10 @@ class WC_REST_Custom_Controller {
 		);
 		if($type == 'fix-design-pdf' && $value) {
 			require_once( NBDESIGNER_PLUGIN_DIR.'includes/class-output.php' );
-    		$design_dettal = Nbdesigner_Output::_export_pdfs( $value);
-    		if(isset($design_dettal['files']) && isset($design_dettal['files'])) {
+    		$files = Nbdesigner_Output::_export_pdfs( $value);
+    		if($files && is_array($files)) {
     			$check = true;
-    			foreach ($design_dettal['files'] as $key => $file) {
+    			foreach ($files as $key => $file) {
     				if(!$file || !file_exists($file)) {
     					$check = false;
     					break;
@@ -906,7 +910,7 @@ class WC_REST_Custom_Controller {
 	    			$data['flag'] = 1;
 	    		}
     		}
-    		$data['design_dettal'] = $design_dettal;
+    		$data['design_dettal'] = $files;
 		}
 		$response = rest_ensure_response( $data);
 		return $response;
@@ -1081,6 +1085,7 @@ class WC_REST_Custom_Controller {
 			send_botaksign_email($order_id , 'ORDER RECEIVED', 'G1.php');
 		}
 		if( isset($status) && $status != '') {
+			$_order_status_df = get_post_meta( $order_id , '_order_status', true );
 			wc_update_order_item_meta($item_id , '_item_status' , $status);
 			$data = array();
 			$order_items = $order->get_items('line_item');
@@ -1093,7 +1098,6 @@ class WC_REST_Custom_Controller {
 			$collected = 0;
 			$cancelled = 0;
 			$count_item_service = 0;
-			$_order_status_df = get_post_meta( $order_id , '_order_status', true );
 			$note_log = false;
 			foreach ( $order_items as $key => $value ) {
 				if( wc_get_product($value->get_product_id())->is_type( 'service' ) ){
@@ -1226,6 +1230,10 @@ class WC_REST_Custom_Controller {
 				if(!isset($time_completed_item) || $time_completed_item == '') {
 					$time_completed_item = date( 'd/m/Y H:i a' , strtotime( v3_get_time_completed_item($production_time ,$order)['production_datetime_completed'] ) );
 				}
+				$roles = get_userdata($user_id)->roles;
+				if(in_array('specialist', $roles) && $_status != 'order_received' && $_status != 'cancelled' ) {
+			        unset($user_can['cancelled']);
+			    }
 				$items['item_id'] = $item_id;
 				$items['download'] = $download;
 				$items['order_id'] = $order_id;

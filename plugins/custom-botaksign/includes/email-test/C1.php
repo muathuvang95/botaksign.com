@@ -1,7 +1,7 @@
 <?php 
 $email_button_title = "Artwork Amendment";
 // $email_button_color = "#FF9E28";
-$email_button_color = "transparent linear-gradient(0deg, #FFE134 0%, #FF9E28 100%) 0% 0% no-repeat padding-box";
+$email_button_color = "transparent linear-gradient(180deg, #FFE134 0%, #FF9E28 100%) 0% 0% no-repeat padding-box";
 ?>
 
 <table id="header-logo" style="width:100%;padding-top:20px;border-collapse:collapse;margin-bottom:45px;">
@@ -10,7 +10,7 @@ $email_button_color = "transparent linear-gradient(0deg, #FFE134 0%, #FF9E28 100
             <td align="left" style="width:50%;"><img class="logo" src="<?php echo CUSTOM_BOTAKSIGN_URL . '/assets/images/logo-transparent.png'; ?>" style="margin-left:0px;margin-top:0px;height: 56px; width: auto;"></td>
             <td align="right" style="width:50%;">
                 <?php if($email_button_title && $email_button_color) {
-                    echo '<button class="status-button" style="background: '. $email_button_color .';box-shadow: 0px 10px 20px #00000029; border: none; color: #fff; padding: 14px 40px; font-size: 22px; line-height: 28px; border-radius: 10px;">'. $email_button_title .'</button>';
+                    echo '<button class="status-button" style="background: '. $email_button_color .';box-shadow: 0px 10px 20px #00000029; border: none; color: #fff; padding: 14px 25px; font-size: 20px; line-height: 28px; border-radius: 10px;">'. $email_button_title .'</button>';
                 } ?>
             </td>
         </tr>
@@ -21,14 +21,16 @@ $email_button_color = "transparent linear-gradient(0deg, #FFE134 0%, #FF9E28 100
 if ($order) {
     $pay_now_url = esc_url( $order->get_checkout_payment_url() );
     $order_data = $order->get_data();
-    $rate_percent = 7;
-    foreach ( $order->get_items('tax') as $tax_item ) {
-        $rate_percent = (int)$tax_item->get_rate_percent();
+    $gst = 0;
+    $taxs = array_slice($order->get_taxes(), 0, 1);
+    if($taxs) {
+        $gst = array_shift($taxs)->get_rate_percent( 'view' );
     }
+
     ?>
     <div style="margin-bottom: 25px;">
         <span class="info-title" style="display:block;font-size:17px; line-height: 20px; font-weight: 500; margin-bottom: 12px;"><?php printf( esc_html__( 'Hi %s,', 'woocommerce' ), esc_html( $order->get_billing_first_name() ) ); ?></span>
-        <span class="info-subtext" style="font-size:14px !important; line-height: 24px; color:#231f20;">We’ve received your order <span style="font-weight: 500;">#<?php echo $order_id; ?></span>, but unfortunately, we are unable to proceed as the artwork uploaded is unsuitable for print. Your order has been put on hold for now. Below is a list of the affected items in your order:</span>
+        <span class="info-subtext" style="font-size:14px !important; line-height: 24px; color:#231f20;">We’ve received your order <span style="font-weight: 500;">#<?php echo $order->get_id(); ?></span>, but unfortunately, we are unable to proceed as the artwork uploaded is unsuitable for print. Your order has been put on hold for now. Below is a list of the affected items in your order:</span>
     </div>
     <div style="border: 1px solid #ECECEC; box-shadow: 0px 0px 12px #0000001F; border-radius: 1em; padding: 20px; overflow: hidden; background: #fafafa; font-size: 14px; line-height: 24px;">
         <table class="product" style="border-collapse:collapse;">
@@ -42,7 +44,6 @@ if ($order) {
 
                 $order_items = $order->get_items('line_item');
                 $d = 1;
-                $subtotal = 0;
                 foreach ( $order_items as $item_id => $item ) {  
                     if( wc_get_product($item->get_product_id())->is_type( 'service' ) ){
                         $_product = wc_get_product($item->get_product_id());
@@ -52,7 +53,6 @@ if ($order) {
                                 $product_name = $_item->get_name();
                             }
                         }
-                        $subtotal += $_product->get_price();
                         if (isset($_product) && $_product != false) {
                             ?>
                             <tr>
@@ -73,7 +73,6 @@ if ($order) {
                         }
                     } 
                 }
-                $gst = $subtotal * $rate_percent / 100;
                
                 ?>
                 <tr>
@@ -84,15 +83,15 @@ if ($order) {
                             <tbody>
                                 <tr style="border-top-width:1px;border-top-style:solid;border-top-color:#ECECEC;">
                                     <td class="subtotal" align="left" style="width: 60px;color:#231f20;display:block;font-size: 14px; line-height: 20px;">Subtotal</td>
-                                    <td class="subtotal-price" align="right" style="width: 140px;"><?php echo wc_price($subtotal); ?></td>
+                                    <td class="subtotal-price" align="right" style="width: 140px;"><?php echo wc_price($order->get_subtotal()); ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="gst" align="left" style="width: 60px;color:#231f20;display:block;font-size: 14px; line-height: 20px;">GST</td>
-                                    <td class="gst-price" align="right" style="width: 140px;"><?php echo wc_price($gst); ?></td>
+                                    <td class="gst" align="left" style="width: 60px;color:#231f20;display:block;font-size: 14px; line-height: 20px;"><?php echo $gst; ?>% GST</td>
+                                    <td class="gst-price" align="right" style="width: 140px;"><?php echo wc_price($order->get_total_tax()); ?></td>
                                 </tr>
                                 <tr style="border-top-width:1px;border-top-style:solid;border-top-color:#ECECEC;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#ECECEC;">
                                     <td class="total" align="left" style="position: relative;top: 1px;width: 60px;color:#231f20;display:block;font-size: 14px !important; line-height: 20px; font-weight: 500; ">Total</td>
-                                    <td class="total-price" align="right" style="width: 140px;border-bottom-width:1px;"><?php echo wc_price($subtotal + $gst); ?></td>
+                                    <td class="total-price" align="right" style="width: 140px;border-bottom-width:1px;"><?php echo wc_price($order->get_total()); ?></td>
                                 </tr>
                                 <tr>
                                     <td></td>
@@ -135,6 +134,6 @@ if ($order) {
 <?php
 } ?>
 
-<div style="display: flex; justify-content: center; width: 100%;">
-    <div style="border-top-width: 2px; border-top-style: solid; border-top-color: #ECECEC; width: 200px;"></div>
+<div style="text-align: center; width: 100%;">
+    <div style="display:inline-block; border-top-width: 2px; border-top-style: solid; border-top-color: #ECECEC; width: 200px;"></div>
 </div>

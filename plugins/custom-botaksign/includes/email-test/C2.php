@@ -7,7 +7,7 @@ if ($order) {
         $link_invoice = str_replace('&amp;', '&', wp_nonce_url(admin_url("admin-ajax.php?action=generate_wpo_wcpdf&document_type=invoice&order_ids=" . $WCX_Order::get_id($order)), 'generate_wpo_wcpdf'));
     }
     $email_button_title = "Order Processed";
-    $email_button_color = "transparent linear-gradient(180deg, #1BCB3F 0%, #45D242 33%, #7BDB46 78%, #91DF48 100%) 0% 0% no-repeat padding-box";
+    $email_button_color = "transparent linear-gradient(0deg, #1BCB3F 0%, #45D242 33%, #7BDB46 78%, #91DF48 100%) 0% 0% no-repeat padding-box";
     ?>
     <table id="header-logo" style="width:100%;padding-top:20px;border-collapse:collapse;margin-bottom:45px;">
         <tbody>
@@ -15,7 +15,7 @@ if ($order) {
                 <td align="left" style="width:50%;"><img class="logo" src="<?php echo CUSTOM_BOTAKSIGN_URL . '/assets/images/logo-transparent.png'; ?>" style="margin-left:0px;margin-top:0px;height: 56px; width: auto;"></td>
                 <td align="right" style="width:50%;">
                     <?php if($email_button_title && $email_button_color) {
-                        echo '<button class="status-button" style="background: '. $email_button_color .';box-shadow: 0px 10px 20px #00000029; border: none; color: #fff; padding: 14px 40px; font-size: 22px; line-height: 28px; border-radius: 10px;">'. $email_button_title .'</button>';
+                        echo '<button class="status-button" style="background: '. $email_button_color .';box-shadow: 0px 10px 20px #00000029; border: none; color: #fff; padding: 14px 25px; font-size: 20px; line-height: 28px; border-radius: 10px;">'. $email_button_title .'</button>';
                     } ?>
                 </td>
             </tr>

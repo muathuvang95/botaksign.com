@@ -1,6 +1,6 @@
 <?php 
 $email_button_title = "Order Received";
-$email_button_color = "#1BCB3F";
+$email_button_color = "transparent linear-gradient(0deg, #1BCB3F 0%, #45D242 33%, #7BDB46 78%, #91DF48 100%) 0% 0% no-repeat padding-box";
 ?>
 
 <table id="header-logo" style="width:100%;padding-top:20px;border-collapse:collapse;margin-bottom:45px;">
@@ -9,7 +9,7 @@ $email_button_color = "#1BCB3F";
             <td align="left" style="width:50%;"><img class="logo" src="<?php echo CUSTOM_BOTAKSIGN_URL . '/assets/images/logo-transparent.png'; ?>" style="margin-left:0px;margin-top:0px;height: 56px; width: auto;"></td>
             <td align="right" style="width:50%;">
                 <?php if($email_button_title && $email_button_color) {
-                    echo '<button class="status-button" style="background: '. $email_button_color .';box-shadow: 0px 10px 20px #00000029; border: none; color: #fff; padding: 14px 40px; font-size: 22px; line-height: 28px; border-radius: 10px;">'. $email_button_title .'</button>';
+                    echo '<button class="status-button" style="background: '. $email_button_color .';box-shadow: 0px 10px 20px #00000029; border: none; color: #fff; padding: 14px 25px; font-size: 20px; line-height: 28px; border-radius: 10px;">'. $email_button_title .'</button>';
                 } ?>
             </td>
         </tr>
@@ -19,9 +19,7 @@ $email_button_color = "#1BCB3F";
 <?php
 if ($order) {
     $order_id = $order->get_id();
-    $order_data = $order->get_data();
     $link_order = get_permalink(get_option('woocommerce_myaccount_page_id')) . '/view-order/' . $order_id;
-    $est_time = show_est_completion($order);
     $plotting_options = unserialize(get_option('plotting_options'));
     $shippting_method = $order->get_shipping_method();
 
@@ -94,14 +92,11 @@ if ($order) {
                 <?php
                 $items = $order->get_items();
                 $d = 1;
-                $subtotal = 0;
                 foreach ($items as $item) {
-                    $subtotal+=$item['line_total'];
-                    if (isset($item['variation_id']) && $item['variation_id'] > 0):
+                    $_product = wc_get_product($item['product_id']);
+                    if (isset($item['variation_id']) && $item['variation_id'] > 0) {
                         $_product = wc_get_product($item['variation_id']);
-                    else:
-                        $_product = wc_get_product($item['product_id']);
-                    endif;
+                    }
                     if (isset($_product) && $_product != false) {
                         ?>
                         <tr>
@@ -114,11 +109,12 @@ if ($order) {
                         </tr>
                         <?php
                     }
-                    $d++;
+                    $d ++;
                 }
-                $gst = $subtotal * 7 / 100;
-                if ($order_data['shipping_total'] > 0) {
-                    $gst += ($order_data['shipping_total'] * 7/100 );
+                $gst = 0;
+                $taxs = array_slice($order->get_taxes(), 0, 1);
+                if($taxs) {
+                    $gst = array_shift($taxs)->get_rate_percent( 'view' );
                 }
                 ?>
                 <tr>
@@ -129,19 +125,19 @@ if ($order) {
                             <tbody>
                                 <tr style="border-top-width:1px;border-top-style:solid;border-top-color:#ECECEC;">
                                     <td class="subtotal" align="left" style="width: 60px;color:#231f20;display:block;font-size: 14px; line-height: 20px;">Subtotal</td>
-                                    <td class="subtotal-price" align="right" style="width: 140px;"><?php echo wc_price($subtotal); ?></td>
+                                    <td class="subtotal-price" align="right" style="width: 140px;"><?php echo wc_price($order->get_subtotal()); ?></td>
                                 </tr>
                                 <tr>
                                     <td class="gst" align="left" style="width: 60px;color:#231f20;display:block;font-size: 14px; line-height: 20px;">Shipping</td>
-                                    <td class="gst-price" align="right" style="width: 140px;border-bottom-width:1px;"><?php echo $shippting_method == 'Self-collection' ? 'Self-collection' : wc_price($order_data['shipping_total']); ?></td>
+                                    <td class="gst-price" align="right" style="width: 140px;border-bottom-width:1px;"><?php echo $shippting_method == 'Self-collection' ? 'Self-collection' : wc_price($order->get_shipping_total()); ?></td>
                                 </tr>
                                 <tr>
-                                    <td class="gst" align="left" style="width: 60px;color:#231f20;display:block;font-size: 14px; line-height: 20px;">GST</td>
-                                    <td class="gst-price" align="right" style="width: 140px;"><?php echo wc_price($gst); ?></td>
+                                    <td class="gst" align="left" style="width: 60px;color:#231f20;display:block;font-size: 14px; line-height: 20px;"><?php echo $gst; ?>% GST</td>
+                                    <td class="gst-price" align="right" style="width: 140px;"><?php echo wc_price($order->get_total_tax()); ?></td>
                                 </tr>
                                 <tr style="border-top-width:1px;border-top-style:solid;border-top-color:#ECECEC;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#ECECEC;">
                                     <td class="total" align="left" style="position: relative;top: 1px;width: 60px;color:#231f20;display:block;font-size: 14px !important; line-height: 20px; font-weight: 500; ">Total</td>
-                                    <td class="total-price" align="right" style="width: 140px;border-bottom-width:1px;"><?php echo wc_price($subtotal + $gst + $order_data['shipping_total']); ?></td>
+                                    <td class="total-price" align="right" style="width: 140px;border-bottom-width:1px;"><?php echo wc_price($order->get_total()); ?></td>
                                 </tr>
                             </tbody></table>
                     </td>
@@ -158,6 +154,7 @@ if ($order) {
         </div>
     </div>
 <?php } ?>
-<div style="display: flex; justify-content: center; width: 100%;">
-    <div style="border-top-width: 2px; border-top-style: solid; border-top-color: #ECECEC; width: 200px;"></div>
+
+<div style="text-align: center; width: 100%;">
+    <div style="display:inline-block; border-top-width: 2px; border-top-style: solid; border-top-color: #ECECEC; width: 200px;"></div>
 </div>
