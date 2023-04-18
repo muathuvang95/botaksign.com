@@ -73,7 +73,7 @@ class Nbdesigner_Plugin {
             'nbdesigner_update_all_product'             => false,
             'nbd_save_customer_design'                  => true,
             'nbd_remove_design_and_file'                => true,
-            'nbd_remove_design_upload_file'             => true,
+            'nbd_remove_design_upload_file'             => true,  // custom remove file upload S3
             'nbd_save_draft_design'                     => true,
             'nbd_update_customer_upload'                => true,
             'nbd_save_cart_design'                      => true,
@@ -4624,7 +4624,7 @@ class Nbdesigner_Plugin {
         $path = Nbdesigner_IO::create_file_path(NBDESIGNER_TEMP_DIR, $new_name);
         if( $result ){
             if(move_uploaded_file($_FILES['file']["tmp_name"],$path['full_path'])){
-                // fix image Orientation
+                 // fix image Orientation
                 if( ( $ext == 'jpg' || $ext == 'jpeg' ) && ( extension_loaded( 'exif' ) && function_exists( 'exif_read_data' ) ) ){
                     $exif = @exif_read_data( $path['full_path'] );
 
@@ -4636,7 +4636,11 @@ class Nbdesigner_Plugin {
                     }
                 }
 
-                $link_s3 = nbd_upload_file_custom_to_s3($path['date_path'] , $path['full_path'] , 'design-templates' ); 
+                $link_s3 = nbd_upload_file_custom_to_s3($path['date_path'] , $path['full_path'] , 'design-templates' );
+                if(!$link_s3 ) {
+                    $result     = false;
+                    unlink($path['full_path']);
+                }
                 $origin_path = $path['full_path'];
                 $res['mes'] = esc_html__('Upload success !', 'web-to-print-online-designer');
             }else{

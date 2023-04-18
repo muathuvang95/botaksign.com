@@ -162,54 +162,53 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
             $original_price     = (float)$product->get_price('edit');
             $nbd_field          = isset($post_data['nbd-field']) ? $post_data['nbd-field'] : array();
 
-            $option_fields = unserialize($options['fields']);  
-            $option_fields = $this->recursive_stripslashes( $option_fields );
-            $fields = isset($option_fields['fields']) ? $option_fields['fields'] : array();
-            if( is_array($fields) && count($fields) > 0) {
-                foreach ($fields as $key => $field) {
-                    if( $field['conditional']['enable'] == 'n' || !isset($field['conditional']['depend']) || count($field['conditional']['depend']) == 0 ){
-                        continue;
-                    }
-                    $show = $field['conditional']['show'];
-                    $logic = $field['conditional']['logic'];
-                    $total_check = $logic == 'a' ? true : false;
-                    $check = array();
-                    if(count($field['conditional']['depend']) > 0) {
-                        foreach($field['conditional']['depend'] as $key => $con){
-                            $check[$key] = true;
-                            if( $con['id'] != '' && isset($nbd_field[$con['id']]) ){
-                                $field_value = isset($nbd_field[$con['id']]['value']) ? $nbd_field[$con['id']]['value'] : $nbd_field[$con['id']];
-                                switch( $con['operator'] ){
-                                    case 'i':
-                                        $check[$key] = $field_value == $con['val'] ? true : false;
-                                        break;
-                                    case 'n':
-                                        $check[$key] = $field_value != $con['val'] ? true : false;
-                                        break;
-                                    case 'e':
-                                        $check[$key] = $field_value == '' ? true : false;
-                                        break;
-                                    case 'ne':
-                                        $check[$key] = $field_value != '' ? true : false;
-                                        break;
-                                }
-                            } else {
-                                $check[$key] = false;
-                            }
-                        }
-                        foreach ($check as $c){
-                            $total_check = $logic == 'a' ? ($total_check && $c) : ($total_check || $c);
-                        }
-                        $total_check = $show == 'y' ? $total_check : !$total_check;
-                        if($total_check ) {
-                            if(!isset($nbd_field[$field['id']])) {
-                                return false;
-                            }
-                            
-                        }
-                    }
-                }
-            }
+            // $option_fields = unserialize($options['fields']);  
+            // $option_fields = $this->recursive_stripslashes( $option_fields );
+            // $fields = isset($option_fields['fields']) ? $option_fields['fields'] : array();
+            // if( is_array($fields) && count($fields) > 0) {
+            //     foreach ($fields as $key => $field) {
+            //         if( $field['conditional']['enable'] == 'n' || !isset($field['conditional']['depend']) || count($field['conditional']['depend']) == 0 ){
+            //             continue;
+            //         }
+            //         $show = $field['conditional']['show'];
+            //         $logic = $field['conditional']['logic'];
+            //         $total_check = $logic == 'a' ? true : false;
+            //         $check = array();
+            //         if(count($field['conditional']['depend']) > 0) {
+            //             foreach($field['conditional']['depend'] as $key => $con){
+            //                 $check[$key] = true;
+            //                 if( $con['id'] != '' && isset($nbd_field[$con['id']]) ){
+            //                     $field_value = isset($nbd_field[$con['id']]['value']) ? $nbd_field[$con['id']]['value'] : $nbd_field[$con['id']];
+            //                     switch( $con['operator'] ){
+            //                         case 'i':
+            //                             $check[$key] = $field_value == $con['val'] ? true : false;
+            //                             break;
+            //                         case 'n':
+            //                             $check[$key] = $field_value != $con['val'] ? true : false;
+            //                             break;
+            //                         case 'e':
+            //                             $check[$key] = $field_value == '' ? true : false;
+            //                             break;
+            //                         case 'ne':
+            //                             $check[$key] = $field_value != '' ? true : false;
+            //                             break;
+            //                     }
+            //                 } else {
+            //                     $check[$key] = false;
+            //                 }
+            //             }
+            //             foreach ($check as $c){
+            //                 $total_check = $logic == 'a' ? ($total_check && $c) : ($total_check || $c);
+            //             }
+            //             $total_check = $show == 'y' ? $total_check : !$total_check;
+            //             if($total_check ) {
+            //                 if(!isset($nbd_field[$field['id']]) && $field['nbd_type'] != 'terms_conditions' ) {
+            //                     return false;
+            //                 }  
+            //             }
+            //         }
+            //     }
+            // }
 
             // $has_design         = false;
             // $has_upload         = false;
@@ -848,18 +847,7 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                     $adjusted_price = $adjusted_price > 0 ? $adjusted_price : 0;
                     
                     //CS V3 production time: calc price with production time option
-                    
-                    $get_option_roles_level = unserialize(get_option('save_option_roles_level'));
-                    $roles = wp_get_current_user()->roles;
-                    $role_level = [];
-                    if(is_array($roles)) {
-                        foreach ($roles as $key => $role) {
-                            $role_level[$role] = isset($get_option_roles_level[$role]) ? $get_option_roles_level[$role] : $key;
-                        }
-                    }
-
-                    $role_use = array_search(min($role_level), $role_level) ? array_search(min($role_level), $role_level) : '';
-
+                    $role_use = wp_get_current_user()->roles['0'];
                     $have_role_use = false;
                     $have_check_default = false;
                     $_role_options = array();
@@ -1152,19 +1140,7 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
 
                 //CS V3 Production time
                 $_adjusted_price = $original_price + $option_price['total_price'] - $option_price['discount_price'];
-
-
-                $get_option_roles_level = unserialize(get_option('save_option_roles_level'));
-                $roles = wp_get_current_user()->roles;
-                $role_level = [];
-                if(is_array($roles)) {
-                    foreach ($roles as $key => $role) {
-                        $role_level[$role] = isset($get_option_roles_level[$role]) ? $get_option_roles_level[$role] : $key;
-                    }
-                }
-
-                $role_use = array_search(min($role_level), $role_level) ? array_search(min($role_level), $role_level) : '';
-
+                $role_use = wp_get_current_user()->roles['0'];
                 $have_role_use = false;
                 $have_check_default = false;
                 $_role_options = array();
@@ -1196,7 +1172,7 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                         if($_role_options) {
                             $value_option_pt = $val['value'];
                             $product_time_option = $_role_options['options'][$value_option_pt];
-                            $price_production_time = $_adjusted_price * (int) $product_time_option['markup_percent'] / 100;
+                            $price_production_time = $adjusted_price * (int) $product_time_option['markup_percent'] / 100;
                             if($price_production_time < (int)$product_time_option['min_markup_percent']/$quantity) {
                                 $price_production_time = (int)$product_time_option['min_markup_percent']/$quantity;
                             }
@@ -1343,19 +1319,7 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
             }
 
             //CS botak Role quantity break V3 start
-            
-
-            $get_option_roles_level = unserialize(get_option('save_option_roles_level'));
-            $roles = wp_get_current_user()->roles;
-            $role_level = [];
-            if(is_array($roles)) {
-                foreach ($roles as $key => $role) {
-                    $role_level[$role] = isset($get_option_roles_level[$role]) ? $get_option_roles_level[$role] : $key;
-                }
-            }
-
-            $role_use = array_search(min($role_level), $role_level) ? array_search(min($role_level), $role_level) : '';
-
+            $role_use = wp_get_current_user()->roles['0'];
             $max_production_time = 0;
             $pre_name = '';
             $have_role_use = false;
@@ -1444,30 +1408,32 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                 //CS botak pricing option
                 if (isset($origin_field['nbd_type']) && $origin_field['nbd_type'] === 'size') {
                     if ($origin_field['general']['attributes']['same_size'] === 'n') {
-                        $size_product_width = $origin_field['general']['attributes']['options'][$val['value']]['product_width'];
-                        $size_product_height = $origin_field['general']['attributes']['options'][$val['value']]['product_height'];
+                        if(isset($origin_field['general']['attributes']['options'][$val['value']])) {
+                            $size_product_width = $origin_field['general']['attributes']['options'][$val['value']]['product_width'];
+                            $size_product_height = $origin_field['general']['attributes']['options'][$val['value']]['product_height'];
 
-                        //Calc price by size option
-                        foreach ($fields as $tmp_key => $tmp_val) {
-                            foreach ($option_fields['fields'] as &$tmp_origin_field) {
-                                if ($tmp_origin_field['id'] === $tmp_key && isset($tmp_origin_field['nbd_type']) && $tmp_origin_field['nbd_type'] === 'pricing_rates') {
-                                    foreach ($tmp_origin_field['general']['attributes']['options'] as &$tmp_option) {
-                                        switch ($tmp_option['calc_method']) {
-                                            case 'area':
-                                                $tmp_option['price'][0] = strval((float) $size_product_width * (float) $size_product_height * (float) $tmp_option['rate']);
-                                                break;
-                                            case 'perimeter':
-                                                $tmp_option['price'][0] = strval(2 * ((float) $size_product_width + (float) $size_product_height) * (float) $tmp_option['rate']);
-                                                break;
-                                            case 'quantity':
-                                                $tmp_option['price'][0] = strval((int) $tmp_option['quantity']* (float) $tmp_option['rate']);
-                                                break;
+                            //Calc price by size option
+                            foreach ($fields as $tmp_key => $tmp_val) {
+                                foreach ($option_fields['fields'] as &$tmp_origin_field) {
+                                    if ($tmp_origin_field['id'] === $tmp_key && isset($tmp_origin_field['nbd_type']) && $tmp_origin_field['nbd_type'] === 'pricing_rates') {
+                                        foreach ($tmp_origin_field['general']['attributes']['options'] as &$tmp_option) {
+                                            switch ($tmp_option['calc_method']) {
+                                                case 'area':
+                                                    $tmp_option['price'][0] = strval((float) $size_product_width * (float) $size_product_height * (float) $tmp_option['rate']);
+                                                    break;
+                                                case 'perimeter':
+                                                    $tmp_option['price'][0] = strval(2 * ((float) $size_product_width + (float) $size_product_height) * (float) $tmp_option['rate']);
+                                                    break;
+                                                case 'quantity':
+                                                    $tmp_option['price'][0] = strval((int) $tmp_option['quantity']* (float) $tmp_option['rate']);
+                                                    break;
+                                            };
                                         };
-                                    };
+                                    }
                                 }
                             }
+                            //End calc price by size option
                         }
-                        //End calc price by size option
                     }
                 }
                 //End CS botak pricing option
@@ -1971,7 +1937,6 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                                     } else {
                                         $field_value = $fields[$con['id']];
                                     }
-
                                     if($field_value) {
                                         switch($con['operator']){
                                             case 'i':
@@ -2315,13 +2280,13 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                     $rate = 0;
                     if ( $measure["measure_type"] === "u" ) {
                         $measure_range = $measure["measure_range"][0];
-                        $rate = $measure_range[2] ? (float) $measure_range[2] : 1;
+                        $rate = $measure_range[2] ? (float) $measure_range[2] : 0;
                     } else {
                         foreach ($measure["measure_range"] as $key => $measure_range) {
                             if ($measure_range[0] != '' && $measure_range[1] != '' && $measure_range[2] != '') {
                                 if (((float) $measure_range[0] <= $calc_value && ($calc_value <= (float) $measure_range[1] || (float) $measure_range[1] == 0))
                                     || ((float) $measure_range[0] <= $calc_value && $key == ( count($measure["measure_range"]) - 1 ) && $calc_value > (float) $measure_range[1])) {
-                                    $rate = $measure_range[2] ? (float) $measure_range[2] : 1;
+                                    $rate = $measure_range[2] ? (float) $measure_range[2] : 0;
                                 }
                             }
                         }
@@ -2475,13 +2440,13 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
 
                 if ( $measure["measure_type"] === "u" ) {
                     $measure_range = $measure["measure_range"][0];
-                    $price_per_unit = $measure_range[2] ? (float) $measure_range[2] : 1;
+                    $price_per_unit = $measure_range[2] ? (float) $measure_range[2] : 0;
                 } else if ( $measure["measure_type"] === "r" ) {
                     foreach ($measure["measure_range"] as $key => $measure_range) {
                         if ($measure_range[0] != '' && $measure_range[1] != '' && $measure_range[2] != '') {
                             if (((float) $measure_range[0] <= $calc_value && ($calc_value <= (float) $measure_range[1] || (float) $measure_range[1] == 0))
                                 || ((float) $measure_range[0] <= $calc_value && $key == ( count($measure["measure_range"]) - 1 ) && $calc_value > (float) $measure_range[1])) {
-                                $price_per_unit = $measure_range[2] ? (float) $measure_range[2] : 1;
+                                $price_per_unit = $measure_range[2] ? (float) $measure_range[2] : 0;
                             }
                         }
                     }
@@ -2584,7 +2549,7 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                         }
                         if ($calc_value == null) {
                             $calc_value = 0;
-                            throw new Exception("Error. Please check calculation syntax!");
+                            // throw new Exception("Error. Please check calculation syntax!");
                         }
 
                         break;
@@ -2873,7 +2838,7 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                                     $image_alt          = trim( strip_tags( get_post_meta( $att_id, '_wp_attachment_image_alt', TRUE ) ) );
                                     $image_srcset       = function_exists( 'wp_get_attachment_image_srcset' ) ? wp_get_attachment_image_srcset( $att_id, 'shop_single' ) : FALSE;
                                     $image_sizes        = function_exists( 'wp_get_attachment_image_sizes' ) ? wp_get_attachment_image_sizes( $att_id, 'shop_single' ) : FALSE;
-                                    $image_caption      = isset($attachment_object->post_excerpt) ? $attachment_object->post_excerpt : '';
+                                    $image_caption      = $attachment_object->post_excerpt;
                                     $image = array(
                                         'imagep'        => 'y',
                                         'image_link'    => $image_link,

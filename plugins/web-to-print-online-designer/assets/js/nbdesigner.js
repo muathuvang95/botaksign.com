@@ -381,29 +381,33 @@ jQuery(document).ready(function () {
             });
         }
         window.removeUploadFile = function(index){
-            var formData = new FormData;
-            jQuery('.nbd-upload-loading').addClass('is-visible');
-            formData.append('action', 'nbd_remove_design_upload_file');
-            formData.append('file', JSON.stringify(listFileUpload[index]));
-            jQuery.ajax({
-                url: nbds_frontend.url,
-                method: "POST",
-                dataType: 'json',
-                cache: false,
-                contentType: false,
-                processData: false,
-                data: formData,
-                success: function(data) {
-                    if( data.flag == 1 ){
-                        listFileUpload.splice(index, 1);
-                        buildPreviewUpload();
-                    }else{
-                        alert("Error");
-                    }
-                    jQuery('.nbd-upload-loading').removeClass('is-visible');
-                    resetUploadInput();
-                }
-            });
+            listFileUpload.splice(index, 1);
+            resetUploadInput();
+            buildPreviewUpload();
+
+            // var formData = new FormData;
+            // jQuery('.nbd-upload-loading').addClass('is-visible');
+            // formData.append('action', 'nbd_remove_design_upload_file');
+            // formData.append('file', JSON.stringify(listFileUpload[index]));
+            // jQuery.ajax({
+            //     url: nbds_frontend.url,
+            //     method: "POST",
+            //     dataType: 'json',
+            //     cache: false,
+            //     contentType: false,
+            //     processData: false,
+            //     data: formData,
+            //     success: function(data) {
+            //         if( data.flag == 1 ){
+            //             listFileUpload.splice(index, 1);
+            //             buildPreviewUpload();
+            //         }else{
+            //             alert("Error");
+            //         }
+            //         jQuery('.nbd-upload-loading').removeClass('is-visible');
+            //         resetUploadInput();
+            //     }
+            // });
         };
         // function buildPreviewUpload(){
         //     show_upload_thumb(listFileUpload);

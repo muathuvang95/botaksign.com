@@ -2595,7 +2595,6 @@ function nbd_export_pdfs( $nbd_item_key, $watermark = true, $force = false, $sho
     if( !file_exists($folder) ) {
         wp_mkdir_p($folder);
     }
-
     // use cloud2print api when design has font
     $has_font = false;
     $used_font_path = $path. '/used_font.json';
@@ -3006,7 +3005,7 @@ function custom_nbd_export_pdfs( $nbd_item_key, $watermark = false, $force = fal
     if( !file_exists($folder) ) {
         wp_mkdir_p($folder);
     }
-    if( nbdesigner_get_option( 'nbdesigner_enable_cloud2print_api', 'no' ) == 'yes' ){
+    // if( nbdesigner_get_option( 'nbdesigner_enable_cloud2print_api', 'no' ) == 'yes' ){
         $datas      = unserialize(file_get_contents($path .'/product.json'));
         $option     = unserialize(file_get_contents($path .'/option.json'));
         $config     = nbd_get_data_from_json($path .'/config.json');
@@ -3385,7 +3384,7 @@ function custom_nbd_export_pdfs( $nbd_item_key, $watermark = false, $force = fal
             $pdf->Output($output_file, 'F');
             $result[] = $output_file;
         }
-    }
+    // }
     return $result;
 }
 function nbd_convert_files( $nbd_item, $type = 'jpg', $dpi = 300 ){

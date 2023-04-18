@@ -124,18 +124,10 @@ if (is_object($user)) {
         $options = NBD_FRONTEND_PRINTING_OPTIONS::calculate_measure_price($options, $product_id);
     }
 }
-
-$get_option_roles_level = unserialize(get_option('save_option_roles_level'));
-$roles = $user->roles;
-$role_level = [];
-if(is_array($roles)) {
-    foreach ($roles as $key => $role) {
-        $role_level[$role] = isset($get_option_roles_level[$role]) ? $get_option_roles_level[$role] : $key;
-    }
+$user_role = '';
+if(isset($user->roles[0])) {
+    $user_role = $user->roles[0];
 }
-
-$user_role = array_search(min($role_level), $role_level) ? array_search(min($role_level), $role_level) : '';
-
 //Get size of product
 $_designer_setting = get_post_meta($product_id, '_designer_setting', true);
 //$enable = get_post_meta($product_id, '_nbdesigner_enable', true);
@@ -2080,8 +2072,8 @@ if( $cart_item_key != ''){ ?>
 <script type="text/javascript">
     //custom BOTAK refresh value input when going back page
     // window.addEventListener("pageshow", function() {
-    //     var form = jQuery('form.cart'); 
-    //     form[0].reset();
+        // var form = jQuery('form.cart'); 
+        // form[0].reset();
     // });
     (function($){
         $.fn.tipTip = function(options) {
