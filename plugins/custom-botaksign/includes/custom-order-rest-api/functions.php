@@ -2135,3 +2135,16 @@ function v3_get_size_link_file($link = '') {
         return  round($size/(1024*1024) , 2). ' Mb';
     endif;
 }
+
+function botak_convert_format_time($time) {
+    $_time= explode(':' , $time );
+    $hourse = (int)$_time[0];
+    if( $hourse < 12 ) {
+        return $time.'am';
+    } elseif( $hourse == 12 ) {
+        return $time.'pm';
+    } else {
+        $hourse = $hourse - 12;
+        return $hourse.':'.$_time[1].'pm';
+    }
+}

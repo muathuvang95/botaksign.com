@@ -1,18 +1,29 @@
-<table id="header-infor" style="border-collapse: collapse; width: 100%;" width="100%">
-            <tbody><tr>
-                <td style="width:100%;padding-top:30px;" class="bill-to-th" align="left"><img style="width:100%" class="confim" src="https://botaksign.com/wp-content/plugins/custom-botaksign/assets/images/E1.png"></td>
-            </tr>
-        </tbody></table>
-<div id="infor" style="width: 100%; height: auto; margin-right: 25px; margin-left: 25px;">
-                    <br><span class="info-title" style="color: #27793d; display: block; font-family: segoe-bold; font-size: 16pt;"><?php printf( esc_html__( 'Hi %s,', 'woocommerce' ), esc_html( $user_login ) ); ?></span><br>
-                    <span class="info-subtext" style="font-family: Myriad-Pro-Semibold; color: #231f20; font-size: 15pt;">A new password has been requested for the following account on Botak Sign.</span>
-                </div>
-<div class="text-content-3" style="width: 95%;padding-top: 25px;padding-left: 25px;padding-right: 25px;">
-            <span class="order-link-text-none" style="color: #231f20; font-size: 15pt;"> Username: </span> <span class="order-link-text-1" style="color: #27793d; font-family: segoe-bold; font-size: 15pt;"> <?php echo $user_login; ?></span><br><br>
-            <span class="order-link-text-none" style="color: #231f20; font-size: 15pt;">If you didn’t make this request, kindly ignore this email. If you’d like to proceed with
-            this request, click <a href="<?php echo esc_url( add_query_arg( array( 'key' => $reset_key, 'id' => $user_id ), wc_get_endpoint_url( 'lost-password', '', wc_get_page_permalink( 'myaccount' ) ) ) ); ?>" class="order-link-here" style="color: #fcaf17; font-family: segoe-bold; font-size: 15pt;"> HERE.</a> to reset your password.</span><br><br>
-            <span class="order-link-text-none" style="color: #231f20; font-size: 15pt;"> Thanks for reading!</span>
-        </div>
-        <div id="thanks-div" style="width: 95%;text-align: right;padding-left: 25px;padding-right: 25px;"><span class="thank-name" style="color: #231f20; display: block; font-size: 17pt;">Cheers,</span><br><span class="thank-title" style="color: #27793d; display: block; font-family: segoe-bold; font-size: 17pt;">Botak Sign</span></div>
+<?php 
+$email_button_title = "Password Reset";
+$email_button_color = "transparent linear-gradient(0deg, #1BCB3F 0%, #45D242 33%, #7BDB46 78%, #91DF48 100%) 0% 0% no-repeat padding-box";
+?>
 
-<div id="line-border" style="border-bottom: 1px solid #a3cf62; width: 200pt; margin: 0px auto; margin-top: 10px; padding-top: 20px;"></div>
+<table id="header-logo" style="width:100%;padding-top:20px;border-collapse:collapse;margin-bottom:45px;">
+    <tbody>
+        <tr>
+            <td align="left" style="width:50%;"><img class="logo" src="<?php echo CUSTOM_BOTAKSIGN_URL . '/assets/images/logo-transparent.png'; ?>" style="margin-left:0px;margin-top:0px;height: 56px; width: auto;"></td>
+            <td align="right" style="width:50%;">
+                <?php if($email_button_title && $email_button_color) {
+                    echo '<button class="status-button" style="background: '. $email_button_color .';box-shadow: 0px 10px 20px #00000029; border: none; color: #fff; padding: 14px 25px; font-size: 20px; line-height: 28px; border-radius: 10px;">'. $email_button_title .'</button>';
+                } ?>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div style="margin-bottom: 25px;">
+    <span class="info-title" style="display:block;font-size:17px !important; line-height: 20px; font-weight: 500; margin-bottom: 12px;"><?php printf( esc_html__( 'Hi %s,', 'woocommerce' ), esc_html( $user_login ) ); ?></span>
+    <span class="info-subtext" style="font-size:14px !important; line-height: 24px; color:#231f20;">A new password has been requested for the following account on Botak Sign.</span>
+</div>
+<div style="border: 1px solid #ECECEC; box-shadow: 0px 0px 12px #0000001F; border-radius: 1em; padding: 20px; overflow: hidden; background: #fafafa;color:#000000;font-weight: 400;font-size:14px; line-height: 24px;">
+    <div class="stt" align="left" style="padding-bottom:5px;font-weight: 400;font-size:14px;line-height: 25px; color:#000000;">
+        <div style="padding-bottom:5px;font-size:17px;font-weight: 500;">Username : <?php printf( esc_html__( 'Hi %s', 'woocommerce' ), esc_html( $user_login ) ); ?></div>
+        <div>If you didn’t make this request, kindly ignore this email.</div>
+        <div>If you’d like to proceed with this request, click <a class="link" style="color: #1BCB3F;" href="<?php echo esc_url( add_query_arg( array( 'key' => $reset_key, 'id' => $user_id ), wc_get_endpoint_url( 'lost-password', '', wc_get_page_permalink( 'myaccount' ) ) ) ); ?>">HERE</a> to reset your password.</div>
+    </div>
+</div>

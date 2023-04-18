@@ -1951,6 +1951,7 @@ add_action('init', 'cxecrt_add_cart_post_type');
 
 function cxecrt_add_cart_post_type() {
     $user = get_userdata(get_current_user_id());
+    if(!$user) return;
 	register_post_type(
 		'stored-carts',
 		array(
