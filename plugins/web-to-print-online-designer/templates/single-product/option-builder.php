@@ -124,10 +124,13 @@ if (is_object($user)) {
         $options = NBD_FRONTEND_PRINTING_OPTIONS::calculate_measure_price($options, $product_id);
     }
 }
+
 $user_role = '';
 if(isset($user->roles[0])) {
     $user_role = $user->roles[0];
 }
+
+
 //Get size of product
 $_designer_setting = get_post_meta($product_id, '_designer_setting', true);
 //$enable = get_post_meta($product_id, '_nbdesigner_enable', true);
@@ -2072,8 +2075,8 @@ if( $cart_item_key != ''){ ?>
 <script type="text/javascript">
     //custom BOTAK refresh value input when going back page
     // window.addEventListener("pageshow", function() {
-        // var form = jQuery('form.cart'); 
-        // form[0].reset();
+    //     var form = jQuery('form.cart'); 
+    //     form[0].reset();
     // });
     (function($){
         $.fn.tipTip = function(options) {

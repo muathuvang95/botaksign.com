@@ -845,7 +845,7 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                     }
                     $adjusted_price = $original_price + $option_price['total_price'] - $option_price['discount_price'];
                     $adjusted_price = $adjusted_price > 0 ? $adjusted_price : 0;
-                    
+
                     //CS V3 production time: calc price with production time option
                     $role_use = wp_get_current_user()->roles['0'];
                     $have_role_use = false;
@@ -1140,7 +1140,9 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
 
                 //CS V3 Production time
                 $_adjusted_price = $original_price + $option_price['total_price'] - $option_price['discount_price'];
+
                 $role_use = wp_get_current_user()->roles['0'];
+
                 $have_role_use = false;
                 $have_check_default = false;
                 $_role_options = array();
@@ -1172,7 +1174,7 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                         if($_role_options) {
                             $value_option_pt = $val['value'];
                             $product_time_option = $_role_options['options'][$value_option_pt];
-                            $price_production_time = $adjusted_price * (int) $product_time_option['markup_percent'] / 100;
+                            $price_production_time = $_adjusted_price * (int) $product_time_option['markup_percent'] / 100;
                             if($price_production_time < (int)$product_time_option['min_markup_percent']/$quantity) {
                                 $price_production_time = (int)$product_time_option['min_markup_percent']/$quantity;
                             }
@@ -1319,7 +1321,10 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
             }
 
             //CS botak Role quantity break V3 start
+            
+
             $role_use = wp_get_current_user()->roles['0'];
+
             $max_production_time = 0;
             $pre_name = '';
             $have_role_use = false;
@@ -1937,6 +1942,7 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                                     } else {
                                         $field_value = $fields[$con['id']];
                                     }
+
                                     if($field_value) {
                                         switch($con['operator']){
                                             case 'i':
@@ -2838,7 +2844,7 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                                     $image_alt          = trim( strip_tags( get_post_meta( $att_id, '_wp_attachment_image_alt', TRUE ) ) );
                                     $image_srcset       = function_exists( 'wp_get_attachment_image_srcset' ) ? wp_get_attachment_image_srcset( $att_id, 'shop_single' ) : FALSE;
                                     $image_sizes        = function_exists( 'wp_get_attachment_image_sizes' ) ? wp_get_attachment_image_sizes( $att_id, 'shop_single' ) : FALSE;
-                                    $image_caption      = $attachment_object->post_excerpt;
+                                    $image_caption      = isset($attachment_object->post_excerpt) ? $attachment_object->post_excerpt : '';
                                     $image = array(
                                         'imagep'        => 'y',
                                         'image_link'    => $image_link,
