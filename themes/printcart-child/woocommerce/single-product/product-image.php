@@ -40,10 +40,12 @@ $items = nbd_get_items_product_grouped($product_id);
 if(is_array($items)) {
     $post->ID = $items[0]['id'];
     $f_product = wc_get_product($items[0]['id']);
-    $attachment_ids = $f_product->get_gallery_image_ids();
+    if( isset($f_product) && $f_product ) {
+        $attachment_ids = $f_product->get_gallery_image_ids();
+    }
 }
 $image_title = '';
-if(isset($f_product)) {
+if( isset($f_product) && $f_product ) {
     $image_title = $f_product->get_name();
 }
 ?>
@@ -104,7 +106,7 @@ if(isset($f_product)) {
                 <div class="swiper-button-prev swiper-button-black"></div>
         </div>
             <?php // if($attachment_ids):?>
-            <div class="thumb-gallery swiper-container"'>
+            <div class="thumb-gallery swiper-container">
                 <div class="swiper-wrapper">
                     <?php
                     $attributes = array(
@@ -129,7 +131,7 @@ if(isset($f_product)) {
 
                     do_action( 'woocommerce_product_thumbnails' );
 
-                    if(isset($f_product)) {
+                    if( isset($f_product) && $f_product ) {
                         $attachment_ids = $f_product->get_gallery_image_ids();
                     } else {
                         $attachment_ids = $product->get_gallery_image_ids();

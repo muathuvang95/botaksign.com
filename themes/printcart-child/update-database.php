@@ -637,15 +637,3 @@
 // echo '$get_total_tax: ' . $get_total_tax. '<br>';
 // echo '$get_total: ' . $get_total. '<br>';
 // echo '$get_subtotal: ' . $get_subtotal. '<br>';
-
-
-$enable_edit_design             = nbdesigner_get_option('nbdesigner_show_button_edit_design_in_cart', 'yes');
-$option = get_option( 'nbdesigner_show_button_edit_design_in_cart1', false );
-$option1 = get_option( 'nbdesigner_show_button_edit_design_in_cart', false );
-
-var_dump($enable_edit_design );
-echo '<br>';
-var_dump($option );
-echo '<br>';
-var_dump($option1 );
- echo strtotime('now');
