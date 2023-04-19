@@ -140,10 +140,10 @@ if ($order) {
                         </div>
                         <div class="stt" align="left" style="padding-top:15px; font-size:14px; line-height: 19px;">
                             <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:17px;">Deliver to : </div>
-                            <div><?php echo $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(); ?></div>
-                            <div><?php echo $order->get_billing_address_1(); ?></div>
-                            <div><?php echo $order->get_billing_address_2(); ?></div>
-                            <div><?php echo $order->get_billing_company() . ' ' . $order->get_billing_postcode(); ?></div>
+                            <div><?php echo $order->get_shipping_first_name() . ' ' . $order->get_shipping_last_name(); ?></div>
+                            <div><?php echo $order->get_shipping_address_1(); ?></div>
+                            <div><?php echo $order->get_shipping_address_2(); ?></div>
+                            <div><?php echo $order->get_shipping_company() . ' ' . $order->get_shipping_postcode(); ?></div>
                             <div><?php echo $order->get_billing_email(); ?></div>
                             <div><?php echo $order->get_billing_phone(); ?></div>
                         </div>
