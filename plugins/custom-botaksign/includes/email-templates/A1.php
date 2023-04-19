@@ -24,8 +24,9 @@ if ($order) {
     $plotting_options = unserialize(get_option('plotting_options'));
     $shippting_method = $order->get_shipping_method();
 
-    $time_completed_display = 'Estimated Completion Time : ' . get_post_meta($order_id, '_order_time_completed', true);
-    $order_completed_str = get_post_meta($order->get_id() , '_order_time_completed_str' , true);
+    $date_completed = date( 'd/m/Y H:i a' , strtotime($est_time['production_datetime_completed']) );
+    $time_completed_display = 'Estimated Completion Time : ' . $date_completed;
+    $order_completed_str = strtotime($est_time['production_datetime_completed']);
     $date = date('d-m-Y' , $order_completed_str);
 
     $check_day = false;
