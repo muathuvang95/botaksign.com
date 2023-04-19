@@ -1188,7 +1188,7 @@ class WC_REST_Custom_Controller {
 				$ongoing = false;
 				if($_order_status_df && $_order_status_df != 'Cancelled') {
 					$note_log = true;
-					send_botaksign_email($order_id , 'ORDER CANCELLED', 'F1.php');
+					send_botaksign_email($order_id , 'ORDER CANCELLED', 'F1.php', '', null, true);
 				}
 			}
 			if($ongoing) {

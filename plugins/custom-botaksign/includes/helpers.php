@@ -916,7 +916,7 @@ function nb_get_from_name() {
 function nb_get_content_type() {
     return 'text/html';
 }
-function send_botaksign_email($order_id, $title_email = '', $template_email = '', $upass = '', $user = null)
+function send_botaksign_email($order_id, $title_email = '', $template_email = '', $upass = '', $user = null, $classic = false)
 {
     global $order;
     $temp_content = '';
@@ -967,9 +967,17 @@ function send_botaksign_email($order_id, $title_email = '', $template_email = ''
             }
         </style>
         <?php
-        include("email-templates/email_header.php");
+        if($classic) {
+            include("email-templates/email_header_2.php");
+        } else {
+            include("email-templates/email_header.php");
+        }
         include('email-templates/' . $temp_content);
-        include("email-templates/email_footer.php");
+        if($classic) {
+            include("email-templates/email_footer_2.php");
+        } else {
+            include("email-templates/email_footer.php");
+        }
         $message = ob_get_contents();
         ob_end_clean();
         wp_mail($to, $subject, $message, $headers);
