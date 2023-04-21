@@ -25,7 +25,7 @@ if ($order) {
     $shippting_method = $order->get_shipping_method();
 
     $date_completed = date( 'd/m/Y H:i a' , strtotime($est_time['production_datetime_completed']) );
-    $time_completed_display = 'Estimated Completion Time : ' . $date_completed;
+    $time_completed_display = 'Estimated Completion Date : ' . $date_completed;
     $order_completed_str = strtotime($est_time['production_datetime_completed']);
     $date = date('d-m-Y' , $order_completed_str);
 
@@ -75,7 +75,7 @@ if ($order) {
         if($check_day) {
             $order_completed_str += 24*60*60;
         }
-        $time_completed_display = 'Estimated Delivery Time : ' . date("d/m/Y" , $order_completed_str). ' (' . $period_display . ')';
+        $time_completed_display = 'Estimated Delivery Date : ' . date("d/m/Y" , $order_completed_str). ' (' . $period_display . ')';
     }
 
     ?>
