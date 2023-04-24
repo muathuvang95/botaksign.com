@@ -1051,26 +1051,22 @@ function v3_generate_order_detail_pdf($order_id)
                         $file_url   = $file;
                         $create_preview     = nbdesigner_get_option('nbdesigner_create_preview_image_file_upload');
                         if(  $create_preview == 'yes' && ( $ext == 'png' || $ext == 'jpg' || $ext == 'pdf' ) ){
-                            if($ext == 'jpg') {
-                                $src = $file;
-                            } else {
-                                $dir        = pathinfo( $file, PATHINFO_DIRNAME );
-                                $filename   = pathinfo( $file, PATHINFO_BASENAME );
-                                $file_headers = @get_headers($dir.'_preview/'.$filename);
-                                if(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found' || $file_headers[0] == 'HTTP/1.1 403 Forbidden') {
-                                    $exists = false;
-                                }
-                                else {
-                                    $exists = true;
-                                }
-                                if( $exists && ( $ext == 'png' ) ){
-                                    $src = $dir.'_preview/'.$filename;
-                                }else if( $ext == 'pdf' && botak_check_link_exists_s3($dir.'_preview/'.$filename.'.jpg') ){
-                                    $src = $dir.'_preview/'.$filename.'.jpg';
-                                }else{
-                                    $src = Nbdesigner_IO::get_thumb_file( $ext, '' );
-                                }
-                            }   
+                            $dir        = pathinfo( $file, PATHINFO_DIRNAME );
+                            $filename   = pathinfo( $fil+e, PATHINFO_BASENAME );
+                            $file_headers = @get_headers($dir.'_preview/'.$filename);
+                            if(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found' || $file_headers[0] == 'HTTP/1.1 403 Forbidden') {
+                                $exists = false;
+                            }
+                            else {
+                                $exists = true;
+                            }
+                            if( $exists && ( $ext == 'png' || $ext == 'jpg' ) ){
+                                $src = $dir.'_preview/'.$filename;
+                            }else if( $ext == 'pdf' && botak_check_link_exists_s3($dir.'_preview/'.$filename.'.jpg') ){
+                                $src = $dir.'_preview/'.$filename.'.jpg';
+                            }else{
+                                $src = Nbdesigner_IO::get_thumb_file( $ext, '' );
+                            }
                         }else {
                             $src = Nbdesigner_IO::get_thumb_file( $ext, '' );
                         }
