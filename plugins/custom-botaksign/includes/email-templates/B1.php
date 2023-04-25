@@ -29,7 +29,7 @@ if ($order) {
 
     if($shippting_method != 'Self-collection') {
         $est_delivery_time = unserialize(get_option('est_delivery_time'));
-        $added_date = (int) isset($est_delivery_time[$shippting_method]) && isset($est_delivery_time[$shippting_method]['added_date']) ? $est_delivery_time[$shippting_method]['added_date'] : 0;
+        $added_date = (float) isset($est_delivery_time[$shippting_method]) && isset($est_delivery_time[$shippting_method]['added_date']) ? $est_delivery_time[$shippting_method]['added_date'] : 0;
         $period_display = isset($est_delivery_time[$shippting_method]) && isset($est_delivery_time[$shippting_method]['period_display']) ? $est_delivery_time[$shippting_method]['period_display'] : 0;
         if($added_date) {
             $order_completed_str += $added_date * 24*60*60;
