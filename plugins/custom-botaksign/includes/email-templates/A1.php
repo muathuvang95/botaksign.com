@@ -21,61 +21,20 @@ if ($order) {
     $order_id = $order->get_id();
     $link_order = get_permalink(get_option('woocommerce_myaccount_page_id')) . '/view-order/' . $order_id;
     $est_time = show_est_completion($order);
-    $plotting_options = unserialize(get_option('plotting_options'));
     $shippting_method = $order->get_shipping_method();
 
     $date_completed = date( 'd/m/Y H:i a' , strtotime($est_time['production_datetime_completed']) );
     $time_completed_display = 'Estimated Completion Date : ' . $date_completed;
     $order_completed_str = strtotime($est_time['production_datetime_completed']);
-    $date = date('d-m-Y' , $order_completed_str);
 
-    $check_day = false;
     if($shippting_method != 'Self-collection') {
-        $period_display = '';
-        foreach ($plotting_options as $key => $plotting_option) {
-            if ($plotting_option['shipping_method']['title'] == 'Delivery') {
-                $period_calc = $plotting_option['period_calc'];
-                $period_calc = explode('-' , $period_calc );
-                $period_dp   = $plotting_option['period_dp'];
-                $period_dp_array = explode('-' , $period_dp );
-                if( v3_time_to_minutes($period_dp_array[1]) > v3_time_to_minutes($period_dp_array[0]) ) {
-                    $time_from = $date . ' ' . $period_dp_array[0];
-                    $time_to = $date . ' ' . $period_dp_array[1];
-                    $period_display = v3_convert_time_adv($time_from).' to '.v3_convert_time_adv($time_to);
-                } else {
-                    $time_from = $date . ' ' . $period_dp_array[1];
-                    $time_to = $date . ' ' . $period_dp_array[0];
-                    $period_display = v3_convert_time_adv($time_from).' to '.v3_convert_time_adv($time_to);
-                }
-                if( count($period_calc) == 2 ) {
-                    if(v3_time_to_minutes($period_calc[1]) > 0 && v3_time_to_minutes($period_calc[0]) > 0) {
-                        if( v3_time_to_minutes($period_calc[1]) > v3_time_to_minutes($period_calc[0]) ) {
-                            $time_from = $date . ' ' . $period_calc[0];
-                            $time_to = $date . ' ' . $period_calc[1];
-                        } else {
-                            $time_from = $date . ' ' . $period_calc[1];
-                            $time_to = $date . ' ' . $period_calc[0];
-                        }
-                        $time_from_str = strtotime($time_from);
-                        $time_to_str = strtotime($time_to);
-                        if( $order_completed_str >= $time_from_str && $order_completed_str <= $time_to_str) {
-                            $period_time_delivery = $period_dp;
-                            if($period_time_delivery) {
-                                $period_calc = explode('-' , $period_time_delivery );
-                                $period_time_delivery = botak_convert_format_time( $period_calc[0]) .' - '.botak_convert_format_time( $period_calc[1]);
-                            }
-                            if($plotting_option['date'] == 'next_day') {
-                                $check_day = true;
-                            }
-                        }
-                    }
-                } 
-            }
+        $est_delivery_time = unserialize(get_option('est_delivery_time'));
+        $added_date = (int) isset($est_delivery_time[$shippting_method]) && isset($est_delivery_time[$shippting_method]['added_date']) ? $est_delivery_time[$shippting_method]['added_date'] : 0;
+        $period_display = isset($est_delivery_time[$shippting_method]) && isset($est_delivery_time[$shippting_method]['period_display']) ? $est_delivery_time[$shippting_method]['period_display'] : 0;
+        if($added_date) {
+            $order_completed_str += $added_date * 24*60*60;
         }
-        if($check_day) {
-            $order_completed_str += 24*60*60;
-        }
-        $time_completed_display = 'Estimated Delivery Date : ' . date("d/m/Y" , $order_completed_str). ' (' . $period_display . ')';
+        $time_completed_display = 'Estimated Delivery Date : ' . date("d/m/Y" , $order_completed_str). $period_display;
     }
 
     ?>

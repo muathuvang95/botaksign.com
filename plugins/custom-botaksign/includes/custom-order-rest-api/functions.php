@@ -1638,7 +1638,28 @@ function v3_delivery_plotter_settings() {
             update_option( 'plotting_options' , serialize($plotting_options) );
         }
     }
-    
+    $est_delivery_time = unserialize(get_option('est_delivery_time'));
+    if(!$est_delivery_time) {
+        $est_delivery_time = array();
+        if($shipping_methods) {
+            foreach ($shipping_methods as $key => $shipping_method) {
+                $shipping_key = isset($shipping_method['title']) ? $shipping_method['title'] : '';
+                if($shipping_key) {
+                    $est_delivery_time[$shipping_key] = array(
+                        'added_date' => 0,
+                        'period_display' => '',
+                    );
+                }
+            }
+            update_option( 'est_delivery_time' , serialize($est_delivery_time) ); 
+        }
+    }
+    if(isset($_POST['est_delivery_submit']) && $_POST['est_delivery_submit'] == 'est_delivery_time') {
+        if(isset($_POST['est_delivery_time'])) {
+            $est_delivery_time = $_POST['est_delivery_time'];
+            update_option('est_delivery_time' , serialize($est_delivery_time));
+        }
+    }
     
     ?>  
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -1676,10 +1697,58 @@ function v3_delivery_plotter_settings() {
         }
     </style>
     <div id="delivery-plotter">
-        <form method='post' action=''>
-            <div class="title">
-                <h1>Settings</h1>
+        <div class="title">
+            <h1>Settings</h1>
+        </div>
+        <form action="" method="post">
+            <div class="delivery-date-wrap">
+                <div class="item-wrap">
+                    <div class="item-title">
+                        <b>Est.Delivery Date</b>
+                    </div>
+                    <div class="item-meta">
+                        <!-- $shipping_methods -->
+                        <table class="table" style="border: none">
+                            <thead>
+                                <tr>
+                                    <th>Method</th>
+                                    <th>Added Date</th>
+                                    <th>Period Display</th>
+                                </tr>
+                            </thead>
+                           <tbody>
+                                <?php
+                                foreach ($shipping_methods as $key => $value) {
+                                    if(isset($value['key']) && isset($value['title'])):
+                                        $added_date = isset($est_delivery_time[$value['title']]) && isset($est_delivery_time[$value['title']]['added_date']) ? $est_delivery_time[$value['title']]['added_date'] : 0;
+                                        $period_display = isset($est_delivery_time[$value['title']]) && isset($est_delivery_time[$value['title']]['period_display']) ? $est_delivery_time[$value['title']]['period_display'] : '';
+                                        ?>
+                                        <tr>
+                                            <td>
+                                                <?php esc_html_e($value['title']); ?>
+                                            </td>
+                                            <td>
+                                                <input type="number" name="est_delivery_time[<?php echo $value['key']; ?>][added_date]" value="<?php echo $added_date; ?>">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="est_delivery_time[<?php echo $value['key']; ?>][period_display]" value="<?php echo $period_display; ?>">
+                                            </td>
+                                        </tr>
+                                        <?php
+                                    endif;
+                                }
+                                ?>
+                           </tbody>
+                        </table>
+                    </div>
+                    <p class='submit'>
+                        <input type='submit' name='Submit' class='button-primary' value='<?php echo 'Save Changes'; ?>' />
+                        <input type='hidden' name='est_delivery_submit' value='est_delivery_time'/>
+                    </p>
+                </div>
             </div>
+        </form>
+        <form method='post' action=''>
             <div class="delivery-plotter-wrap">
                 <div class="item-wrap plotting-wrap">
                     <div class="item-title">
@@ -1942,7 +2011,7 @@ function v3_delivery_plotter_settings() {
                     </div>
                 </div>
             </div>
-             <p class='submit'>
+            <p class='submit'>
                 <input type='submit' name='Submit' class='button-primary' value='<?php echo 'Save Changes'; ?>' />
                 <input type='hidden' name='status-updated' value='updated'/>
             </p>
