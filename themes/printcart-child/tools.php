@@ -257,8 +257,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
 	</form>
 </div>
 
-
-<!-- Get invoice & quotation template -->
+<!-- Test email templates -->
 <div class="invoice-template border border-primary m-4 p-4">
 	<?php 
 	$titles = array(

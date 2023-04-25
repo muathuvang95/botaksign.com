@@ -161,7 +161,6 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
             $product            = $variation_id ? wc_get_product( $variation_id ) : wc_get_product( $product_id );
             $original_price     = (float)$product->get_price('edit');
             $nbd_field          = isset($post_data['nbd-field']) ? $post_data['nbd-field'] : array();
-
             // $option_fields = unserialize($options['fields']);  
             // $option_fields = $this->recursive_stripslashes( $option_fields );
             // $fields = isset($option_fields['fields']) ? $option_fields['fields'] : array();
@@ -208,8 +207,7 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
             //             }
             //         }
             //     }
-            // }
-
+            // 
             // $has_design         = false;
             // $has_upload         = false;
             $nbd_item_cart_key  = ($variation_id > 0) ? $product_id . '_' . $variation_id : $product_id;
