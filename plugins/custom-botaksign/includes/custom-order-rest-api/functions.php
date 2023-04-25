@@ -1052,7 +1052,7 @@ function v3_generate_order_detail_pdf($order_id)
                         $create_preview     = nbdesigner_get_option('nbdesigner_create_preview_image_file_upload');
                         if(  $create_preview == 'yes' && ( $ext == 'png' || $ext == 'jpg' || $ext == 'pdf' ) ){
                             $dir        = pathinfo( $file, PATHINFO_DIRNAME );
-                            $filename   = pathinfo( $fil+e, PATHINFO_BASENAME );
+                            $filename   = pathinfo( $file, PATHINFO_BASENAME );
                             $file_headers = @get_headers($dir.'_preview/'.$filename);
                             if(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found' || $file_headers[0] == 'HTTP/1.1 403 Forbidden') {
                                 $exists = false;
