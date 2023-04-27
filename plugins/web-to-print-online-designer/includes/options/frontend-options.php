@@ -162,53 +162,33 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
             $original_price     = (float)$product->get_price('edit');
             $nbd_field          = isset($post_data['nbd-field']) ? $post_data['nbd-field'] : array();
 
-            // $option_fields = unserialize($options['fields']);  
-            // $option_fields = $this->recursive_stripslashes( $option_fields );
-            // $fields = isset($option_fields['fields']) ? $option_fields['fields'] : array();
-            // if( is_array($fields) && count($fields) > 0) {
-            //     foreach ($fields as $key => $field) {
-            //         if( $field['conditional']['enable'] == 'n' || !isset($field['conditional']['depend']) || count($field['conditional']['depend']) == 0 ){
-            //             continue;
-            //         }
-            //         $show = $field['conditional']['show'];
-            //         $logic = $field['conditional']['logic'];
-            //         $total_check = $logic == 'a' ? true : false;
-            //         $check = array();
-            //         if(count($field['conditional']['depend']) > 0) {
-            //             foreach($field['conditional']['depend'] as $key => $con){
-            //                 $check[$key] = true;
-            //                 if( $con['id'] != '' && isset($nbd_field[$con['id']]) ){
-            //                     $field_value = isset($nbd_field[$con['id']]['value']) ? $nbd_field[$con['id']]['value'] : $nbd_field[$con['id']];
-            //                     switch( $con['operator'] ){
-            //                         case 'i':
-            //                             $check[$key] = $field_value == $con['val'] ? true : false;
-            //                             break;
-            //                         case 'n':
-            //                             $check[$key] = $field_value != $con['val'] ? true : false;
-            //                             break;
-            //                         case 'e':
-            //                             $check[$key] = $field_value == '' ? true : false;
-            //                             break;
-            //                         case 'ne':
-            //                             $check[$key] = $field_value != '' ? true : false;
-            //                             break;
-            //                     }
-            //                 } else {
-            //                     $check[$key] = false;
-            //                 }
-            //             }
-            //             foreach ($check as $c){
-            //                 $total_check = $logic == 'a' ? ($total_check && $c) : ($total_check || $c);
-            //             }
-            //             $total_check = $show == 'y' ? $total_check : !$total_check;
-            //             if($total_check ) {
-            //                 if(!isset($nbd_field[$field['id']]) && $field['nbd_type'] != 'terms_conditions' ) {
-            //                     return false;
-            //                 }  
-            //             }
-            //         }
-            //     }
-            // }
+
+            // fixbug block add to card when field options not right.
+            $option_fields = unserialize($options['fields']);  
+            $option_fields = $this->recursive_stripslashes( $option_fields );
+            $fields = isset($option_fields['fields']) ? $option_fields['fields'] : array();
+            if( is_array($nbd_field) && count($nbd_field) > 0) {
+                foreach ($nbd_field as $field_id => $value) {
+                    $origin_field = $this->get_field_by_id( $option_fields, $field_id );
+                    if( $origin_field['conditional']['enable'] == 'y' && isset($origin_field['conditional']['depend']) || count($origin_field['conditional']['depend']) > 0 ){
+                        foreach($origin_field['conditional']['depend'] as $key => $con){
+                            $con_id = isset($con['id']) ? $con['id'] : '';
+                            $con_val = isset($con['val']) ? $con['val'] : '';
+                            if($con_id && $con_val != '') {
+                                if( !isset($nbd_field[$con_id]) ) {
+                                    return false;
+                                }
+                                if( isset($nbd_field[$con_id]) ) {
+                                    $field_value = isset($nbd_field[$con_id]['value']) ? $nbd_field[$con_id]['value'] : $nbd_field[$con_id];
+                                    if( $field_value != $con_val) {
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             // $has_design         = false;
             // $has_upload         = false;
@@ -225,10 +205,8 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                 if(  !isset($post_data['nbd-field']) && !isset($post_data['nbo-add-to-cart']) && $total_price == 0 && $original_price == 0){
                     $passed = false;
                 }
-            } else {
-                if($original_price == 0) {
-                    $passed = false;
-                }
+            } else if($original_price == 0) {
+                $passed = false;
             }
 
             if( $enabled_design ) {
