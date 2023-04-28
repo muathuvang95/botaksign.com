@@ -175,14 +175,13 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                             $con_id = isset($con['id']) ? $con['id'] : '';
                             $con_val = isset($con['val']) ? $con['val'] : '';
                             if($con_id && $con_val != '') {
-                                if( !isset($nbd_field[$con_id]) ) {
-                                    return false;
-                                }
                                 if( isset($nbd_field[$con_id]) ) {
                                     $field_value = isset($nbd_field[$con_id]['value']) ? $nbd_field[$con_id]['value'] : $nbd_field[$con_id];
                                     if( $field_value != $con_val) {
                                         return false;
                                     }
+                                } else {
+                                    return false;
                                 }
                             }
                         }
