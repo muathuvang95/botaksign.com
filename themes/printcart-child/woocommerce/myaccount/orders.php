@@ -88,7 +88,7 @@ if( $order_id  && $user_id == $user_id_current) {
                                         <?php
                                         $opt_status = get_post_meta($order->get_id(), '_order_status', true);
                                         if ($opt_status) {
-                                            echo botaksign_status_order($opt_status);
+                                            echo $opt_status;
                                         } else {
                                             echo esc_html(wc_get_order_status_name($order->get_status()));
                                         }
