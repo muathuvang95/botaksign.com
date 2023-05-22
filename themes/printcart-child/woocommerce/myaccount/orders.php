@@ -86,7 +86,7 @@ if( $order_id  && $user_id == $user_id_current) {
 
                                     <?php elseif ('order-status' === $column_id) : ?>
                                         <?php
-                                        $opt_status = get_post_meta($order->get_id(), '_cxecrt_status_od', true);
+                                        $opt_status = get_post_meta($order->get_id(), '_order_status', true);
                                         if ($opt_status) {
                                             echo botaksign_status_order($opt_status);
                                         } else {
