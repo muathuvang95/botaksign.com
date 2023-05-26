@@ -100,7 +100,7 @@ if ($order) {
                     <div style="width: 65%;">
                         <div class="stt" align="left" style="padding-bottom:5px;">
                             <div style="padding-bottom:5px;color:#000000;font-weight: 600;font-size:17px;">Operation Hours : </div>
-                            <div style="font-size:14px;line-height:17px;">Open Mon - Fri 9am - 5pm, Sat 9am - 1pm</div>
+                            <div style="font-size:14px;line-height:17px;">Open Mon - Fri 9am - 6pm, Sat 9am - 1pm</div>
                             <div style="font-size:14px;line-height:17px;">Closed on Sundays and public holidays</div>
                         </div>
                         <div class="stt" align="left" style="padding-bottom:5px;">
