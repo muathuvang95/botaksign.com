@@ -4551,8 +4551,8 @@ function botak_show_production_time_admin_order($order)
                 <p>* This timing does not take into account:</p>
                 <p>- Delays due to unforseen circumstances</p>
                 <p>- Potential delays due to artwork issues</p>
-                <p>- Order is only ready for collection when the completion email has been received.</p>
             </div>
+            <b style="margin-top: 15px; display: block;">Order is only ready for collection when the completion email has been received.</b>
         </div>
         <?php
     }
