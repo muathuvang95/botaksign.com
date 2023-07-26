@@ -4545,12 +4545,13 @@ function botak_show_production_time_admin_order($order)
         ?>
 
         <div class="order-time-info">
-            <div class="title"><b>Your order will be completed by:</b></div>
+            <div class="title"><b>Your order is estimated to be ready by:</b></div>
             <div class="time"><?= $est_time['total_time']; ?></div>
             <div class="time-notice">
                 <p>* This timing does not take into account:</p>
                 <p>- Delays due to unforseen circumstances</p>
                 <p>- Potential delays due to artwork issues</p>
+                <p>- Order is only ready for collection when the completion email has been received.</p>
             </div>
         </div>
         <?php
@@ -4564,12 +4565,13 @@ function botak_show_production_time_in_email($order, $sent_to_admin, $plain_text
     ?>
 
     <div style="display: inline-block; border: 1px solid #ccc; padding: 10px; margin-bottom: 20px; margin-top: 0px; width: calc(100% - 22px);">
-        <div style="margin-bottom: 0px;"><b>Your order will be completed by:</b></div>
+        <div style="margin-bottom: 0px;"><b>Your order is estimated to be ready by:</b></div>
         <div class="time"><?= $est_time['total_time']; ?></div>
         <div style="margin-bottom: 0px;">
             <p style="margin-bottom: 0px;">* This timing does not take into account:</p>
             <p style="margin-bottom: 0px;">- Delays due to unforseen circumstances</p>
             <p style="margin-bottom: 0px;">- Potential delays due to artwork issues</p>
+            <p style="margin-bottom: 0px;">- Order is only ready for collection when the completion email has been received.</p>
         </div>
     </div>
     <?php
