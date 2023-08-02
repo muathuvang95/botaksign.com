@@ -1475,6 +1475,7 @@ class WC_REST_Custom_Controller {
 		$total = count($wpdb->get_results($query_total));	
 		$results = $wpdb->get_results($query);
 		$total_order = count($results);
+		$data = array();
 		foreach ($results as $key => $value) {
 			$data[] = $this->get_order( $value->ID, $request );
 		}
