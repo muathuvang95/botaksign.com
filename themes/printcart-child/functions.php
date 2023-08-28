@@ -29,7 +29,7 @@ function printcart_child_enqueue_styles()
     );
     wp_enqueue_style('botak-style', get_stylesheet_directory_uri() . '/botak-style.css');
     wp_enqueue_style('Roboto-googlefonts', 'https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap', array(), null);
-    wp_enqueue_script('fontawesome', 'https://kit.fontawesome.com/54ed714a8b.js', array(), 'latest', false);
+    wp_enqueue_script('fontawesome', 'https://kit.fontawesome.com/b3086b58c0.js', array(), 'latest', false);
     wp_enqueue_script('printcart-custom-js', get_stylesheet_directory_uri() . '/js/customize.js', array(), 'latest', false);
 }
 
