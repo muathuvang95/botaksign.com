@@ -221,11 +221,11 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
             $enabled_upload_design =  get_post_meta($product_id, '_nbdesigner_enable_upload_without_design', true);
             if($enable_po) {
                 if(  !isset($post_data['nbd-field']) && !isset($post_data['nbo-add-to-cart']) && $total_price == 0 && $original_price == 0){
-                    $passed = false;
+                    return false;
                 }
             } else {
                 if($original_price == 0) {
-                    $passed = false;
+                    return false;
                 }
             }
 
