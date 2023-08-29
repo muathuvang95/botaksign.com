@@ -1245,6 +1245,7 @@ function v3_get_role_status_by_user($user_id) {
         }
     }
     $user_can = array();
+    if(count($role_level) == 0) return $user_can;
     $is_role = array_search(min($role_level), $role_level);
     $list_status = unserialize(get_option('custom_status_order') );
 

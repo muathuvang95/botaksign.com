@@ -1410,10 +1410,11 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                 $origin_field = $this->get_field_by_id( $option_fields, $key );
                 //CS botak pricing option
                 if (isset($origin_field['nbd_type']) && $origin_field['nbd_type'] === 'size') {
+                    $__val = is_array($val) ? ( isset($val['value']) ? $val['value'] : $val[0] ) : $val;
                     if ($origin_field['general']['attributes']['same_size'] === 'n') {
-                        if(isset($origin_field['general']['attributes']['options'][$val['value']])) {
-                            $size_product_width = $origin_field['general']['attributes']['options'][$val['value']]['product_width'];
-                            $size_product_height = $origin_field['general']['attributes']['options'][$val['value']]['product_height'];
+                        if(isset($origin_field['general']['attributes']['options'][$__val])) {
+                            $size_product_width = $origin_field['general']['attributes']['options'][$__val]['product_width'];
+                            $size_product_height = $origin_field['general']['attributes']['options'][$__val]['product_height'];
 
                             //Calc price by size option
                             foreach ($fields as $tmp_key => $tmp_val) {

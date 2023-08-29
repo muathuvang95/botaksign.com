@@ -300,7 +300,7 @@ class WC_REST_Custom_Controller {
 					$check_expiring = 'expiring';
 				}
 				$roles = get_userdata($user_id)->roles;
-				if(in_array('specialist', $roles) && $opt_status != 'order_received' && $opt_status != 'cancelled' ) {
+				if($roles && is_array($roles) && in_array('specialist', $roles) && $opt_status != 'order_received' && $opt_status != 'cancelled' ) {
 			        unset($user_can['cancelled']);
 			    }
 				$items['order_no']			= $order_no;
