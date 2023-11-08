@@ -148,16 +148,18 @@ class NBDesigner_Artwork_Actions {
             $no_request_val         = '';
             $design_request_val     = '';
             $upload_request_val     = '';
-            foreach ( $option_fields['fields'] as $key => $field ) {
-                if ($field['general']['enabled'] == 'y' && isset($field['nbe_type']) && $field['nbe_type'] == 'actions') {
-                    $is_artwork_action = true;
-                    $artwork_field = $field;
-                    if( isset( $artwork_field['general']['attributes']["options"] ) ){
-                        foreach( $artwork_field['general']['attributes']["options"] as $key => $option ){
-                            if( $option['action'] == 'h' ) $request_val         = $key;
-                            if( $option['action'] == 'n' ) $no_request_val      = $key;
-                            if( $option['action'] == 'c' ) $design_request_val  = $key;
-                            if( $option['action'] == 'u' ) $upload_request_val  = $key;
+            if( isset($option_fields['fields']) && is_array($option_fields['fields']) ) {
+                foreach ( $option_fields['fields'] as $key => $field ) {
+                    if ($field['general']['enabled'] == 'y' && isset($field['nbe_type']) && $field['nbe_type'] == 'actions') {
+                        $is_artwork_action = true;
+                        $artwork_field = $field;
+                        if( isset( $artwork_field['general']['attributes']["options"] ) ){
+                            foreach( $artwork_field['general']['attributes']["options"] as $key => $option ){
+                                if( $option['action'] == 'h' ) $request_val         = $key;
+                                if( $option['action'] == 'n' ) $no_request_val      = $key;
+                                if( $option['action'] == 'c' ) $design_request_val  = $key;
+                                if( $option['action'] == 'u' ) $upload_request_val  = $key;
+                            }
                         }
                     }
                 }

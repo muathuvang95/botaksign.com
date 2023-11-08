@@ -518,7 +518,7 @@ class WC_REST_Custom_Controller {
 	    $specialist = get_userdata($id_specialist)->display_name;
 	    $data['specialist']['name'] = $specialist ? $specialist : 'No Specialist' ;
 	    $data['specialist']['id'] = $id_specialist ? $id_specialist : '-1' ;
-		$specialist_roles = get_userdata($id_specialist)->roles;
+		$specialist_roles = get_userdata($id_specialist)->roles ? get_userdata($id_specialist)->roles : [];
 		if(!in_array('specialist', $specialist_roles, true)) {
 			$data['specialist']['name'] = 'No Specialist' ;
 			$data['specialist']['id'] = '-1';
