@@ -28,10 +28,9 @@ global $product;
 //     $min_value = $f_product->get_height_stock_amount();
 // }
 if(empty($max_value)){ $max_value = 9999; }
-// $input_style = printcart_get_options('nbcore_add_cart_style');
-$input_style = 'style-2';
+$input_style = printcart_get_options('nbcore_add_cart_style');
 ?>
-	<div class="nb-quantity input-group">
+	<div class="nb-quantity <?php echo esc_attr($input_style); ?>">
 		<?php if('style-1' == $input_style): ?>
 			<input type="number" class="input-text qty text" step="<?php echo esc_attr( $step ); ?>" min="<?php echo esc_attr( $min_value ); ?>" max="<?php echo esc_attr( 0 < $max_value ? $max_value : '' ); ?>" name="<?php echo esc_attr( $input_name ); ?>" value="<?php echo esc_attr( $input_value ); ?>" title="<?php echo esc_attr_x( 'Qty', 'Product quantity input tooltip', 'printcart' ) ?>" size="4" pattern="<?php echo esc_attr( $pattern ); ?>" inputmode="<?php echo esc_attr( $inputmode ); ?>" />
 			<div class="qty-buttons">
@@ -39,12 +38,8 @@ $input_style = 'style-2';
 				<span class="wac-btn-sub quantity-minus-cart pt-icon-minus"></span>
 			</div>
 		<?php else: ?>
-			<div class="input-group-prepend">
-				<span class="wac-btn-sub btn btn-outline-light quantity-minus-cart pt-icon-minus qty-button btk-btn-light"></span>
-			</div>
-			<input type="number" class="input-text qty text form-control" step="<?php echo esc_attr( $step ); ?>" min="<?php echo esc_attr( $min_value ); ?>" max="<?php echo esc_attr( 0 < $max_value ? $max_value : '' ); ?>" name="<?php echo esc_attr( $input_name ); ?>" value="<?php echo esc_attr( $input_value ); ?>" title="<?php echo esc_attr_x( 'Qty', 'Product quantity input tooltip', 'printcart' ) ?>" size="4" pattern="<?php echo esc_attr( $pattern ); ?>" inputmode="<?php echo esc_attr( $inputmode ); ?>" />
-			<div class="input-group-append">
-				<span class="wac-btn-inc btn btn-outline-light quantity-plus-cart pt-icon-plus qty-button btk-btn-light"></span>
-			</div>
+			<span class="wac-btn-sub quantity-minus pt-icon-minus"></span>
+			<input type="number" class="input-text qty text" step="<?php echo esc_attr( $step ); ?>" min="<?php echo esc_attr( $min_value ); ?>" max="<?php echo esc_attr( 0 < $max_value ? $max_value : '' ); ?>" name="<?php echo esc_attr( $input_name ); ?>" value="<?php echo esc_attr( $input_value ); ?>" title="<?php echo esc_attr_x( 'Qty', 'Product quantity input tooltip', 'printcart' ) ?>" size="4" pattern="<?php echo esc_attr( $pattern ); ?>" inputmode="<?php echo esc_attr( $inputmode ); ?>" />
+			<span class="wac-btn-inc quantity-plus-cart pt-icon-plus"></span>
 		<?php endif; ?>
 	</div>

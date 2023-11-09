@@ -62,3 +62,19 @@ Stack trace:
 Stack trace:
 #0 {main}
   thrown in /home/btksigndotcom/public_html/wp-content/themes/printcart-child/index.php on line 15
+[18-Oct-2023 17:03:59 Asia/Singapore] PHP Fatal error:  Uncaught Error: Call to undefined function printcart_get_options() in /home/btksigndotcom/public_html/wp-content/themes/printcart-child/index.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/btksigndotcom/public_html/wp-content/themes/printcart-child/index.php on line 15
+[18-Oct-2023 17:04:00 Asia/Singapore] PHP Fatal error:  Uncaught Error: Call to undefined function printcart_get_options() in /home/btksigndotcom/public_html/wp-content/themes/printcart-child/index.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/btksigndotcom/public_html/wp-content/themes/printcart-child/index.php on line 15
+[18-Oct-2023 17:07:37 Asia/Singapore] PHP Fatal error:  Uncaught Error: Call to undefined function printcart_get_options() in /home/btksigndotcom/public_html/wp-content/themes/printcart-child/index.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/btksigndotcom/public_html/wp-content/themes/printcart-child/index.php on line 15
+[18-Oct-2023 17:27:28 Asia/Singapore] PHP Fatal error:  Uncaught Error: Call to undefined function printcart_get_options() in /home/btksigndotcom/public_html/wp-content/themes/printcart-child/index.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/btksigndotcom/public_html/wp-content/themes/printcart-child/index.php on line 15

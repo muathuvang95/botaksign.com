@@ -581,6 +581,7 @@
 
 //     include(CUSTOM_BOTAKSIGN_PATH . "includes/email-test/email_header.php");
 
+
 //     include(CUSTOM_BOTAKSIGN_PATH . "includes/email-test/". $template .".php");
 
 //     include(CUSTOM_BOTAKSIGN_PATH . "includes/email-test/email_footer.php");
@@ -636,3 +637,11 @@
 // echo '$get_total_tax: ' . $get_total_tax. '<br>';
 // echo '$get_total: ' . $get_total. '<br>';
 // echo '$get_subtotal: ' . $get_subtotal. '<br>';
+echo 'Muatrhuvang';
+$order_id = 143203;
+$order = wc_get_order($order_id);
+$est = show_est_completion($order);
+
+echo '<pre>';
+var_dump($est);
+echo '</pre>';

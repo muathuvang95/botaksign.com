@@ -20,7 +20,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 global $product;
-
 	/**
 	 * woocommerce_before_single_product hook.
 	 *
@@ -31,7 +30,10 @@ global $product;
 	if ( post_password_required() ) {
 		echo get_the_password_form();
 		return;
-	}
+	}	
+$current_user=wp_get_current_user();
+$User_ID=$current_user->ID;
+if($User_ID==1){echo " --> "; echo $product->get_id();}
 ?>
 <div id="product-<?php the_ID(); ?>" <?php wc_product_class( '', $product ); ?>>
 	<div class="single-product-wrap">
@@ -79,8 +81,16 @@ global $product;
 				 * @hooked WC_Structured_Data::generate_product_data() - 60
 				 */
 				do_action( 'woocommerce_single_product_summary' );
-				if($product->get_type() == 'woosg') {
+				if($product->get_type() == 'woosg') {					
+					if($User_ID==1){
+						$BTS_Product_Group_ID=$product->get_id();
+						$_SESSION['BTS_Product_Group_ID']=$BTS_Product_Group_ID;
+						echo "<h1>Main 002 : ". $_SESSION['BTS_Product_Group_ID'] ."</h1>";
+						do_action( 'woosg_single_product_summary' );
+						}else{
+					$_SESSION['BTS_Product_Group_ID']=$product->get_id();
 					do_action( 'woosg_single_product_summary' );
+					}
 				}
 			?>
 		</div><!-- .summary -->
