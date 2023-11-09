@@ -2729,7 +2729,7 @@ if( $cart_item_key != ''){ ?>
                                         field_id_map = field_id;
                                     }
                                 })
-                                if (field_id_map != '' && !$scope.status_fields[field_id][field.value].enable) {
+                                if (field_id_map != '' && !$scope.status_fields[field_id][field.value]?.enable) {
                                     let select = '0';
                                     angular.forEach( $scope.status_fields[field_id] , function(value , key ) {
                                         if(value.enable) {
@@ -2791,7 +2791,7 @@ if( $cart_item_key != ''){ ?>
                                         field_id_map = field_id;
                                     }
                                 })
-                                if (field_id_map != '' && !$scope.status_fields[field_id][field.value].enable) {
+                                if (field_id_map != '' && !$scope.status_fields[field_id][field.value]?.enable) {
                                     let select = '0';
                                     angular.forEach( $scope.status_fields[field_id] , function(value , key ) {
                                         if(value.enable) {
@@ -2856,7 +2856,6 @@ if( $cart_item_key != ''){ ?>
                                     };
                                 }
                             }
-
                             if( origin_field.general.attributes.options.length ){
                                 origin_field.general.attributes.options.forEach(function(op, opIndex){
                                     $scope.checkAttributeStatus( field_id, opIndex );
@@ -2868,7 +2867,7 @@ if( $cart_item_key != ''){ ?>
                                     }
                                 });
 
-                                if( !$scope.status_fields[field_id][field.value].enable ){
+                                if( !$scope.status_fields[field_id][field.value]?.enable ){
                                     check[field_id] = false;
                                     field.valid = false;
                                     field.invalidOption = selected_option.name;
