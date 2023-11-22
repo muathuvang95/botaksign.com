@@ -336,8 +336,8 @@ class WC_REST_Custom_Controller {
 		$date_completed = get_post_meta( $order_id , '_order_time_completed' , true);
 		if(!isset($date_completed) || $date_completed == '') {
 			$date_completed = date( 'd/m/Y H:i a' , strtotime(show_est_completion($order)['production_datetime_completed']) );
-			update_post_meta( $order->get_id() , '_order_time_completed', $date_completed );
-			update_post_meta( $order->get_id() , '_order_time_completed_str', strtotime(show_est_completion($order)['production_datetime_completed']) );
+			NB_Order_Meta::update_post_meta( $order->get_id() , '_order_time_completed', $date_completed ); // Sync data
+			NB_Order_Meta::update_post_meta( $order->get_id() , '_order_time_completed_str', strtotime(show_est_completion($order)['production_datetime_completed']) ); // Sync data
 		}
 		// update specialist if miss
 		$_specialist_id = get_post_meta( $order_id , '_specialist_id' , true);
@@ -345,7 +345,7 @@ class WC_REST_Custom_Controller {
 	    if($current_user && !$_specialist_id) {
 	        $_specialist_id = get_user_meta($current_user, 'specialist', true);
 	        if($_specialist_id) {
-	            update_post_meta($order_id, '_specialist_id', $_specialist_id);
+	            NB_Order_Meta::update_post_meta($order_id, '_specialist_id', $_specialist_id); // Sync data
 	        }
 	    }
 	    //
@@ -355,14 +355,14 @@ class WC_REST_Custom_Controller {
 		$has_os = false;
 		if(!get_post_meta( $order_id , '_order_status' , true)) {
 			if( $order->get_status() == 'processing' ) {
-				update_post_meta( $order_id , '_order_status' , 'New');
+				NB_Order_Meta::update_post_meta( $order_id , '_order_status' , 'New'); // Sync data
 			} elseif($order->get_status() == 'pending' || $order->get_status() == 'on-hold') {
-				update_post_meta( $order_id , '_order_status' , 'Pending');
+				NB_Order_Meta::update_post_meta( $order_id , '_order_status' , 'Pending'); // Sync data
 				$has_os = true;
 			} elseif($order->get_status() == 'cancelled') {
-				update_post_meta($order->get_id() , '_order_status' , 'Cancelled');
+				NB_Order_Meta::update_post_meta($order->get_id() , '_order_status' , 'Cancelled'); // Sync data
 			} elseif ($order->get_status() == 'completed') {
-				update_post_meta($order->get_id() , '_order_status' , 'Collected');
+				NB_Order_Meta::update_post_meta($order->get_id() , '_order_status' , 'Collected'); // Sync data
 			}
 		}
 		foreach ($order_items as $item_id => $item) {
@@ -408,11 +408,11 @@ class WC_REST_Custom_Controller {
 			}
 		}
 		// if( get_post_meta($order_id, '_cxecrt_status_od', true) == 11 || get_post_meta($order_id, '_cxecrt_status_od', true) == 9 ) {
-		// 	update_post_meta($order->get_id() , '_order_status' , 'Collected');
+		// 	NB_Order_Meta::update_post_meta($order->get_id() , '_order_status' , 'Collected'); // Sync data
 
 		// }
 		if($payment_status != '') {
-			update_post_meta($order_id , '_payment_status' , $payment_status);
+			NB_Order_Meta::update_post_meta($order_id , '_payment_status' , $payment_status); // Sync data
 		}
 		$invoice_number = get_post_meta($order->get_id() , '_wcpdf_invoice_number' , true);
 		$link_pdf_invoice = '';
@@ -538,16 +538,16 @@ class WC_REST_Custom_Controller {
 		$payment_status = get_post_meta($order->get_id() , '_payment_status' , true);
 		if(get_post_meta( $order_id , '_order_status' , true) == 'Cancelled') {
 			$payment_status = 'cancelled';
-			update_post_meta($order->get_id() , '_payment_status' , 'cancelled');
+			NB_Order_Meta::update_post_meta($order->get_id() , '_payment_status' , 'cancelled'); // Sync data
 		}
 		if(!isset($payment_status) || $payment_status == '' ) {
 			if( ($order->get_payment_method() == 'paypal' || $order->get_payment_method() == 'omise_paynow' || $order->get_payment_method() == 'omise') && $order->get_status() == 'processing' ) {
 				$payment_status = 'paid';
-				update_post_meta($order->get_id() , '_payment_status' , 'paid');
+				NB_Order_Meta::update_post_meta($order->get_id() , '_payment_status' , 'paid'); // Sync data
 			}
 			if ($order->get_payment_method() == 'cod') {
 				$payment_status = 'pendding';
-				update_post_meta($order->get_id() , '_payment_status' , 'pendding');
+				NB_Order_Meta::update_post_meta($order->get_id() , '_payment_status' , 'pendding'); // Sync data
 			}
 		}
 		$_invoice_number  = '';
@@ -979,7 +979,7 @@ class WC_REST_Custom_Controller {
 			}			
 		}
 		if($flag == $count_item && $item_service && $item_issue ) {
-			update_post_meta( $order_id , '_order_status', 'Ongoing' );
+			NB_Order_Meta::update_post_meta( $order_id , '_order_status', 'Ongoing' ); // Sync data
 			// update status order WC
 			wp_update_post(array(
 			    'ID'    =>  $order_id,
@@ -1064,8 +1064,8 @@ class WC_REST_Custom_Controller {
 					$_new_date = date( 'd/m/Y H:i a' , $str_new_time );
 					if( $str_new_time > $max_time) {
 						$max_time = $str_new_time;
-						update_post_meta( $order_id , '_order_time_completed' , $_new_date);
-						update_post_meta( $order_id , '_order_time_completed_str' , $str_new_time);
+						NB_Order_Meta::update_post_meta( $order_id , '_order_time_completed' , $_new_date); // Sync data
+						NB_Order_Meta::update_post_meta( $order_id , '_order_time_completed_str' , $str_new_time); // Sync data
 						if( ( $str_new_time - strtotime("now") - 8*3600 )/3600 <= 2 && ( $opt_status != 'collection_point' && $opt_status != 'collected' ) ) {
 							$items['check_expiring'] = 'expiring';
 						}
@@ -1081,7 +1081,7 @@ class WC_REST_Custom_Controller {
 		}
 		if(isset($payment_status) && $payment_status != '') {
 			$payment_status = 'paid';
-			update_post_meta($order_id , '_payment_status' , 'paid');
+			NB_Order_Meta::update_post_meta($order_id , '_payment_status' , 'paid'); // Sync data
 			send_botaksign_email($order_id , 'ORDER RECEIVED', 'G1.php');
 		}
 		if( isset($status) && $status != '') {
@@ -1129,7 +1129,7 @@ class WC_REST_Custom_Controller {
 				}
 			}
 			if($new == $count_item) {
-				update_post_meta( $order_id , '_order_status', 'New' );
+				NB_Order_Meta::update_post_meta( $order_id , '_order_status', 'New' ); // Sync data
 				// update status order WC
 				wp_update_post(array(
 				    'ID'    =>  $order_id,
@@ -1143,8 +1143,8 @@ class WC_REST_Custom_Controller {
 				}
 			}
 			if( ($completed == $count_item || ($cancelled > 0 && $completed > 0 && $completed + $cancelled == $count_item) ) && $collected != $completed ) {
-				update_post_meta( $order_id , '_order_status', 'Completed' );
-				update_post_meta( $order_id , '_order_time_out', date("d/m/Y H:i a" , strtotime("now") + 8*3600 ) );
+				NB_Order_Meta::update_post_meta( $order_id , '_order_status', 'Completed' ); // Sync data
+				NB_Order_Meta::update_post_meta( $order_id , '_order_time_out', date("d/m/Y H:i a" , strtotime("now") + 8*3600 ) ); // Sync data
 				$_method = $order->get_shipping_method();
 				if($_order_status_df && $_order_status_df != 'Completed') {
 					if($_method=='Self-collection') {
@@ -1160,7 +1160,7 @@ class WC_REST_Custom_Controller {
 				$ongoing = false;
 			}
 			if($collected == $count_item || ($cancelled > 0 && $collected > 0 && $collected + $cancelled == $count_item) ) {
-				update_post_meta( $order_id , '_order_status', 'Collected' );
+				NB_Order_Meta::update_post_meta( $order_id , '_order_status', 'Collected' ); // Sync data
 				// update status order WC
 				wp_update_post(array(
 				    'ID'    =>  $order_id,
@@ -1174,14 +1174,14 @@ class WC_REST_Custom_Controller {
 				}
 			}
 			if($cancelled == $count_item) {
-				update_post_meta( $order_id , '_order_status', 'Cancelled' );
+				NB_Order_Meta::update_post_meta( $order_id , '_order_status', 'Cancelled' ); // Sync data
 				// update status order WC
 				wp_update_post(array(
 				    'ID'    =>  $order_id,
 				    'post_status'   =>  'wc-cancelled'
 				));
-				update_post_meta( $order_id , '_order_time_out', date("d/m/Y H:i a" , strtotime("now") + 8*3600 ) );
-				update_post_meta($order->get_id() , '_payment_status' , 'cancelled');
+				NB_Order_Meta::update_post_meta( $order_id , '_order_time_out', date("d/m/Y H:i a" , strtotime("now") + 8*3600 ) ); // Sync data
+				NB_Order_Meta::update_post_meta($order->get_id() , '_payment_status' , 'cancelled'); // Sync data
 				$payment_status = 'cancelled';
 				$_order_status = 'Cancelled';
 				$_order_status_wc = 'cancelled';
@@ -1192,7 +1192,7 @@ class WC_REST_Custom_Controller {
 				}
 			}
 			if($ongoing) {
-				update_post_meta( $order_id , '_order_status', 'Ongoing' );
+				NB_Order_Meta::update_post_meta( $order_id , '_order_status', 'Ongoing' ); // Sync data
 				// update status order WC
 				wp_update_post(array(
 				    'ID'    =>  $order_id,
@@ -1267,8 +1267,8 @@ class WC_REST_Custom_Controller {
 					wc_update_order_item_meta($item_id , '_item_time_completed' , date('d/m/Y H:i a' , strtotime($item_est_completion)) );
 					$items['date_completed'] = date('d/m/Y H:i a' , strtotime($item_est_completion));
 					if( strtotime($item_est_completion) > strtotime(show_est_completion($order)['production_datetime_completed']) ) {
-						update_post_meta( $order->get_id() , '_order_time_completed', date('d/m/Y H:i a' , strtotime($item_est_completion)) );
-						update_post_meta( $order->get_id() , '_order_time_completed_str', strtotime($item_est_completion) );
+						NB_Order_Meta::update_post_meta( $order->get_id() , '_order_time_completed', date('d/m/Y H:i a' , strtotime($item_est_completion)) ); // Sync data
+						NB_Order_Meta::update_post_meta( $order->get_id() , '_order_time_completed_str', strtotime($item_est_completion) ); // Sync data
 						$items['order_date_completed'] = date('d/m/Y H:i a' , strtotime($item_est_completion));
 					} else {
 						$items['order_date_completed'] = get_post_meta( $order->get_id() , '_order_time_completed', true );

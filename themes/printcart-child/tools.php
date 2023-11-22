@@ -335,6 +335,39 @@ if ( ! current_user_can( 'manage_options' ) ) {
 	</form>
 </div>
 
+<!-- Sync order meta data -->
+<div class="change-status border border-primary m-4 p-4">
+    <?php
+
+    if(isset($_POST['update-database']) && $_POST['update-database'] == 'update-database' ) {
+        $from = isset($_POST['from']) ? $_POST['from'] : '';
+        $to = isset($_POST['to']) ? $_POST['to'] : '';
+        $order_ids = NB_Order_Meta::get_list_order_id(1, $from, $to);
+        foreach($order_ids as $key => $value) {
+		    $order_id = $value['ID'];
+		    $res = NB_Order_Meta::nb_sync_order($order_id);
+		    echo '<pre>';
+		    var_dump($res);
+		    echo '</pre>';
+		}
+    }
+    ?>
+    <h3 class="my-2">Sync order meta</h3>
+
+    <form method="post" class="p-4">
+        <div class="mb-3">
+            <label for="orderIdFrom" class="form-label">Order ID From</label>
+            <input type="number" name="from" class="form-control" value="" id="orderIdFrom">
+        </div>
+        <div class="mb-3">
+            <label for="orderIdFrom" class="form-label">Order ID To</label>
+            <input type="number" name="to" class="form-control" value="" id="orderIdFrom">
+        </div>
+        <input type="hidden" name="update-database" value="update-database">
+        <button class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
 
 
 

@@ -72,6 +72,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/bucket-browser-for-aws-s3/buc
 require_once plugin_dir_path(__FILE__) . 'includes/filebird/filebird.php';
 require_once plugin_dir_path(__FILE__) . 'includes/custom-order-rest-api/functions.php';
 require_once plugin_dir_path(__FILE__) . 'includes/custom-order-rest-api/class-wc-rest-custom-order-controller.php';
+require_once plugin_dir_path(__FILE__) . 'includes/custom-order-rest-api/class.nb_ordermeta.php';
 require plugin_dir_path( __DIR__ ) . 'nb-offload-media/vendor/autoload.php';    //custom botak s3: require autoload S3
 add_action('wp_ajax_create_pages', 'create_default_pages', 2);
 
@@ -5476,7 +5477,7 @@ function my_save_extra_profile_fields( $user_id ) {
                 foreach($orders as $order) {
                     $order_id = $order->get_id();
                     if($order_id) {
-                        update_post_meta($order_id, '_specialist_id', $specialist);
+                        NB_Order_Meta::update_post_meta($order_id, '_specialist_id', $specialist); // Sync data
                     }
                 }
             }
@@ -5547,10 +5548,10 @@ function nb_set_date_order_status_changed_onhold_to_processing($order_id , $stat
                 // wc_update_order_item_meta($item_id, 'item_status', $opt_status);
             }
         }
-        update_post_meta( $order_id , '_order_status' , 'Ongoing');
+        NB_Order_Meta::update_post_meta( $order_id , '_order_status' , 'Ongoing'); // Sync data
         $date_completed = date( 'd/m/Y H:i a' , strtotime(show_est_completion($order)['production_datetime_completed']) );
-        update_post_meta( $order_id , '_order_time_completed', $date_completed );
-        update_post_meta( $order_id , '_order_time_completed_str', strtotime(show_est_completion($order)['production_datetime_completed']) );
+        NB_Order_Meta::update_post_meta( $order_id , '_order_time_completed', $date_completed ); // Sync data
+        NB_Order_Meta::update_post_meta( $order_id , '_order_time_completed_str', strtotime(show_est_completion($order)['production_datetime_completed']) ); // Sync data
     }
     $status_order = '';
     $status_item = '';
@@ -5569,7 +5570,7 @@ function nb_set_date_order_status_changed_onhold_to_processing($order_id , $stat
     if($status_t == 'cancelled' || $status_t == 'failed' || $status_t == 'refunded' ) {
         $status_order   = 'Cancelled';
         $status_item    = 'cancelled';
-        update_post_meta( $order_id , '_order_time_out', date("d/m/Y H:i a" , strtotime("now") + 8*3600 ) );
+        NB_Order_Meta::update_post_meta( $order_id , '_order_time_out', date("d/m/Y H:i a" , strtotime("now") + 8*3600 ) ); // Sync data
     }
     if($status_t == 'failed') {
         send_botaksign_email($order_id , 'ORDER #'.$order_id.' PAYMENT FAIL', 'I1.php');
@@ -5577,7 +5578,7 @@ function nb_set_date_order_status_changed_onhold_to_processing($order_id , $stat
     if($status_order && $status_item) {
         if($order_items) {
             v3_add_order_notes($order_id , $status_order , 'update_status_order');
-            update_post_meta( $order_id , '_order_status' , $status_order);
+            NB_Order_Meta::update_post_meta( $order_id , '_order_status' , $status_order); // Sync data
             foreach ( $order_items as $item_id => $item ) {
                 if( wc_get_product($item->get_product_id()) && !wc_get_product($item->get_product_id())->is_type( 'service' ) ){
                     wc_update_order_item_meta($item_id , '_item_status' , $status_item);

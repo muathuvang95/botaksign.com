@@ -1268,7 +1268,7 @@ function v3_update_date_api($order_id) {
     if($current_user) {
         $specialist = get_user_meta($current_user, 'specialist', true);
         if($specialist) {
-            update_post_meta($order_id, '_specialist_id', $specialist);
+            NB_Order_Meta::update_post_meta($order_id, '_specialist_id', $specialist); // Sync data
         }
     }
     if($order_items) {
@@ -1279,11 +1279,11 @@ function v3_update_date_api($order_id) {
             // wc_update_order_item_meta($item_id, '_item_status', $opt_status);
         }
     }
-    //update_post_meta( $order_id , '_order_status' , 'New');
+    // NB_Order_Meta::update_post_meta( $order_id , '_order_status' , 'New'); // Sync data
     $date_completed = date( 'd/m/Y H:i a' , strtotime(show_est_completion($order)['production_datetime_completed']) );
     update_post_meta( $order_id , '_order_time_completed', $date_completed );
     update_post_meta( $order_id , '_order_time_completed_str', strtotime(show_est_completion($order)['production_datetime_completed']) );
-
+    NB_Order_Meta::nb_sync_order($order_id);
 }
 
 // create button payment authentic in order
@@ -1335,9 +1335,9 @@ add_action('woocommerce_process_shop_order_meta' , 'nb_save_authentic_payment' ,
 function nb_save_authentic_payment($order_id) {
     $authentic_payment = isset($_POST['authentic_payment']) ? $_POST['authentic_payment']: '' ;
     if(isset($_POST['action']) && isset($_POST['action']) == 'editpost' && $authentic_payment == 'authentic_payment') {
-        update_post_meta($order_id , '_payment_status' , 'paid');
+        NB_Order_Meta::update_post_meta($order_id , '_payment_status' , 'paid'); // Sync data
     } else {
-        update_post_meta($order_id , '_payment_status' , 'pendding');
+        NB_Order_Meta::update_post_meta($order_id , '_payment_status' , 'pendding'); // Sync data
     }
 }
 
