@@ -1456,6 +1456,7 @@ CREATE TABLE {$wpdb->prefix}nbdesigner_options (
                                 'subval'    => ''
                             )
                         ),
+                        'implicit_value'        => ''
                         /* CS botak gallery option
                         'gallery_enable_con'            => 0,
                         'gallery_con_logic'             => 'a',
@@ -1480,6 +1481,7 @@ CREATE TABLE {$wpdb->prefix}nbdesigner_options (
                 $options[$key]['con_show']           = isset( $options[$key]['con_show'] ) ? $options[$key]['con_show'] : 'n';
                 $options[$key]['con_logic']          = isset( $options[$key]['con_logic'] ) ? $options[$key]['con_logic'] : 'a';
                 $options[$key]['depend']             = ( isset( $option['depend'] ) && count( $option['depend'] ) ) ? $option['depend'] : array( 0 => array( 'id' => '', 'operator' => 'i', 'val' => '', 'subval' => '' ) );
+                $options[$key]['implicit_value']     = isset( $option['implicit_value'] ) ? $option['implicit_value'] : '';
 //                $options[$key]['gallery_depend']     = ( isset( $option['gallery_depend'] ) && count( $option['gallery_depend'] ) ) ? $option['gallery_depend'] : array( 0 => array( 'id' => '', 'operator' => 'i', 'val' => '', 'subval' => '' ) );
 //                $options[$key]['gallery_con_logic']  = isset( $options[$key]['gallery_con_logic'] ) ? $options[$key]['gallery_con_logic'] : 'a';
 //                $options[$key]['gallery_enable_con'] = isset( $options[$key]['gallery_enable_con'] ) ? $options[$key]['gallery_enable_con'] : 0;
@@ -1490,6 +1492,7 @@ CREATE TABLE {$wpdb->prefix}nbdesigner_options (
                         $options[$key]['sub_attributes'][$sak]['con_show']      = isset( $sa['con_show'] ) ? $sa['con_show'] : 'n';
                         $options[$key]['sub_attributes'][$sak]['con_logic']     = isset( $sa['con_logic'] ) ? $sa['con_logic'] : 'a';
                         $options[$key]['sub_attributes'][$sak]['depend']        = ( isset( $sa['depend'] ) && count( $sa['depend'] ) ) ? $sa['depend'] : array( 0 => array( 'id' => '', 'operator' => 'i', 'val' => '', 'subval' => '' ) );
+                        $options[$key]['sub_attributes'][$sak]['implicit_value']    = isset( $sa['implicit_value'] ) ? $sa['implicit_value'] : '';
                     }
                 }
                 

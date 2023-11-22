@@ -117,6 +117,13 @@
                                 <input autocomplete="off" ng-click="initFormulaPrice(op.price[0], 0, fieldIndex, opIndex)" name="options[fields][{{fieldIndex}}][general][attributes][options][{{opIndex}}][price][0]" class="nbd-short-ip" type="text" ng-model="op.price[0]"/>
                             </div>
                         </div>
+                        <div class="nbd-margin-10"></div>
+                        <div>
+                            <div><?php esc_html_e('Implicit Value', 'web-to-print-online-designer'); ?></div>
+                            <div>
+                                <input class="nbd-short-ip" type="text" ng-model="op.implicit_value" name="options[fields][{{fieldIndex}}][general][attributes][options][{{opIndex}}][implicit_value]"/>
+                            </div>
+                        </div>
                         <div ng-if="field.nbd_type === 'pricing_rates'">
                             <div class="nbd-field-info nbd-field-pricing-rates" ng-repeat="(role_index, role) in op.role_pricing_rates">
                                 <div class="nbd-pricing-rates title" ng-show="!role.isExpand">{{role.role_name}}</div>
@@ -478,6 +485,13 @@
                                                 </td>
                                             </tr>
                                         </table>
+                                    </div>
+                                    <div class="nbd-margin-10"></div>
+                                    <div>
+                                        <div><?php esc_html_e('Implicit Value', 'web-to-print-online-designer'); ?></div>
+                                        <div>
+                                            <input class="nbd-short-ip" type="text" ng-model="sop.implicit_value" name="options[fields][{{fieldIndex}}][general][attributes][options][{{opIndex}}][sub_attributes][{{sopIndex}}][implicit_value]"/>
+                                        </div>
                                     </div>
                                     <ng-include src="'field_body_sub_attributes_conditional'"></ng-include>
                                 </div>

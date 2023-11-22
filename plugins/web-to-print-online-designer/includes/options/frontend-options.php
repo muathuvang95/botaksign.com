@@ -1901,6 +1901,31 @@ if(!class_exists('NBD_FRONTEND_PRINTING_OPTIONS')){
                             case 'value_length':
                                 $val = $value_len;
                                 break;
+                            case 'implicit_value':
+                                if( $_origin_field['general']['data_type'] == 'm' ){
+                                    $field_value = $fields[$field_id];
+                                    $select_val = is_array( $field_value ) ? ( isset( $field_value['value'] ) ? $field_value['value'] : $field_value[0] ) : $field_value;
+                                    if( array_key_exists( $select_val, $_origin_field['general']['attributes']['options'] ) ){
+                                        $option = $_origin_field['general']['attributes']['options'][$select_val];
+                                        $val = isset( $option['implicit_value'] ) ? $option['implicit_value'] : 0;
+                                    }
+                                }
+                                break;
+                            case 'sub_implicit_value':
+                                if( $_origin_field['general']['data_type'] == 'm' ){
+                                    $field_value = $fields[$field_id];
+                                    $select_val = is_array( $field_value ) ? ( isset( $field_value['value'] ) ? $field_value['value'] : $field_value[0] ) : $field_value;
+                                    if( array_key_exists( $select_val, $_origin_field['general']['attributes']['options'] ) ){
+                                        $option = $_origin_field['general']['attributes']['options'][$select_val];
+                                        if( isset($option['enable_subattr']) && $option['enable_subattr'] == 'on' && isset($option['sub_attributes']) && count($option['sub_attributes']) > 0 ){
+                                            if( is_array( $field_value ) && isset( $field_value['sub_value'] ) && array_key_exists( $field_value['sub_value'], $option['sub_attributes'] ) ){
+                                                $soption = $option['sub_attributes'][$field_value['sub_value']];
+                                                $val = isset( $soption['implicit_value'] ) ? $soption['implicit_value'] : 0;
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
                         }
                     }
 

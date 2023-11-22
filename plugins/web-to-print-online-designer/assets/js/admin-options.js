@@ -2190,7 +2190,8 @@ angular.module('optionApp', []).controller('optionCtrl', function( $scope, $time
                     val: '',
                     subval: ''
                 }
-            ]
+            ],
+            implicit_value: ''
         };
         
         if (angular.isDefined($scope.options['fields'][fieldIndex].nbd_type) && $scope.options['fields'][fieldIndex].nbd_type === 'pricing_rates') {
@@ -2261,7 +2262,8 @@ angular.module('optionApp', []).controller('optionCtrl', function( $scope, $time
                         val: '',
                         subval: ''
                     }
-                ]
+                ],
+                implicit_value: ''
             }
         );
         $scope.initfieldValue();
@@ -2850,7 +2852,8 @@ angular.module('optionApp', []).controller('optionCtrl', function( $scope, $time
                         color: op.color,
                         name: op.name,
                         des: op.des,
-                        price: op.price
+                        price: op.price,
+                        implicit_value: angular.isDefined( op.implicit_value ) ? op.implicit_value : ''
                     };
                     if( op.color2 ){
                         fields[fieldIndex].general.attributes.options[opIndex].color2 = op.color2;
@@ -2867,6 +2870,7 @@ angular.module('optionApp', []).controller('optionCtrl', function( $scope, $time
                         if( op.sub_attributes.length > 0 ){
                             fields[fieldIndex].general.attributes.options[opIndex].sub_attributes = op.sub_attributes;
                             fields[fieldIndex].general.attributes.options[opIndex].sub_attributes.forEach(function(sa, saIndex){
+                                fields[fieldIndex].general.attributes.options[opIndex].sub_attributes[saIndex].implicit_value = angular.isDefined( sa.implicit_value ) ? sa.implicit_value : '';
                                 if( sa.selected ){
                                     fields[fieldIndex].general.attributes.options[opIndex].sub_attributes[saIndex].selected = 'on';
                                 }

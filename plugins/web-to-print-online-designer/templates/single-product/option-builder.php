@@ -7394,6 +7394,33 @@ if( $cart_item_key != ''){ ?>
                                 case 'value_length':
                                     val = fields[field_id].value.length;
                                     break;
+                                case 'implicit_value':
+                                    var _origin_field = $scope.get_field( field_id );
+                                    if( _origin_field.general.data_type == 'm' ){
+                                        var field_value = fields[field_id].value;
+                                        var option = _origin_field.general.attributes.options[field_value];
+                                        if( option && angular.isDefined( option.implicit_value ) ){
+                                            val = option.implicit_value;
+                                        }
+                                    }
+                                    break;
+                                case 'sub_implicit_value':
+                                    var _origin_field = $scope.get_field( field_id );
+                                    if( _origin_field.general.data_type == 'm' ){
+                                        var field_value = fields[field_id].value;
+                                        var option = _origin_field.general.attributes.options[field_value];
+                                        if( option ){
+                                            if( angular.isDefined( option.enable_subattr ) && option.enable_subattr == 'on' 
+                                                && angular.isDefined( option.sub_attributes ) && option.sub_attributes.length > 0 ){
+                                                var sub_field_value = fields[field_id].sub_value;
+                                                var sub_option = option.sub_attributes[sub_field_value];
+                                                if( sub_option && angular.isDefined( sub_option.implicit_value ) ){
+                                                    val = sub_option.implicit_value;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    break;
                             }
                         }
 
