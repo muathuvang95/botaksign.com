@@ -177,8 +177,8 @@ foreach ($items as $item_id => $item) {
             <div class="col-sm-6">
                 <div class="order-actions d-flex justify-content-end">
                     <?php
-                    echo '<button class="me-3 btn btk-btn-success">Re-Order</button>';
-                    // if($can_reorder) woocommerce_order_again_button($order);
+                    // echo '<button class="me-3 btn btk-btn-success">Re-Order</button>';
+                    if($can_reorder) woocommerce_order_again_button($order);
                     nb_custom_pay_paynow($order_id);
                     ?>
                 </div>
