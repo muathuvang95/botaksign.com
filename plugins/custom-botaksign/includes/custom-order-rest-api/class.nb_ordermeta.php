@@ -5,9 +5,9 @@ if (!class_exists('NB_Order_Meta')) {
 
 	class NB_Order_Meta {
 
-		public static $validate_input = array('specialist_id', 'order_status', 'post_date', 'order_time_completed', 'order_time_completed_str', 'order_time_out', 'billing_first_name', 'billing_last_name', 'billing_company', 'payment_method', 'payment_status', 'delivery');
+		public static $validate_input = array('specialist_id', 'order_status', 'post_date', 'order_time_completed', 'order_time_completed_str', 'order_time_out', 'billing_first_name', 'billing_last_name', 'billing_company', 'payment_method', 'payment_status', 'delivery', 'order_create', 'order_update');
 
-		public static $validate_input2 = array('_specialist_id', '_order_status', 'post_date', '_order_time_completed', '_order_time_completed_str', '_order_time_out', '_billing_first_name', '_billing_last_name', '_billing_company', '_payment_method', '_payment_status', 'delivery');
+		public static $validate_input2 = array('_specialist_id', '_order_status', 'post_date', '_order_time_completed', '_order_time_completed_str', '_order_time_out', '_billing_first_name', '_billing_last_name', '_billing_company', '_payment_method', '_payment_status', 'delivery', 'order_create', 'order_update');
 
 		public function __construct()
         {
@@ -76,11 +76,45 @@ if (!class_exists('NB_Order_Meta')) {
 		        payment_method text NULL,
 		        payment_status text NULL,
 		        delivery text NULL,
+		        order_create datetime default NULL,
+		        order_update datetime default NULL,
 		        PRIMARY KEY  (id)
 		        ) $collate; 
 		    ";
 		    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		    @dbDelta($tables);
+		}
+
+
+		public static function migrate_column_post_date($columns) {
+		    global $wpdb;
+
+		    $table_name = $wpdb->prefix . 'nb_order_meta';
+
+		    if(is_array($columns) && count($columns) > 0) {
+		        foreach($columns as $key => $col_name) {
+		            if($col_name) {
+		                $row = $wpdb->get_results(  "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
+		                WHERE table_name = '${table_name}' AND column_name = '${col_name}'"  );
+
+		                if(empty($row)){
+		                   $wpdb->query("ALTER TABLE ${table_name} ADD ${col_name} datetime");
+		                }
+		            }
+		        }
+		    }
+		}
+
+		public static function get_order_meta($order_id, $meta_key) {
+			global $wpdb;
+
+			if(!$order_id || !$meta_key || !in_array($meta_key, self::$validate_input)) return false;
+
+		    $table_name = $wpdb->prefix . 'nb_order_meta';
+
+		    $data = $wpdb->get_var( $wpdb->prepare("SELECT ${meta_key} FROM $table_name WHERE order_id = %s", $order_id) );
+
+		    return $data;
 		}
 
 		public static function add_order_meta($order_id, $data) {
@@ -105,6 +139,8 @@ if (!class_exists('NB_Order_Meta')) {
 			    	$_data[$key] = $value;
 			    }
 			}
+
+			$_data['order_create'] = current_time( 'mysql' );
 
 			$result = $wpdb->insert($table_name,$_data);
 
@@ -145,6 +181,8 @@ if (!class_exists('NB_Order_Meta')) {
 		        'order_id'    => $order_id,
 		    );
 
+		    $_data['order_update'] = current_time( 'mysql' );
+
 		    $result = $wpdb->update( $table_name, $_data, $where );
 
 			if ( ! $result ) {
@@ -181,7 +219,7 @@ if (!class_exists('NB_Order_Meta')) {
 		    $specialist_id = get_post_meta( $order_id , '_specialist_id' , true);
 		    $order_status = get_post_meta( $order_id , '_order_status' , true);
 		    $order_time_completed_str = get_post_meta( $order_id , '_order_time_completed_str' , true);
-		    $order_time_completed = date("Y-m-d H:i:s", $order_time_completed_str);
+		    $order_time_completed = $order_time_completed_str ? date("Y-m-d H:i:s", $order_time_completed_str) : null;
 		    $order_time_out = get_post_meta( $order_id , '_order_time_out' , true);
 			$order_time_out_str = '';
 			if($order_time_out) {
@@ -207,7 +245,7 @@ if (!class_exists('NB_Order_Meta')) {
 		    $wc_order_status = $post->post_status;
 		    $post_date = $post->post_date;
 
-		    $table = 'wp_nb_order_meta';
+		    $table_name = $wpdb->prefix . 'nb_order_meta';
 
 		    $data = array(
 				'order_id' => $order_id,
@@ -224,15 +262,17 @@ if (!class_exists('NB_Order_Meta')) {
 				'payment_method' => esc_sql($payment_method),
 				'payment_status' => esc_sql($payment_status),
 				'delivery' => esc_sql($delivery),
+				'order_create' => self::get_order_meta($order_id, 'order_create') ? self::get_order_meta($order_id, 'order_create') : current_time( 'mysql' ),
+				'order_update' => current_time( 'mysql' ),
 			);
 
 			if($is_imported) {
 				$where = array(
 			        'order_id'    => $order_id,
 			    );
-				$wpdb->update( $table, $data, $where);
+				$wpdb->update( $table_name, $data, $where);
 			} else {
-				$wpdb->insert( $table, $data);
+				$wpdb->insert( $table_name, $data);
 				$order_id = $wpdb->insert_id;
 			}
 

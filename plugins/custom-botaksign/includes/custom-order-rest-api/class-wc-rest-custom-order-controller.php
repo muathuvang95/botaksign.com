@@ -411,6 +411,11 @@ class WC_REST_Custom_Controller {
 		// 	NB_Order_Meta::update_post_meta($order->get_id() , '_order_status' , 'Collected'); // Sync data
 
 		// }
+		$order_status = get_post_meta( $order_id , '_order_status' , true);
+		$_order_status_sync = NB_Order_Meta::get_order_meta( $order_id , '_order_status');
+		if($order_status != $_order_status_sync) {
+			NB_Order_Meta::nb_sync_order($order_id);
+		}
 		if($payment_status != '') {
 			NB_Order_Meta::update_post_meta($order_id , '_payment_status' , $payment_status); // Sync data
 		}
@@ -476,7 +481,7 @@ class WC_REST_Custom_Controller {
 		// }
 		$data = array(
 			'id'                   => $order->get_id(),
-			'status'               => get_post_meta( $order_id , '_order_status' , true),
+			'status'               => $order_status,
 			'currency'             => $order->get_currency(),
 			'date_created'         => $date_created,
 			'date_modified'        => $order->get_date_modified(),
