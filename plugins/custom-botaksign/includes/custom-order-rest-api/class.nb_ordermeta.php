@@ -78,6 +78,7 @@ if (!class_exists('NB_Order_Meta')) {
 		        delivery text NULL,
 		        order_create datetime default NULL,
 		        order_update datetime default NULL,
+		        log text,
 		        PRIMARY KEY  (id)
 		        ) $collate; 
 		    ";
@@ -204,7 +205,7 @@ if (!class_exists('NB_Order_Meta')) {
 			return '';
 		}
 
-		public static function nb_sync_order($order_id) {
+		public static function nb_sync_order($order_id, $s = '') {
 		   global $wpdb;
 
 		   $is_imported = self::is_imported($order_id);
@@ -247,6 +248,10 @@ if (!class_exists('NB_Order_Meta')) {
 
 		    $table_name = $wpdb->prefix . 'nb_order_meta';
 
+		    $log = self::get_order_meta($order_id, 'log');
+		    $current_tatus = self::get_order_meta($order_id, 'order_status');
+		    $new_log = $log.',SYNC:'.$current_tatus.':'.$order_status;
+
 		    $data = array(
 				'order_id' => $order_id,
 				'specialist_id' => $specialist_id,
@@ -264,6 +269,7 @@ if (!class_exists('NB_Order_Meta')) {
 				'delivery' => esc_sql($delivery),
 				'order_create' => self::get_order_meta($order_id, 'order_create') ? self::get_order_meta($order_id, 'order_create') : current_time( 'mysql' ),
 				'order_update' => current_time( 'mysql' ),
+				'log'	=> $new_log,
 			);
 
 			if($is_imported) {

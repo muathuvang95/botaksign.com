@@ -412,7 +412,7 @@ class WC_REST_Custom_Controller {
 
 		// }
 		$order_status = get_post_meta( $order_id , '_order_status' , true);
-		$_order_status_sync = NB_Order_Meta::get_order_meta( $order_id , '_order_status');
+		$_order_status_sync = NB_Order_Meta::get_order_meta( $order_id , 'order_status');
 		if($order_status != $_order_status_sync) {
 			NB_Order_Meta::nb_sync_order($order_id);
 		}
@@ -1308,6 +1308,482 @@ class WC_REST_Custom_Controller {
 		$response = rest_ensure_response( $items);
 		return $response;
 	}
+	public function search($request) {
+		global $wpdb;
+
+		$mode = $request['mode'] ? $request['mode'] : '';
+		if($mode == 'dev' || true) {
+			return $this->_search_new($request);
+		}
+
+		$specialist = $request['specialist'] ? json_decode($request['specialist']) : '';
+		$user_id = $request['user_id'] ? (int) $request['user_id'] : '';
+		$posts_per_page = $request['per_page'] ? (int) $request['per_page'] : 20;
+		$page = $request['page'] ? (int) $request['page'] : 1;
+		$offset = ($page * $posts_per_page) - $posts_per_page;
+		$id = $request['id'] ? $request['id'] : '';
+		$status = $request['status'] ? $request['status'] : '';
+		$date_in = $request['date_in'] ? $request['date_in'] : '';
+		$date_out = $request['date_out'] ? $request['date_out'] : '';
+		$date_completed = $request['date_completed'] ? $request['date_completed'] : '';
+		$name = $request['name'] ? $request['name'] : '';
+		$company = $request['company'] ? $request['company'] : '';
+		$payment = $request['payment'] ? $request['payment'] : '';
+		$payment_status = $request['payment_status'] ? $request['payment_status'] : '';
+		$delivery = $request['delivery'] ? $request['delivery'] : '';
+		$completion = $request['completion'] ? $request['completion'] : '';
+
+		$date_in_y = date_parse($date_in)['year'];
+		$date_in_m = date_parse($date_in)['month'];
+		$date_in_d = date_parse($date_in)['day'];
+
+		$date_out_y = date_parse($date_out)['year'];
+		$date_out_m = date_parse($date_out)['month'];
+		$date_out_d = date_parse($date_out)['day'];
+		$date_out_str = $date_out_d.'/'.$date_out_m.'/'.$date_out_y;
+        
+        // 115000->Mid Dec 2022
+        // 162976->End June 2023
+        // Change (wp_posts.post_status = 'wc-pending' OR wp_posts.post_status = 'wc-processing' OR wp_posts.post_status = 'wc-on-hold' OR wp_posts.post_status = 'wc-cancelled' OR wp_posts.post_status = 'wc-completed' OR wp_posts.post_status = 'wc-failed' OR wp_posts.post_status = 'wc-refunded')
+        // To nothing as shop_order status is ('wc-pending','wc-processing','wc-on-hold','wc-completed','wc-cancelled','wc-refunded','wc-failed')
+        // so can skip filter post_status for wc-** if post_type is shop_order
+        $Start_Post_ID_To_Search=115000; $Start_Post_ID_To_Search=162976;
+		$query_first = "SELECT ID FROM wp_posts WHERE wp_posts.ID > $Start_Post_ID_To_Search AND wp_posts.post_type = 'shop_order' ";
+		$query_first_total = "SELECT COUNT(ID) as count FROM wp_posts WHERE wp_posts.ID > $Start_Post_ID_To_Search AND wp_posts.post_type = 'shop_order' ";
+		//$query_first = "SELECT ID FROM wp_posts WHERE wp_posts.ID > $Start_Post_ID_To_Search AND wp_posts.post_type = 'shop_order' AND ((wp_posts.post_status = 'wc-pending' OR wp_posts.post_status = 'wc-processing' OR wp_posts.post_status = 'wc-on-hold' OR wp_posts.post_status = 'wc-completed' OR wp_posts.post_status = 'wc-cancelled' OR wp_posts.post_status = 'wc-refunded' OR wp_posts.post_status = 'wc-failed'))";
+		//$query_first_total = "SELECT COUNT(ID) as count FROM wp_posts WHERE wp_posts.ID > $Start_Post_ID_To_Search AND wp_posts.post_type = 'shop_order' AND ((wp_posts.post_status = 'wc-pending' OR wp_posts.post_status = 'wc-processing' OR wp_posts.post_status = 'wc-on-hold' OR wp_posts.post_status = 'wc-completed' OR wp_posts.post_status = 'wc-cancelled' OR wp_posts.post_status = 'wc-refunded' OR wp_posts.post_status = 'wc-failed'))";
+		$query_meta_first = "SELECT wp_postmeta.post_id FROM wp_postmeta";
+		$query_meta_last = "";
+		$query_last = "";
+		$is_query_metadata = false;
+		if($specialist) {
+			if(is_array($specialist)) {
+				$is_query_metadata = true;
+				$query_meta_first .= " INNER JOIN wp_postmeta AS mts ON ( wp_postmeta.post_id = mts.post_id )";
+				$query_meta_last .= " AND ( mts.meta_key = '_specialist_id' AND ( ";
+				foreach ($specialist as $key => $value) {
+					$specialist_id = $value->id;
+					$query_meta_last .= " mts.meta_value = '${specialist_id}'";
+					if(count($specialist) >0 && $key < count($specialist) - 1) {
+						$query_meta_last .= " OR ";
+					}
+				}
+				$query_meta_last .= " ))";
+			}
+		}
+		if($id != '') {
+		    // ID means Fixed no need use like %% by Chee Ong on 11/11/2023
+			//$query_last .= " AND wp_posts.ID LIKE '%${id}%'";
+			$query_last .= " AND wp_posts.ID ='${id}'";
+		}
+		//$delivery = 'Self-collection';
+		if($status != '') {
+			$is_query_metadata = true;
+			$query_meta_first .= " INNER JOIN wp_postmeta AS mt1 ON ( wp_postmeta.post_id = mt1.post_id )";
+			$query_meta_last .= " AND ( ( mt1.meta_key = '_order_status' AND mt1.meta_value = '${status}' ) )";
+		}
+		// Close it first by Chee Ong on 11/11/2023
+		/*
+		if($date_in != '') {
+			$query_last .= " AND ( ( YEAR( wp_posts.post_date ) = ${date_in_y} AND MONTH( wp_posts.post_date ) = ${date_in_m} AND DAYOFMONTH( wp_posts.post_date ) = ${date_in_d} ) )";
+		    }
+		if($date_out != '') {
+			$datas = array();
+			$datas['orders'] = array();
+			$datas['total'] = 0;
+			$datas['shipping_method'] = $this->get_shipping_method();
+			$response = rest_ensure_response( $datas );
+			return $response;
+
+			$query_first .= " INNER JOIN wp_postmeta AS mt2 ON ( wp_posts.ID = mt2.post_id )";
+			$query_last .= " AND ( ( mt2.meta_key = '_order_time_out' AND mt2.meta_value LIKE '%".$date_out_str."%') )";
+		    }
+		*/
+		if($company != '') {
+		    // Either search by company or name. Chee Ong on 11/11/2023
+		    // Use Like 'company%', '%company%'in DB Search is very resource consuming
+			$is_query_metadata = true;
+			$company = esc_sql($company);
+			$query_meta_first .= " INNER JOIN wp_postmeta AS mt3 ON ( wp_postmeta.post_id = mt3.post_id )";
+			//$query_meta_last .= " AND ( ( mt3.meta_key = '_billing_company' AND mt3.meta_value LIKE '%${company}%' ) )";
+			$query_meta_last .= " AND ( ( mt3.meta_key = '_billing_company' AND mt3.meta_value LIKE '${company}%' ) )";
+			$name=False;
+		    }
+	    // Disable Expiring First Chee Ong on 22/11/2023
+	    /*
+		if($completion != '') {
+			$is_query_metadata = true;
+			$time_from = strtotime('-10 now');
+			$time_to = strtotime('-8 now');
+			$query_meta_first .= " INNER JOIN wp_postmeta AS mt5 ON ( wp_postmeta.post_id = mt5.post_id )";
+			$query_meta_last .= "AND ( ( mt5.meta_key = '_order_time_completed_str' AND mt5.meta_value BETWEEN '0' AND '${time_from}' ) ) AND ( ( wp_postmeta.meta_key = '_order_status' AND wp_postmeta.meta_value != 'Completed' ) ) AND ( ( wp_postmeta.meta_key = '_order_status' AND wp_postmeta.meta_value != 'Collected' ) ) ";
+	    	}
+		*/
+		if($name != '' && strlen($name)>4) {
+		    // The name must be at least 5 characters and Search By Firstname only. By Chee Ong on 11/11/2023
+			$is_query_metadata = true;
+			$name = esc_sql($name);
+			$query_meta_first .= " INNER JOIN wp_postmeta AS mt6 ON ( wp_postmeta.post_id = mt6.post_id )";
+			//$query_meta_last .= " INNER JOIN wp_usermeta ON (mt6.meta_key = '_customer_user' AND mt6.meta_value = wp_usermeta.user_id) WHERE ( wp_usermeta.meta_key = 'billing_first_name' AND  wp_usermeta.meta_value LIKE '%${name}%' ) OR (  wp_usermeta.meta_key = 'billing_last_name' AND  wp_usermeta.meta_value LIKE '%${name}%' )";
+			$query_meta_last .= " INNER JOIN wp_usermeta ON (mt6.meta_key = '_customer_user' AND mt6.meta_value = wp_usermeta.user_id) WHERE ( wp_usermeta.meta_key = 'billing_first_name' AND  wp_usermeta.meta_value LIKE '${name}%' ) ";
+		    }
+		
+		// Close it first by Chee Ong on 11/11/2023
+		/*
+		if($payment != '') {
+			$is_query_metadata = true;
+			$query_meta_first .= " INNER JOIN wp_postmeta AS mt4 ON ( wp_postmeta.post_id = mt4.post_id )";
+			$query_meta_last .= " AND ( ( mt4.meta_key = '_payment_method' AND mt4.meta_value = '${payment}' ) )";
+		    }
+		if($payment_status != '') {
+			$is_query_metadata = true;
+			$query_meta_first .= " INNER JOIN wp_postmeta AS mt7 ON ( wp_postmeta.post_id = mt7.post_id )";
+			$query_meta_last .= " AND ( ( mt7.meta_key = '_payment_status' AND mt7.meta_value = '${payment_status}' ) )";
+		    }
+		   */
+		if($delivery != '') {
+		    // Try not to use Like %%
+			$is_query_metadata = true;
+			// $query_meta_last .= " INNER JOIN wp_woocommerce_order_items ON ( wp_postmeta.post_id = wp_woocommerce_order_items.order_id )  WHERE ( ( wp_woocommerce_order_items.order_item_name LIKE '${delivery}' ) )";
+			$query_meta_last .= " INNER JOIN wp_woocommerce_order_items ON ( wp_postmeta.post_id = wp_woocommerce_order_items.order_id )  WHERE ( ( wp_woocommerce_order_items.order_item_name = '${delivery}' ) )";
+		    }
+		
+		$query = $query_first . ' '.$query_last;
+		$query_total = $query_first_total . ' '.$query_last;
+		if($is_query_metadata) {
+			$query .= ' AND ID IN ('. $query_meta_first . $query_meta_last . ' )';
+			$query_total .= ' AND ID IN ('. $query_meta_first . $query_meta_last . ' )';
+		}
+		$query .= " GROUP BY wp_posts.ID ORDER BY wp_posts.post_date DESC LIMIT ${offset}, ${posts_per_page}";
+		
+		
+		// Need to either Union or IN
+		if($specialist){
+		    //echo "$query<br>"; 
+		    if(is_array($specialist)) {
+		        $Specialist_Select_In=False;
+		        foreach ($specialist as $key => $value) {
+					$specialist_id = $value->id;
+					if($Specialist_Select_In){$Specialist_Select_In.=",'$specialist_id'";}else{$Specialist_Select_In="'$specialist_id'";}
+		            }
+		        }
+		    $query_in="SELECT post_id FROM wp_postmeta where post_id > $Start_Post_ID_To_Search and meta_key='_specialist_id' and meta_value IN ($Specialist_Select_In)";
+		    if($status){
+		        // Try if NEW then get New first as New is always lesser
+		        switch($status){
+		            case 'New' : $Start_Post_ID_To_Search_For_New=180000; // case 'Ongoing' : 
+		                $query_in="SELECT post_id From wp_postmeta where post_id > $Start_Post_ID_To_Search_For_New and meta_key='_order_status' and meta_value='${status}'";
+		                $query_in="SELECT post_id FROM wp_postmeta where meta_key='_specialist_id' and meta_value IN ($Specialist_Select_In) and post_id IN ($query_in)";
+		                break;
+		            case 'Pending' : // Pending mean search all specialist
+		                $query_in="SELECT post_id From wp_postmeta where post_id > $Start_Post_ID_To_Search and meta_key='_order_status' and meta_value='${status}'";
+		                break;      
+		            default : $query_in="SELECT post_id From wp_postmeta where meta_key='_order_status' and meta_value = '${status}' and post_id IN ($query_in)";
+		            }
+		        }
+		    // If specialist more than 5 then just do as All specialist 
+		    //if(count($specialist)>5){$query_in="SELECT post_id From wp_postmeta where post_id>162976 and meta_key='_order_status'";}
+		    //if(count($specialist)>5 && $status){
+		    if(count($specialist)>4){
+		        if($status){$query_in="SELECT post_id From wp_postmeta where post_id > $Start_Post_ID_To_Search and meta_key='_order_status' and meta_value='${status}'";}
+		        else{$query_in="SELECT post_id From wp_postmeta where post_id > $Start_Post_ID_To_Search and meta_key='_order_status'";}
+		        }
+		    if($delivery){$query_in="SELECT post_id From wp_postmeta AS A INNER JOIN wp_woocommerce_order_items AS B ON A.post_id=B.order_id WHERE B.order_item_name='${delivery}' and A.post_id IN ($query_in)";}
+		    $query = $query_first . ' AND ID IN ('. $query_in .')';
+		    $query_total = $query_first_total . ' AND ID IN  ('. $query_in .')';
+		    $query .= " GROUP BY wp_posts.ID ORDER BY wp_posts.post_date DESC LIMIT ${offset}, ${posts_per_page}";
+		    }
+		// if search for company or name ignore specialist, status, delivery
+		if($company){
+		    $company=esc_sql($company);
+		    if(strlen($company)<4){$company="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";}
+		    $query_in="SELECT post_id FROM wp_postmeta where post_id > $Start_Post_ID_To_Search and meta_key='_billing_company' and meta_value LIKE '${company}%'";
+		    if($delivery){$query_in="SELECT post_id From wp_postmeta AS A INNER JOIN wp_woocommerce_order_items AS B ON A.post_id=B.order_id WHERE B.order_item_name='${delivery}' and A.post_id IN ($query_in)";}
+		    $query = $query_first . ' AND ID IN ('. $query_in .')';
+		    $query_total = $query_first_total . ' AND ID IN  ('. $query_in .')';
+		    $query .= " GROUP BY wp_posts.ID ORDER BY wp_posts.post_date DESC LIMIT ${offset}, ${posts_per_page}";
+			$name=False;
+		    }
+		if($name){
+			$name = esc_sql($name);
+			if(strlen($name)<3){$name="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";}
+			$query_in="SELECT post_id FROM wp_postmeta where post_id > $Start_Post_ID_To_Search and ((meta_key='_billing_first_name' and meta_value LIKE '${name}%') or (meta_key='_billing_last_name' and meta_value LIKE '${name}%'))";
+			if($delivery){$query_in="SELECT post_id From wp_postmeta AS A INNER JOIN wp_woocommerce_order_items AS B ON A.post_id=B.order_id WHERE B.order_item_name='${delivery}' and A.post_id IN ($query_in)";}
+		    $query = $query_first . ' AND ID IN ('. $query_in .')';
+		    $query_total = $query_first_total . ' AND ID IN  ('. $query_in .')';
+		    $query .= " GROUP BY wp_posts.ID ORDER BY wp_posts.post_date DESC LIMIT ${offset}, ${posts_per_page}";
+		    }
+		// Look for ID just straight go for it
+		if($id){
+		    $query="SELECT ID FROM wp_posts WHERE ID=$id AND post_type='shop_order' ";
+		    $query_total="SELECT COUNT(ID) as count FROM wp_posts WHERE ID=$id AND post_type='shop_order' ";
+		    $query .= " GROUP BY ID ORDER BY post_date DESC LIMIT ${offset}, ${posts_per_page}";
+		    }
+		 
+		$total = $wpdb->get_results($query_total);	
+		$results = $wpdb->get_results($query);
+		$data = array();
+		foreach ($results as $key => $value) {
+			$data[] = $this->get_order( $value->ID, $request );
+		}
+		$datas = array();
+		$datas['orders'] = $data;
+		$datas['total'] = isset($total[0]) ? $total[0]->count : 0;
+		$datas['shipping_method'] = $this->get_shipping_method();
+		$response = rest_ensure_response( $datas );
+		return $response;
+	}
+	public function _search_new($request) {
+		global $wpdb;
+		$specialist = $request['specialist'] ? json_decode($request['specialist'], true) : '';
+		$user_id = $request['user_id'] ? (int) $request['user_id'] : '';
+		$posts_per_page = $request['per_page'] ? (int) $request['per_page'] : 20;
+		$page = $request['page'] ? (int) $request['page'] : 1;
+		$offset = ($page * $posts_per_page) - $posts_per_page;
+		$id = $request['id'] ? $request['id'] : '';
+		$status = $request['status'] ? $request['status'] : '';
+		$date_in = $request['date_in'] ? $request['date_in'] : '';
+		$date_out = $request['date_out'] ? $request['date_out'] : '';
+		$date_completed = $request['date_completed'] ? $request['date_completed'] : '';
+		$name = $request['name'] ? $request['name'] : '';
+		$company = $request['company'] ? $request['company'] : '';
+		$payment = $request['payment'] ? $request['payment'] : '';
+		$payment_status = $request['payment_status'] ? $request['payment_status'] : '';
+		$delivery = $request['delivery'] ? $request['delivery'] : '';
+		$completion = $request['completion'] ? $request['completion'] : '';
+
+		$date_in_y = date_parse($date_in)['year'];
+		$date_in_m = date_parse($date_in)['month'];
+		$date_in_d = date_parse($date_in)['day'];
+
+		$date_out_y = date_parse($date_out)['year'];
+		$date_out_m = date_parse($date_out)['month'];
+		$date_out_d = date_parse($date_out)['day'];
+		$date_out_str = $date_out_d.'/'.$date_out_m.'/'.$date_out_y;
+
+		$where_post = [
+		    array(
+		        'key' => 'post_type',
+		        'value' => 'shop_order',
+		        'operator' => '=',
+		    ),
+		    array(
+		        'key' => 'post_status',
+		        'value' => array('wc-pending', 'wc-processing', 'wc-on-hold', 'wc-completed', 'wc-cancelled', 'wc-refunded', 'wc-failed'),
+		        'operator' => '=',
+		        'related' => 'OR',
+		    ),
+		];
+		$where_meta = [];
+
+		if($specialist) {
+		    if(is_array($specialist)) {
+		        $where_specialist = [];
+		        foreach ($specialist as $key => $value) {
+		            $where_specialist[] = $value['id'];
+		        }
+		        $where_meta[] = array(
+		            'key' => 'specialist_id',
+		            'value' => $where_specialist,
+		            'operator' => '=',
+		            'related' => 'OR',
+		        );
+		    }
+		}
+		if($id != '') {
+		    $where_post[] = array(
+		        'key' => 'ID',
+		        'value' => $id,
+		        'operator' => '=',
+		    );
+		}
+		if($status != '') {
+		    $where_meta[] = array(
+		        'key' => 'order_status',
+		        'value' => $status,
+		        'operator' => '=',
+		    );
+		}
+		if($date_in != '') {
+		    $where_meta[] = array(
+		        'key' => 'post_date',
+		        'value' => array(
+		            'from' => $date_in. ' 00:00:00.000000',
+		            'to' => $date_in. ' 23:59:59.000000',
+		        ),
+		        'operator' => 'BETWEEN',
+		    );
+		}
+		if($date_out != '') {
+		    $datas = array();
+		    $datas['orders'] = array();
+		    $datas['total'] = 0;
+		    $datas['shipping_method'] = $this->get_shipping_method();
+		    $response = rest_ensure_response( $datas );
+		    return $response;
+		}
+		if($company != '') {
+		    $company = esc_sql($company);
+		    $where_meta[] = array(
+		        'key' => 'billing_company',
+		        'value' => $company,
+		        'operator' => '%LIKE%',
+		    );
+		}
+		if($payment != '') {
+		    $where_meta[] = array(
+		        'key' => 'payment_method',
+		        'value' => $payment,
+		        'operator' => '=',
+		    );
+		}
+		if($completion != '') {
+		    $time_from = strtotime('-10 now');
+		    $time_to = strtotime('-8 now');
+
+		    $where_meta[] = array(
+		        'key' => 'order_time_completed_str',
+		        'value' => array(
+		            'from' => 0,
+		            'to' => $time_from,
+		        ),
+		        'operator' => 'BETWEEN',
+		    );
+		    $where_meta[] = array(
+		        'key' => 'order_status',
+		        'value' => 'Collected',
+		        'operator' => '!=',
+		    );
+		    $where_meta[] = array(
+		        'key' => 'order_status',
+		        'value' => 'Completed',
+		        'operator' => '!=',
+		    );
+		}
+		if($name != '') {
+		    $name = esc_sql($name);
+
+		    $where_meta[] = array(
+		        array(
+		            'key' => 'billing_first_name',
+		            'value' => $name,
+		            'operator' => '=',
+		            'related' => 'OR',
+		        ),
+		        array(
+		            'key' => 'billing_last_name',
+		            'value' => $name,
+		            'operator' => '=',
+		            'related' => 'OR',
+		        )
+		    );
+		}
+		if($payment_status != '') {
+		    $where_meta[] = array(
+		        'key' => 'payment_status',
+		        'value' => $payment_status,
+		        'operator' => '=',
+		    );
+		}
+		if($delivery != '') {
+		    $where_meta[] = array(
+		        'key' => 'delivery',
+		        'value' => $delivery,
+		        'operator' => '=',
+		    );
+		}
+
+		$where_meta_sql = '';
+		$where_post_sql = '';
+		$and = '';
+		foreach ($where_post as $_key => $_value) {
+		    $key = $_value['key'];
+		    $value = $_value['value'];
+		    $operator = $_value['operator'];
+		    if( isset($_value['related']) && $_value['related'] ) {
+		        $sub_sql = '';
+		        if(is_array($value)) {
+		            foreach ($value as $k => $v) {
+		                $sub_sql .= ' wp_posts.' . $key . ' ' . $operator . ' "' . $v . '"';
+		                $related1 = $_value['related'];
+		                if($k < count($value) - 1) {
+		                    $sub_sql .= ' ' .$related1;
+		                }
+		            }
+		        }
+		        if($sub_sql) {
+		            $where_post_sql .= $and .' ( ' . $sub_sql . ' )';
+		            $and = ' AND';
+		        }
+		    } else {
+		        if($operator == '%LIKE%') {
+		            $value = '%' . $value . '%';
+		            $operator = 'LIKE';
+		        }
+		        $where_post_sql .= $and . ' wp_posts.' . $key . ' ' . $operator . ' "' . $value . '"';
+		        $and = ' AND';
+		    }
+		}
+		$_and = '';
+		foreach ($where_meta as $key2 => $_value2) {
+		    $key2 = $_value2['key'];
+		    $value2 = $_value2['value'];
+		    $operator2 = $_value2['operator'];
+		    if( isset($_value2['related']) && $_value2['related'] ) {
+		        $sub_sql = '';
+		        if(is_array($value2)) {
+		            foreach ($value2 as $_k => $_v) {
+		                $sub_sql .= ' wp_nb_order_meta.' . $key2 . ' ' . $operator2 . ' "' . $_v . '"';
+		                $related2 = $_value2['related'];
+		                if($_k < count($value2) - 1) {
+		                    $sub_sql .= ' ' .$related2;
+		                }
+		            }
+		        }
+		        if($sub_sql) {
+		            $where_meta_sql .= $_and.' ( ' . $sub_sql . ' )';
+		            $_and = ' AND';
+		        }
+		    } else {
+		        if($operator2 == '%LIKE%') {
+		            $value2 = '%' . $value2 . '%';
+		            $operator2 = 'LIKE';
+		        } else if( $operator2 == 'BETWEEN' ) {
+		            $value2 = $value2['from'] . '" AND "' . $value2['to']; 
+		        }
+		        $where_meta_sql .= $_and . ' wp_nb_order_meta.' . $key2 . ' ' . $operator2 . ' "' . $value2 . '"';
+		        $_and = ' AND';
+		    }
+		}
+
+		global $wpdb;
+		$s1 = 'WHERE ';
+		$s2 = ' AND ';
+		if(!$where_post_sql) {
+		    $s1 = '';
+		    $s2 = ' WHERE ';
+		}
+		if(!$where_meta_sql) {
+		    $s2 = '';
+		}
+
+		$sql = 'SELECT wp_posts.ID FROM wp_posts INNER JOIN wp_nb_order_meta ON wp_posts.ID = wp_nb_order_meta.order_id ' . $s1 . $where_post_sql . $s2 . $where_meta_sql . ' ORDER BY wp_posts.post_date DESC LIMIT ' . $offset . ',' . $posts_per_page;
+		$total_sql = 'SELECT count(wp_posts.ID) as total FROM wp_posts INNER JOIN wp_nb_order_meta ON wp_posts.ID = wp_nb_order_meta.order_id ' . $s1 . $where_post_sql . $s2 . $where_meta_sql;
+
+		$total_results = $wpdb->get_results($total_sql);
+		$results = $wpdb->get_results($sql);
+		$data = array();
+		foreach ($results as $key => $value) {
+			$data[] = $this->get_order( $value->ID, $request );
+		}
+		$datas = array();
+		$datas['sql'] = $total_sql;
+		$datas['orders'] = $data;
+		$datas['total'] = $total_results[0] ? $total_results[0]->total : 0;
+		$datas['shipping_method'] = $this->get_shipping_method();
+		$response = rest_ensure_response( $datas );
+		return $response;
+	}
 	public function _search($request) {
 		global $wpdb;
 		$specialist = $request['specialist'] ? json_decode($request['specialist']) : '';
@@ -1477,260 +1953,9 @@ class WC_REST_Custom_Controller {
 		$query_total = $query." GROUP BY wp_posts.ID ORDER BY wp_posts.post_date DESC";
 		$query .= " GROUP BY wp_posts.ID ORDER BY wp_posts.post_date DESC LIMIT ${offset}, ${posts_per_page}";
 
-		$total = count($wpdb->get_results($query_total));	
+		$total_results = $wpdb->get_results($query_total);
+		$total = $wpdb->num_rows;	
 		$results = $wpdb->get_results($query);
-		$total_order = count($results);
-		$data = array();
-		foreach ($results as $key => $value) {
-			$data[] = $this->get_order( $value->ID, $request );
-		}
-		$datas = array();
-		$datas['orders'] = $data;
-		$datas['total'] = $total;
-		$datas['shipping_method'] = $this->get_shipping_method();
-		$response = rest_ensure_response( $datas );
-		return $response;
-	}
-	public function search($request) {
-		global $wpdb;
-		$specialist = $request['specialist'] ? json_decode($request['specialist']) : '';
-		$user_id = $request['user_id'] ? (int) $request['user_id'] : '';
-		$posts_per_page = $request['per_page'] ? (int) $request['per_page'] : 20;
-		$page = $request['page'] ? (int) $request['page'] : 1;
-		$offset = ($page * $posts_per_page) - $posts_per_page;
-		$id = $request['id'] ? $request['id'] : '';
-		$status = $request['status'] ? $request['status'] : '';
-		$date_in = $request['date_in'] ? $request['date_in'] : '';
-		$date_out = $request['date_out'] ? $request['date_out'] : '';
-		$date_completed = $request['date_completed'] ? $request['date_completed'] : '';
-		$name = $request['name'] ? $request['name'] : '';
-		$company = $request['company'] ? $request['company'] : '';
-		$payment = $request['payment'] ? $request['payment'] : '';
-		$payment_status = $request['payment_status'] ? $request['payment_status'] : '';
-		$delivery = $request['delivery'] ? $request['delivery'] : '';
-		$completion = $request['completion'] ? $request['completion'] : '';
-
-		$date_in_y = date_parse($date_in)['year'];
-		$date_in_m = date_parse($date_in)['month'];
-		$date_in_d = date_parse($date_in)['day'];
-
-		$date_out_y = date_parse($date_out)['year'];
-		$date_out_m = date_parse($date_out)['month'];
-		$date_out_d = date_parse($date_out)['day'];
-		$date_out_str = $date_out_d.'/'.$date_out_m.'/'.$date_out_y;
-
-		$where_post = [
-		    array(
-		        'key' => 'post_type',
-		        'value' => 'shop_order',
-		        'operator' => '=',
-		    ),
-		    array(
-		        'key' => 'post_status',
-		        'value' => array('wc-pending', 'wc-processing', 'wc-on-hold', 'wc-completed', 'wc-cancelled', 'wc-refunded', 'wc-failed'),
-		        'operator' => '=',
-		        'related' => 'OR',
-		    ),
-		];
-		$where_meta = [];
-
-		if($specialist) {
-		    if(is_array($specialist)) {
-		        $where_specialist = [];
-		        foreach ($specialist as $key => $value) {
-		            $where_specialist[] = $value['id'];
-		        }
-		        $where_meta[] = array(
-		            'key' => 'specialist_id',
-		            'value' => $where_specialist,
-		            'operator' => '=',
-		            'related' => 'OR',
-		        );
-		    }
-		}
-		if($id != '') {
-		    $where_post[] = array(
-		        'key' => 'ID',
-		        'value' => $id,
-		        'operator' => '%LIKE%',
-		    );
-		}
-		if($status != '') {
-		    $where_meta[] = array(
-		        'key' => 'order_status',
-		        'value' => $status,
-		        'operator' => '=',
-		    );
-		}
-		if($date_in != '') {
-		    $where_meta[] = array(
-		        'key' => 'post_date',
-		        'value' => array(
-		            'from' => $date_in. ' 00:00:00.000000',
-		            'to' => $date_in. ' 23:59:59.000000',
-		        ),
-		        'operator' => 'BETWEEN',
-		    );
-		}
-		if($date_out != '') {
-		    $datas = array();
-		    $datas['orders'] = array();
-		    $datas['total'] = 0;
-		    $datas['shipping_method'] = $this->get_shipping_method();
-		    $response = rest_ensure_response( $datas );
-		    return $response;
-		}
-		if($company != '') {
-		    $company = esc_sql($company);
-		    $where_meta[] = array(
-		        'key' => 'billing_company',
-		        'value' => $company,
-		        'operator' => '%LIKE%',
-		    );
-		}
-		if($payment != '') {
-		    $where_meta[] = array(
-		        'key' => 'payment_method',
-		        'value' => $company,
-		        'operator' => '=',
-		    );
-		}
-		if($completion != '') {
-		    $time_from = strtotime('-10 now');
-		    $time_to = strtotime('-8 now');
-
-		    $where_meta[] = array(
-		        'key' => 'order_time_completed_str',
-		        'value' => array(
-		            'from' => 0,
-		            'to' => $time_from,
-		        ),
-		        'operator' => 'BETWEEN',
-		    );
-		    $where_meta[] = array(
-		        'key' => 'order_status',
-		        'value' => 'Collected',
-		        'operator' => '!=',
-		    );
-		    $where_meta[] = array(
-		        'key' => 'order_status',
-		        'value' => 'Completed',
-		        'operator' => '!=',
-		    );
-		}
-		if($name != '') {
-		    $name = esc_sql($name);
-		    
-		    $where_meta[] = array(
-		        array(
-		            'key' => 'billing_first_name',
-		            'value' => $name,
-		            'operator' => '=',
-		            'related' => 'OR',
-		        ),
-		        array(
-		            'key' => 'billing_last_name',
-		            'value' => $name,
-		            'operator' => '=',
-		            'related' => 'OR',
-		        )
-		    );
-		}
-		if($payment_status != '') {
-		    $where_meta[] = array(
-		        'key' => 'payment_status',
-		        'value' => $payment_status,
-		        'operator' => '=',
-		    );
-		}
-		if($delivery != '') {
-		    $where_meta[] = array(
-		        'key' => 'delivery',
-		        'value' => $delivery,
-		        'operator' => '=',
-		    );
-		}
-
-		$where_meta_sql = '';
-		$where_post_sql = '';
-		$and = '';
-		foreach ($where_post as $_key => $_value) {
-		    $key = $_value['key'];
-		    $value = $_value['value'];
-		    $operator = $_value['operator'];
-		    if( isset($_value['related']) && $_value['related'] ) {
-		        $sub_sql = '';
-		        if(is_array($value)) {
-		            foreach ($value as $k => $v) {
-		                $sub_sql .= ' wp_posts.' . $key . ' ' . $operator . ' "' . $v . '"';
-		                $related1 = $_value['related'];
-		                if($k < count($value) - 1) {
-		                    $sub_sql .= ' ' .$related1;
-		                }
-		            }
-		        }
-		        if($sub_sql) {
-		            $where_post_sql .= $and .' ( ' . $sub_sql . ' )';
-		            $and = ' AND';
-		        }
-		    } else {
-		        if($operator == '%LIKE%') {
-		            $value = '%' . $value . '%';
-		            $operator = 'LIKE';
-		        }
-		        $where_post_sql .= $and . ' wp_posts.' . $key . ' ' . $operator . ' "' . $value . '"';
-		        $and = ' AND';
-		    }
-		}
-		$_and = '';
-		foreach ($where_meta as $key2 => $_value2) {
-		    $key2 = $_value2['key'];
-		    $value2 = $_value2['value'];
-		    $operator2 = $_value2['operator'];
-		    if( isset($_value2['related']) && $_value2['related'] ) {
-		        $sub_sql = '';
-		        if(is_array($value2)) {
-		            foreach ($value2 as $_k => $_v) {
-		                $sub_sql .= ' wp_nb_order_meta.' . $key2 . ' ' . $operator2 . ' "' . $_v . '"';
-		                $related2 = $_value2['related'];
-		                if($_k < count($value2) - 1) {
-		                    $sub_sql .= ' ' .$related2;
-		                }
-		            }
-		        }
-		        if($sub_sql) {
-		            $where_meta_sql .= $_and.' ( ' . $sub_sql . ' )';
-		            $_and = ' AND';
-		        }
-		    } else {
-		        if($operator2 == '%LIKE%') {
-		            $value2 = '%' . $value2 . '%';
-		            $operator2 = 'LIKE';
-		        } else if( $operator2 == 'BETWEEN' ) {
-		            $value2 = $value2['from'] . '" AND "' . $value2['to']; 
-		        }
-		        $where_meta_sql .= $_and . ' wp_nb_order_meta.' . $key2 . ' ' . $operator2 . ' "' . $value2 . '"';
-		        $_and = ' AND';
-		    }
-		}
-
-		global $wpdb;
-		$s1 = 'WHERE ';
-		$s2 = ' AND ';
-		if(!$where_post_sql) {
-		    $s1 = '';
-		    $s2 = ' WHERE ';
-		}
-		if(!$where_meta_sql) {
-		    $s2 = '';
-		}
-
-		$sql = 'SELECT wp_posts.ID FROM wp_posts INNER JOIN wp_nb_order_meta ON wp_posts.ID = wp_nb_order_meta.order_id ' . $s1 . $where_post_sql . $s2 . $where_meta_sql . ' ORDER BY wp_posts.post_date DESC LIMIT ' . $offset . ',' . $posts_per_page;
-		$total_sql = 'SELECT wp_posts.ID FROM wp_posts INNER JOIN wp_nb_order_meta ON wp_posts.ID = wp_nb_order_meta.order_id ' . $s1 . $where_post_sql . $s2 . $where_meta_sql;
-
-		$total_results = $wpdb->get_results($total_sql);
-		$total = $wpdb->num_rows;
-		$results = $wpdb->get_results($sql);
 		$total_order = count($results);
 		$data = array();
 		foreach ($results as $key => $value) {
