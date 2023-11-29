@@ -130,6 +130,23 @@ class WC_REST_Custom_Controller {
 			array(
 				'methods'  => WP_REST_Server::READABLE,
 				'callback' => array( $this, 'search' ),
+				'permission_callback' => array( $this, 'get_item_permissions_check' ),
+			)
+		);
+
+		//  login
+		register_rest_route( $this->namespace, '/' . $this->rest_base.'/login',
+			array(
+				'methods'  => WP_REST_Server::CREATABLE,
+				'callback' => array( $this, 'login' ),
+			)
+		);
+
+		//  logout
+		register_rest_route( $this->namespace, '/' . $this->rest_base.'/logout',
+			array(
+				'methods'  => WP_REST_Server::CREATABLE,
+				'callback' => array( $this, 'logout' ),
 			)
 		);
 
@@ -213,11 +230,207 @@ class WC_REST_Custom_Controller {
 			)
 		));
 	}
+
+	public function logout($request) {
+        wp_logout();
+
+		$response = rest_ensure_response( array('flag' => 1) );
+
+		return $response;
+    }
+
+    public function wp_set_auth_cookie( $user_id, $remember = false, $secure = '', $token = '' ) {
+		if ( $remember ) {
+			/**
+			 * Filters the duration of the authentication cookie expiration period.
+			 *
+			 * @since 2.8.0
+			 *
+			 * @param int  $length   Duration of the expiration period in seconds.
+			 * @param int  $user_id  User ID.
+			 * @param bool $remember Whether to remember the user login. Default false.
+			 */
+			$expiration = time() + apply_filters( 'auth_cookie_expiration', 14 * DAY_IN_SECONDS, $user_id, $remember );
+
+			/*
+			 * Ensure the browser will continue to send the cookie after the expiration time is reached.
+			 * Needed for the login grace period in wp_validate_auth_cookie().
+			 */
+			$expire = $expiration + ( 12 * HOUR_IN_SECONDS );
+		} else {
+			/** This filter is documented in wp-includes/pluggable.php */
+			$expiration = time() + apply_filters( 'auth_cookie_expiration', 2 * DAY_IN_SECONDS, $user_id, $remember );
+			$expire     = 0;
+		}
+
+		if ( '' === $secure ) {
+			$secure = is_ssl();
+		}
+
+		// Front-end cookie is secure when the auth cookie is secure and the site's home URL uses HTTPS.
+		$secure_logged_in_cookie = $secure && 'https' === parse_url( get_option( 'home' ), PHP_URL_SCHEME );
+
+		/**
+		 * Filters whether the auth cookie should only be sent over HTTPS.
+		 *
+		 * @since 3.1.0
+		 *
+		 * @param bool $secure  Whether the cookie should only be sent over HTTPS.
+		 * @param int  $user_id User ID.
+		 */
+		$secure = apply_filters( 'secure_auth_cookie', $secure, $user_id );
+
+		/**
+		 * Filters whether the logged in cookie should only be sent over HTTPS.
+		 *
+		 * @since 3.1.0
+		 *
+		 * @param bool $secure_logged_in_cookie Whether the logged in cookie should only be sent over HTTPS.
+		 * @param int  $user_id                 User ID.
+		 * @param bool $secure                  Whether the auth cookie should only be sent over HTTPS.
+		 */
+		$secure_logged_in_cookie = apply_filters( 'secure_logged_in_cookie', $secure_logged_in_cookie, $user_id, $secure );
+
+		if ( $secure ) {
+			$auth_cookie_name = SECURE_AUTH_COOKIE;
+			$scheme           = 'secure_auth';
+		} else {
+			$auth_cookie_name = AUTH_COOKIE;
+			$scheme           = 'auth';
+		}
+
+		if ( '' === $token ) {
+			$manager = WP_Session_Tokens::get_instance( $user_id );
+			$token   = $manager->create( $expiration );
+		}
+
+		$auth_cookie      = wp_generate_auth_cookie( $user_id, $expiration, $scheme, $token );
+		$logged_in_cookie = wp_generate_auth_cookie( $user_id, $expiration, 'logged_in', $token );
+
+		/**
+		 * Fires immediately before the authentication cookie is set.
+		 *
+		 * @since 2.5.0
+		 * @since 4.9.0 The `$token` parameter was added.
+		 *
+		 * @param string $auth_cookie Authentication cookie value.
+		 * @param int    $expire      The time the login grace period expires as a UNIX timestamp.
+		 *                            Default is 12 hours past the cookie's expiration time.
+		 * @param int    $expiration  The time when the authentication cookie expires as a UNIX timestamp.
+		 *                            Default is 14 days from now.
+		 * @param int    $user_id     User ID.
+		 * @param string $scheme      Authentication scheme. Values include 'auth' or 'secure_auth'.
+		 * @param string $token       User's session token to use for this cookie.
+		 */
+		do_action( 'set_auth_cookie', $auth_cookie, $expire, $expiration, $user_id, $scheme, $token );
+
+		/**
+		 * Fires immediately before the logged-in authentication cookie is set.
+		 *
+		 * @since 2.6.0
+		 * @since 4.9.0 The `$token` parameter was added.
+		 *
+		 * @param string $logged_in_cookie The logged-in cookie value.
+		 * @param int    $expire           The time the login grace period expires as a UNIX timestamp.
+		 *                                 Default is 12 hours past the cookie's expiration time.
+		 * @param int    $expiration       The time when the logged-in authentication cookie expires as a UNIX timestamp.
+		 *                                 Default is 14 days from now.
+		 * @param int    $user_id          User ID.
+		 * @param string $scheme           Authentication scheme. Default 'logged_in'.
+		 * @param string $token            User's session token to use for this cookie.
+		 */
+		do_action( 'set_logged_in_cookie', $logged_in_cookie, $expire, $expiration, $user_id, 'logged_in', $token );
+
+		/**
+		 * Allows preventing auth cookies from actually being sent to the client.
+		 *
+		 * @since 4.7.4
+		 *
+		 * @param bool $send Whether to send auth cookies to the client.
+		 */
+		if ( ! apply_filters( 'send_auth_cookies', true ) ) {
+			return;
+		}
+
+		setcookie( $auth_cookie_name, $auth_cookie, $expire, PLUGINS_COOKIE_PATH, COOKIE_DOMAIN, $secure, true );
+		setcookie( $auth_cookie_name, $auth_cookie, $expire, ADMIN_COOKIE_PATH, COOKIE_DOMAIN, $secure, true );
+		setcookie( LOGGED_IN_COOKIE, $logged_in_cookie, $expire, COOKIEPATH, COOKIE_DOMAIN, $secure_logged_in_cookie, true );
+		if ( COOKIEPATH != SITECOOKIEPATH ) {
+			setcookie( LOGGED_IN_COOKIE, $logged_in_cookie, $expire, SITECOOKIEPATH, COOKIE_DOMAIN, $secure_logged_in_cookie, true );
+		}
+		return $logged_in_cookie;
+	}
+
+	public function login($request) {
+        $parameters = $request->get_json_params();
+
+        $username = isset($request['username']) ? $request['username'] : '';
+        $password = isset($request['password']) ? $request['password'] : '';
+        $remember = isset($request['remember']) ? $request['remember'] : '';
+
+        $result = array();
+
+        $error = new WP_Error();
+
+        if ( empty( $username ) ) {
+            $error->add( 400, __( "user_login field is required.", 'printcart-convert-api' ), array( 'status' => 400 ) );
+            return $error;
+        }
+
+        if ( empty( $password ) ) {
+            $error->add( 400, __( "user_password field is required.", 'printcart-convert-api' ), array( 'status' => 400 ) );
+            return $error;
+        }
+
+        $credentials = array(
+            'user_login'    => $username,
+            'user_password' => $password,
+            'remember'      => $remember
+        );
+
+        $user = wp_signon( $credentials, false );
+
+        if ( is_wp_error( $user ) ) {
+            $error->add( 400, __( "Invlid Username or Password.", 'printcart-convert-api' ), array( 'status' => 400 ) );
+            return $error;
+        }
+
+        $user_id = isset($user->ID) ? $user->ID : '';
+
+        $logged_in_cookie = $this->wp_set_auth_cookie($user_id, $remember);
+
+        $result[ 'logged_in_cookie' ] = $logged_in_cookie;
+        $result[ 'user' ] = $user;
+
+		$response = rest_ensure_response( $result );
+
+		return $response;
+    }
 	
 	public function get_current_user($request) {
 		$current_user = wp_get_current_user();
 		$response = rest_ensure_response( $current_user );
 		return $response;
+	}
+
+	public function get_user_id_by_auth() {
+    	$headers = apache_request_headers();
+
+        $logged_in_cookie = isset($headers['Authorization']) ? $headers['Authorization'] : '';
+
+        if(!$logged_in_cookie) return false;
+
+        $user_id = wp_validate_auth_cookie($logged_in_cookie, 'logged_in');
+
+    	return $user_id;
+    }
+
+	public function get_item_permissions_check() {
+		$user_id = $this->get_user_id_by_auth();
+
+    	if($user_id) return true;
+
+    	return false;
 	}
 
 	public function get_orders( $request ) {
@@ -1535,6 +1748,25 @@ class WC_REST_Custom_Controller {
 	}
 	public function _search_new($request) {
 		global $wpdb;
+		$current_user_id = $this->get_user_id_by_auth();
+		$_specialist = array();
+		$user = get_userdata($current_user_id);
+	    $specialist_linking = '';
+	    if (in_array('administrator', $user->roles) || in_array('production', $user->roles) || in_array('customer_service', $user->roles)) {
+	    } else {
+	        $_specialist[] = array(
+	            'id'    => $current_user_id,
+	        );
+	        $datas = unserialize(get_user_meta( $current_user_id, 'group_specialist' , true));
+	        if (count($datas) > 0) {
+	            foreach ($datas as $key => $value) {
+	                $_specialist[] = array(
+	                    'id'    => (int)$value,
+	                );
+	            }
+	        }
+	    }
+
 		$specialist = $request['specialist'] ? json_decode($request['specialist'], true) : '';
 		$user_id = $request['user_id'] ? (int) $request['user_id'] : '';
 		$posts_per_page = $request['per_page'] ? (int) $request['per_page'] : 20;
@@ -1576,6 +1808,9 @@ class WC_REST_Custom_Controller {
 		];
 		$where_meta = [];
 
+		if(!$specialist) {
+			$specialist = $_specialist;
+		}
 		if($specialist) {
 		    if(is_array($specialist)) {
 		        $where_specialist = [];
