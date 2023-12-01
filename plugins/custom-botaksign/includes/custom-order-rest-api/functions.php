@@ -1283,7 +1283,7 @@ function v3_update_date_api($order_id) {
     $date_completed = date( 'd/m/Y H:i a' , strtotime(show_est_completion($order)['production_datetime_completed']) );
     update_post_meta( $order_id , '_order_time_completed', $date_completed );
     update_post_meta( $order_id , '_order_time_completed_str', strtotime(show_est_completion($order)['production_datetime_completed']) );
-    NB_Order_Meta::nb_sync_order($order_id);
+    NB_Order_Meta::nb_sync_order($order_id, 'first');
 }
 
 // create button payment authentic in order

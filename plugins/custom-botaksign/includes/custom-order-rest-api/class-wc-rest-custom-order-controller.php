@@ -554,11 +554,15 @@ class WC_REST_Custom_Controller {
 		}
 		// update specialist if miss
 		$_specialist_id = get_post_meta( $order_id , '_specialist_id' , true);
+		$_specialist_id_sync = NB_Order_Meta::get_order_meta( $order_id , 'specialist_id');
 		$current_user = get_post_meta($order_id, '_customer_user', true);
-	    if($current_user && !$_specialist_id) {
+	    if($current_user && (!$_specialist_id || !$_specialist_id_sync)) {
 	        $_specialist_id = get_user_meta($current_user, 'specialist', true);
 	        if($_specialist_id) {
 	            NB_Order_Meta::update_post_meta($order_id, '_specialist_id', $_specialist_id); // Sync data
+	        }
+	        if(!$_specialist_id_sync) {
+	        	NB_Order_Meta::update_order_meta($order_id, array('specialist_id', $_specialist_id)); // Sync data
 	        }
 	    }
 	    //
@@ -627,7 +631,7 @@ class WC_REST_Custom_Controller {
 		$order_status = get_post_meta( $order_id , '_order_status' , true);
 		$_order_status_sync = NB_Order_Meta::get_order_meta( $order_id , 'order_status');
 		if($order_status != $_order_status_sync) {
-			NB_Order_Meta::nb_sync_order($order_id);
+			NB_Order_Meta::nb_sync_order($order_id, 'status');
 		}
 		if($payment_status != '') {
 			NB_Order_Meta::update_post_meta($order_id , '_payment_status' , $payment_status); // Sync data

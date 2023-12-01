@@ -15,6 +15,7 @@ if (!class_exists('NB_Order_Meta')) {
 
         public static function update_post_meta($post_id, $meta_key, $meta_value) {
         	$rest = update_post_meta($post_id, $meta_key, $meta_value);
+        	$updated = false;
         	if($meta_key && in_array($meta_key, self::$validate_input2)) {
         		$index = array_search($meta_key, self::$validate_input2);
 				$_meta_key = self::$validate_input[$index];
@@ -43,7 +44,10 @@ if (!class_exists('NB_Order_Meta')) {
 
 		    	$data[$_meta_key] = $_meta_value;
 
-		    	self::update_order_meta($post_id, $data);
+		    	$updated = self::update_order_meta($post_id, $data);
+		    }
+		    if(!$updated) {
+		    	self::update_log($post_id, $meta_key. ':' . $meta_value, true);
 		    }
 		    return $rest;
         }
@@ -173,8 +177,8 @@ if (!class_exists('NB_Order_Meta')) {
 
 		    $id = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM $table_name WHERE order_id = %s", $order_id) );
 			if ( !$id ) {
-				self::nb_sync_order($order_id);
-				return;
+				self::nb_sync_order($order_id, 'update');
+				return false;
 			}
 
 
@@ -203,6 +207,14 @@ if (!class_exists('NB_Order_Meta')) {
 			}
 
 			return '';
+		}
+
+		public function update_log($order_id, $message, $action = false) {
+			$log = self::get_order_meta($order_id, 'log');
+			$new_log = $log.','.$message;
+			if($action) {
+				self::update_order_meta($order_id, array('log', $new_log));
+			}
 		}
 
 		public static function nb_sync_order($order_id, $s = '') {
@@ -250,7 +262,7 @@ if (!class_exists('NB_Order_Meta')) {
 
 		    $log = self::get_order_meta($order_id, 'log');
 		    $current_tatus = self::get_order_meta($order_id, 'order_status');
-		    $new_log = $log.',SYNC:'.$current_tatus.':'.$order_status;
+		    $new_log = $log.',SYNC:'.$current_tatus.':'.$order_status. '-' .$s;
 
 		    $data = array(
 				'order_id' => $order_id,
