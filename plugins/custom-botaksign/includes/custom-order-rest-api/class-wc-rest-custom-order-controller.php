@@ -16,6 +16,8 @@ class WC_REST_Custom_Controller {
 	 */
 	protected $namespace = 'wc/v3';
 
+	protected $namespacev4 = 'wc/v4';
+
 	protected $rest_base = 'custom';
 
 	protected $post_type = 'shop_order';
@@ -60,6 +62,7 @@ class WC_REST_Custom_Controller {
 				'callback' => array( $this, 'get_order_detail_by_id' ),
 			)
 		);
+
 		// get order items  by order id
 		register_rest_route( $this->namespace, '/' . $this->rest_base . '/items/(?P<id>[\d]+)', array(
 			array(
@@ -68,7 +71,22 @@ class WC_REST_Custom_Controller {
 			),
 			array(
 				'methods'  => WP_REST_Server::EDITABLE,
-				'callback' => array( $this, 'update_order_item' ),			)
+				'callback' => array( $this, 'update_order_item' ),
+			)
+		));
+
+		// get order items  by order id V4
+		register_rest_route( $this->namespacev4, '/' . $this->rest_base . '/items/(?P<id>[\d]+)', array(
+			array(
+				'methods'  => WP_REST_Server::READABLE,
+				'callback' => array( $this, 'v4_get_order_items' ),
+				'permission_callback' => array( $this, 'get_item_permissions_check' ),
+			),
+			array(
+				'methods'  => WP_REST_Server::EDITABLE,
+				'callback' => array( $this, 'v4_update_order_item' ),
+				'permission_callback' => array( $this, 'get_item_permissions_check' ),
+			)
 		));
 
 		// get all specialist
@@ -76,6 +94,15 @@ class WC_REST_Custom_Controller {
 			array(
 				'methods'  => WP_REST_Server::READABLE,
 				'callback' => array( $this, 'get_all_specialist' ),
+			)
+		);
+
+		// get all specialist V4
+		register_rest_route( $this->namespacev4, '/' . $this->rest_base . '/specialist', 
+			array(
+				'methods'  => WP_REST_Server::READABLE,
+				'callback' => array( $this, 'get_all_specialist' ),
+				'permission_callback' => array( $this, 'get_item_permissions_check' ),
 			)
 		);
 
@@ -99,6 +126,20 @@ class WC_REST_Custom_Controller {
 			)
 		));
 
+		//get,update specialist by order id V4
+		register_rest_route( $this->namespacev4, '/' . $this->rest_base . '/specialist/(?P<id>[\d]+)', array(
+			array(
+				'methods'  => WP_REST_Server::READABLE,
+				'callback' => array( $this, 'get_specialist_by_order_id' ),
+				'permission_callback' => array( $this, 'get_item_permissions_check' ),
+			),
+			array(
+				'methods'             => WP_REST_Server::EDITABLE,
+				'callback'            => array( $this, 'update_specialist' ),
+				'permission_callback' => array( $this, 'get_item_permissions_check' ),
+			)
+		));
+
 		// get artwork by order id
 		register_rest_route( $this->namespace, '/' . $this->rest_base.'/artwork/(?P<id>[\d]+)', array(
 			array(
@@ -110,10 +151,35 @@ class WC_REST_Custom_Controller {
 				'callback' => array( $this, 'update_artwork' ),
 			),
 		));
+
+		// get artwork by order id V4
+		register_rest_route( $this->namespacev4, '/' . $this->rest_base.'/artwork/(?P<id>[\d]+)', array(
+			array(
+				'methods'  => WP_REST_Server::READABLE,
+				'callback' => array( $this, 'get_artwork_by_order_id' ),
+				'permission_callback' => array( $this, 'get_item_permissions_check' ),
+			),
+			array(
+				'methods'  => WP_REST_Server::EDITABLE,
+				'callback' => array( $this, 'update_artwork' ),
+				'permission_callback' => array( $this, 'get_item_permissions_check' ),
+			),
+		));
+
+		// delete_artwork
 		register_rest_route( $this->namespace, '/' . $this->rest_base.'/del-artwork/(?P<id>[\d]+)', array(
 			array(
 				'methods'  => WP_REST_Server::EDITABLE,
 				'callback' => array( $this, 'delete_artwork' ),
+			)
+		));
+
+		// delete_artwork V4
+		register_rest_route( $this->namespacev4, '/' . $this->rest_base.'/del-artwork/(?P<id>[\d]+)', array(
+			array(
+				'methods'  => WP_REST_Server::EDITABLE,
+				'callback' => array( $this, 'delete_artwork' ),
+				'permission_callback' => array( $this, 'get_item_permissions_check' ),
 			)
 		));
 
@@ -130,20 +196,28 @@ class WC_REST_Custom_Controller {
 			array(
 				'methods'  => WP_REST_Server::READABLE,
 				'callback' => array( $this, 'search' ),
+			)
+		);
+
+		//  SEARCH V4
+		register_rest_route( $this->namespacev4, '/' . $this->rest_base.'/search',
+			array(
+				'methods'  => WP_REST_Server::READABLE,
+				'callback' => array( $this, 'search' ),
 				'permission_callback' => array( $this, 'get_item_permissions_check' ),
 			)
 		);
 
-		//  login
-		register_rest_route( $this->namespace, '/' . $this->rest_base.'/login',
+		//  login V4
+		register_rest_route( $this->namespacev4, '/' . $this->rest_base.'/login',
 			array(
 				'methods'  => WP_REST_Server::CREATABLE,
 				'callback' => array( $this, 'login' ),
 			)
 		);
 
-		//  logout
-		register_rest_route( $this->namespace, '/' . $this->rest_base.'/logout',
+		//  logout V4
+		register_rest_route( $this->namespacev4, '/' . $this->rest_base.'/logout',
 			array(
 				'methods'  => WP_REST_Server::CREATABLE,
 				'callback' => array( $this, 'logout' ),
@@ -158,23 +232,64 @@ class WC_REST_Custom_Controller {
 			)
 		));
 
+		// get,update order notes V4
+		register_rest_route( $this->namespacev4, '/' . $this->rest_base . '/notes/(?P<id>[\d]+)', array(
+			array(
+				'methods'  => WP_REST_Server::READABLE,
+				'callback' => array( $this, 'get_order_notes_by_order_id' ),
+				'permission_callback' => array( $this, 'get_item_permissions_check' ),
+			)
+		));
+
+		// get shipping method
 		register_rest_route( $this->namespace, '/' . $this->rest_base . '/shipping', array(
 			array(
 				'methods'  => WP_REST_Server::READABLE,
 				'callback' => array( $this, 'get_shipping_method' ),
 			)
 		));
+
+		// get shipping method V4
+		register_rest_route( $this->namespacev4, '/' . $this->rest_base . '/shipping', array(
+			array(
+				'methods'  => WP_REST_Server::READABLE,
+				'callback' => array( $this, 'get_shipping_method' ),
+				'permission_callback' => array( $this, 'get_item_permissions_check' ),
+			)
+		));
+
+		// get setting options
 		register_rest_route( $this->namespace, '/' . $this->rest_base . '/settings', array(
 			array(
 				'methods'  => WP_REST_Server::READABLE,
 				'callback' => array( $this, 'get_setting_options' ),
 			)
 		));
+
+
+		// get setting options V4
+		register_rest_route( $this->namespacev4, '/' . $this->rest_base . '/settings', array(
+			array(
+				'methods'  => WP_REST_Server::READABLE,
+				'callback' => array( $this, 'get_setting_options' ),
+				'permission_callback' => array( $this, 'get_item_permissions_check' ),
+			)
+		));
+
 		// Tools support design
 		register_rest_route( $this->namespace, '/' . $this->rest_base . '/tools', array(
 			array(
 				'methods'  => WP_REST_Server::READABLE,
 				'callback' => array( $this, 'get_tools' ),
+			)
+		));
+
+		// Tools support design V4
+		register_rest_route( $this->namespacev4, '/' . $this->rest_base . '/tools', array(
+			array(
+				'methods'  => WP_REST_Server::READABLE,
+				'callback' => array( $this, 'get_tools' ),
+				'permission_callback' => array( $this, 'get_item_permissions_check' ),
 			)
 		));
 
@@ -362,8 +477,6 @@ class WC_REST_Custom_Controller {
 	}
 
 	public function login($request) {
-        $parameters = $request->get_json_params();
-
         $username = isset($request['username']) ? $request['username'] : '';
         $password = isset($request['password']) ? $request['password'] : '';
         $remember = isset($request['remember']) ? $request['remember'] : '';
@@ -542,6 +655,71 @@ class WC_REST_Custom_Controller {
 		return $response;
 	}
 
+	public function v4_get_order_items($request) {
+		$user_id = $this->get_user_id_by_auth();
+		$user_can = v3_get_role_status_by_user($user_id);
+		$order_id = (int) $request['id'];
+		$order = wc_get_order($order_id);
+		$item_meta = array();
+		$order_items = $order->get_items('line_item');
+		$order_no = 0;
+		foreach ( $order_items as $item_id => $item ) {
+			$product = wc_get_product($item->get_product_id());
+			if( wc_get_product($item->get_product_id()) && !$product->is_type( 'service' ) ){
+				$opt_status = wc_get_order_item_meta($item_id, '_item_status', true);
+				if (!$opt_status || $opt_status == '0') {
+	                $opt_status = 'order_received';
+	                wc_update_order_item_meta($item_id, '_item_status', $opt_status);
+	            }
+	            $user_can[$opt_status] = unserialize(get_option('custom_status_order') )[$opt_status];
+	            $nbu_item_key = wc_get_order_item_meta($item_id, '_nbu');
+	            $nbd_item_key = wc_get_order_item_meta($item_id, '_nbd');
+	            $download = wc_get_order_item_meta($item_id , '_nbd_item_edit');
+	            $time_completed = wc_get_order_item_meta($item_id , '_item_time_completed');
+				if(!isset($time_completed) || $time_completed == '') {
+					$time_completed = date( 'd/m/Y H:i a' , strtotime( v3_get_time_completed_item(v3_get_production_time_item($item ,$order , true) ,$order)['production_datetime_completed'] ) );
+					wc_update_order_item_meta($item_id , '_item_time_completed' , $time_completed);
+				}
+				$date_now = date("H:i Y/m/d");
+				$check_expiring = '';
+				$_time_cpl = wc_get_order_item_meta($item_id , '_item_time_completed');
+				$_time_cpl = str_replace('am' , '' , $_time_cpl);
+				$_time_cpl = str_replace('pm' , '' , $_time_cpl);
+				$_time_cpl = str_replace('/' , '-' , $_time_cpl);
+				$expiring = ( strtotime( $_time_cpl ) - strtotime("now") )/3600 - 8;
+				if($expiring <= 2 && ( $opt_status != 'collection_point' && $opt_status != 'collected' ) ) {
+					$check_expiring = 'expiring';
+				}
+				$roles = get_userdata($user_id)->roles;
+				if($roles && is_array($roles) && in_array('specialist', $roles) && $opt_status != 'order_received' && $opt_status != 'cancelled' ) {
+			        unset($user_can['cancelled']);
+			    }
+				$items['order_no']			= $order_no;
+				$items['item_id']			= $item_id;
+				$items['download']			= $download;
+				$items['order_id']			= $order_id;
+				$items['id']				= $item->get_product_id();
+				$items['name']				= $item->get_name();
+				$items['qty']				= $item->get_quantity();
+				$items['status']			= $opt_status;
+				$items['nbu']				= $nbu_item_key ? $nbu_item_key : '';
+				$items['nbd']				= $nbd_item_key ? $nbd_item_key : '';
+				$items['production_time']	= v3_get_production_time_item($item ,$order , false);
+				$items['date_completed']	= $time_completed;
+				$items['date_out']			= wc_get_order_item_meta($item_id, '_item_date_out');
+				$items['list_status']		= $user_can;
+				$items['expiring']			= $check_expiring;
+				$items['item_on_hold']      = wc_get_order_item_meta($item_id , '_item_on_hold');
+				$items['user_can']    		= 'edit';
+				$item_meta[] = $items;
+				$order_no ++;
+			}	
+			
+		} 
+		$response = rest_ensure_response( $item_meta );
+		return $response;
+	}
+
 	public function get_order( $order_id, $request ) {
 		$order = wc_get_order($order_id);
 		$dp    = wc_get_price_decimals();
@@ -582,8 +760,13 @@ class WC_REST_Custom_Controller {
 				NB_Order_Meta::update_post_meta($order->get_id() , '_order_status' , 'Collected'); // Sync data
 			}
 		}
+		$is_rush = false;
 		foreach ($order_items as $item_id => $item) {
 			$production_time = v3_get_production_time_item($item ,$order , true);
+			$_production_time = v3_get_production_time_item($item ,$order , false);
+			if(strpos("RUSH",$_production_time) !== false) {
+				$is_rush = true;
+			}
 			$time_completed = date( 'd/m/Y H:i a' , strtotime( v3_get_time_completed_item($production_time ,$order)['production_datetime_completed'] ) );
 			wc_update_order_item_meta($item_id , '_item_time_completed' , $time_completed);
 			// $_time = wc_get_order_item_meta($item_id , '_item_time_completed' );
@@ -634,7 +817,7 @@ class WC_REST_Custom_Controller {
 			NB_Order_Meta::nb_sync_order($order_id, 'status');
 		}
 		if($payment_status != '') {
-			NB_Order_Meta::update_post_meta($order_id , '_payment_status' , $payment_status); // Sync data
+			// NB_Order_Meta::update_post_meta($order_id , '_payment_status' , $payment_status); // Sync data
 		}
 		$invoice_number = get_post_meta($order->get_id() , '_wcpdf_invoice_number' , true);
 		$link_pdf_invoice = '';
@@ -729,6 +912,7 @@ class WC_REST_Custom_Controller {
 			'expiring'       	   => $check_expiring,
 			'pdf_invoice'		   => $link_pdf_invoice,
 			'order_detail'		   => $link_down,
+			'is_rush'		   	   => $is_rush,
 		);
 
 		// Add addresses.
@@ -1101,7 +1285,7 @@ class WC_REST_Custom_Controller {
 		$order = wc_get_order($order_id);
 		$user_id = $order->get_user_id();
 		if($user_id != $specialist_id) {
-			update_post_meta($order_id, '_specialist_id', $specialist_id);
+			NB_Order_Meta::update_post_meta($order_id, '_specialist_id', $specialist_id);
 			update_user_meta($user_id , 'specialist' , $specialist_id);
 			update_user_meta($user_id , '_specialist' , 'field_5e79d59463a04');
 		}
@@ -1525,6 +1709,266 @@ class WC_REST_Custom_Controller {
 		$response = rest_ensure_response( $items);
 		return $response;
 	}
+
+	public function v4_update_order_item($request) {
+		$order_id = (int) $request['id'];
+		$order = wc_get_order($order_id);
+		$user_id = $this->get_user_id_by_auth();
+		$user_can = v3_get_role_status_by_user($user_id);
+		$item_id = (int) $request['item_id'];
+		$status = $request['status'];
+		$update_est = $request['update_est'];
+		$payment_status = $request['payment_status'];
+		$new_date = json_decode($request['new_date']);
+		$max_time = 0;
+		$opt_status = wc_get_order_item_meta($item_id, '_item_status', true);
+		if( isset($new_date) && $new_date != '') { 
+			foreach ($new_date as $key => $value) {
+				if($value->item_select_date != '' && $value->item_select_time != '') {
+					$str_new_time = strtotime($value->item_select_date.' '. $value->item_select_time);
+					$_new_date = date( 'd/m/Y H:i a' , $str_new_time );
+					if( $str_new_time > $max_time) {
+						$max_time = $str_new_time;
+						NB_Order_Meta::update_post_meta( $order_id , '_order_time_completed' , $_new_date); // Sync data
+						NB_Order_Meta::update_post_meta( $order_id , '_order_time_completed_str' , $str_new_time); // Sync data
+						if( ( $str_new_time - strtotime("now") - 8*3600 )/3600 <= 2 && ( $opt_status != 'collection_point' && $opt_status != 'collected' ) ) {
+							$items['check_expiring'] = 'expiring';
+						}
+						$items['order_new_date'] = $_new_date;
+					}
+					wc_update_order_item_meta($value->item_id , '_item_time_completed' , $_new_date);
+					$items['item_new_date'][$key] = $_new_date;
+					$_get_item = new WC_Order_Item_Product($item_id);
+					send_botaksign_email($order_id , 'ORDER COMPLETION DELAY', 'H1.php');
+					$this->add_order_notes($request , 'Reprint(*'.$value->item_select_time.'* *'.$value->item_select_date.'*)' , $value->item_no.' - '.$_get_item->get_name() );
+				}
+			}
+		}
+		if(isset($payment_status) && $payment_status != '') {
+			$payment_status = 'paid';
+			NB_Order_Meta::update_post_meta($order_id , '_payment_status' , 'paid'); // Sync data
+			send_botaksign_email($order_id , 'ORDER RECEIVED', 'G1.php');
+		}
+		if( isset($status) && $status != '') {
+			$_order_status_df = get_post_meta( $order_id , '_order_status', true );
+			wc_update_order_item_meta($item_id , '_item_status' , $status);
+			$data = array();
+			$order_items = $order->get_items('line_item');
+			$order_no = 0;
+			$item_index = 1;
+			$new = 0;
+			$_order_status_wc = '';
+			$ongoing = true;
+			$completed = 0;
+			$collected = 0;
+			$cancelled = 0;
+			$count_item_service = 0;
+			$note_log = false;
+			foreach ( $order_items as $key => $value ) {
+				if( wc_get_product($value->get_product_id())->is_type( 'service' ) ){
+					$count_item_service++;
+				}
+			}
+			$count_item = count($order_items) - $count_item_service;
+			foreach ( $order_items as $key => $value ) {
+				$_status = wc_get_order_item_meta($key , '_item_status');
+
+				if($_status == 'collection_point') {
+					$completed++;
+					wc_update_order_item_meta($item_id , '_item_date_out' , date("d/m/Y H:i a" , strtotime("now") + 8*3600 ) );
+				}
+				if($_status == 'order_received') {
+					$new++;
+				}
+				if($_status == 'collected') {
+					$collected++;
+					$completed++;
+				}
+				if($_status == 'cancelled') {
+					$cancelled++;
+				}
+				$order_no++;
+				if($item_id == $key) {
+					$item_index = $order_no;
+					$item = $value;
+				}
+			}
+			if($new == $count_item) {
+				NB_Order_Meta::update_post_meta( $order_id , '_order_status', 'New' ); // Sync data
+				// update status order WC
+				wp_update_post(array(
+				    'ID'    =>  $order_id,
+				    'post_status'   =>  'wc-pending'
+				));
+				$_order_status = 'New';
+				$_order_status_wc = 'pending';
+				$ongoing = false;
+				if($_order_status_df && $_order_status_df != 'New') {
+					$note_log = true;
+				}
+			}
+			if( ($completed == $count_item || ($cancelled > 0 && $completed > 0 && $completed + $cancelled == $count_item) ) && $collected != $completed ) {
+				NB_Order_Meta::update_post_meta( $order_id , '_order_status', 'Completed' ); // Sync data
+				NB_Order_Meta::update_post_meta( $order_id , '_order_time_out', date("d/m/Y H:i a" , strtotime("now") + 8*3600 ) ); // Sync data
+				$_method = $order->get_shipping_method();
+				if($_order_status_df && $_order_status_df != 'Completed') {
+					if($_method=='Self-collection') {
+					    send_botaksign_email($order_id , 'ORDER COMPLETED', 'B2.php');
+					} elseif ($_method=='Delivery') {
+						send_botaksign_email($order_id , 'ORDER COMPLETED', 'A2.php');
+					} else {
+					    send_botaksign_email($order_id , 'ORDER COMPLETED', 'A2.php');
+					}
+					$note_log = true;
+				}
+				$_order_status = 'Completed';
+				$ongoing = false;
+			}
+			if($collected == $count_item || ($cancelled > 0 && $collected > 0 && $collected + $cancelled == $count_item) ) {
+				NB_Order_Meta::update_post_meta( $order_id , '_order_status', 'Collected' ); // Sync data
+				// update status order WC
+				wp_update_post(array(
+				    'ID'    =>  $order_id,
+				    'post_status'   =>  'wc-completed'
+				));
+				$_order_status = 'Collected';
+				$_order_status_wc = 'completed';
+				$ongoing = false;
+				if($_order_status_df && $_order_status_df != 'Collected') {
+					$note_log = true;
+				}
+			}
+			if($cancelled == $count_item) {
+				NB_Order_Meta::update_post_meta( $order_id , '_order_status', 'Cancelled' ); // Sync data
+				// update status order WC
+				wp_update_post(array(
+				    'ID'    =>  $order_id,
+				    'post_status'   =>  'wc-cancelled'
+				));
+				NB_Order_Meta::update_post_meta( $order_id , '_order_time_out', date("d/m/Y H:i a" , strtotime("now") + 8*3600 ) ); // Sync data
+				NB_Order_Meta::update_post_meta($order->get_id() , '_payment_status' , 'cancelled'); // Sync data
+				$payment_status = 'cancelled';
+				$_order_status = 'Cancelled';
+				$_order_status_wc = 'cancelled';
+				$ongoing = false;
+				if($_order_status_df && $_order_status_df != 'Cancelled') {
+					$note_log = true;
+					send_botaksign_email($order_id , 'ORDER CANCELLED', 'F1.php', '', null, true);
+				}
+			}
+			if($ongoing) {
+				NB_Order_Meta::update_post_meta( $order_id , '_order_status', 'Ongoing' ); // Sync data
+				// update status order WC
+				wp_update_post(array(
+				    'ID'    =>  $order_id,
+				    'post_status'   =>  'wc-processing'
+				));
+				$_order_status = 'Ongoing';
+				$_order_status_wc = 'processing';
+				if($_order_status_df && $_order_status_df != 'Ongoing') {
+					$note_log = true;
+				}
+			}
+			if($note_log ) {
+				$this->add_order_notes($request , $_order_status ,  'update_status_order');
+				if($_order_status_wc != '') {
+					$this->add_order_notes($request , 'WC - '.$_order_status_wc ,  'update_status_order');
+				}
+			}
+
+			if($item) {
+				$opt_status = $status;
+		        $nbu_item_key = wc_get_order_item_meta($item_id, '_nbu');
+		        $nbd_item_key = wc_get_order_item_meta($item_id, '_nbd');
+		        $download = '';
+		        if( $nbu_item_key || $nbd_item_key ) { 
+		        	$files = Nbdesigner_IO::get_list_files( NBDESIGNER_UPLOAD_DIR .'/'. $nbu_item_key );
+		        	foreach($files as $key => $file) { 
+		        		$count_img_design++;
+		           		if($key > 0) { 
+		           			$download = NBDESIGNER_UPLOAD_URL.'/'.basename($file);               	
+		           		}
+		           	}
+		        }
+				$production_time = v3_get_production_time_item($item ,$order, true);
+				$time_completed_item = wc_get_order_item_meta($item_id , '_item_time_completed');
+				if(!isset($time_completed_item) || $time_completed_item == '') {
+					$time_completed_item = date( 'd/m/Y H:i a' , strtotime( v3_get_time_completed_item($production_time ,$order)['production_datetime_completed'] ) );
+				}
+				$roles = get_userdata($user_id)->roles;
+				if(in_array('specialist', $roles) && $_status != 'order_received' && $_status != 'cancelled' ) {
+			        unset($user_can['cancelled']);
+			    }
+				$items['item_id'] = $item_id;
+				$items['download'] = $download;
+				$items['order_id'] = $order_id;
+				$items['id'] = $item->get_product_id();
+				$items['name'] = $item->get_name();
+				$items['qty'] = $item->get_quantity();
+				$items['status'] = $opt_status;
+				$items['production_time'] = v3_get_production_time_item($item ,$order, false);
+				$items['date_completed'] = $time_completed_item;
+				$items['order_status'] = get_post_meta( $order_id , '_order_status' , true);
+				$items['date_time_out'] = get_post_meta( $order_id , '_order_time_out' , true);
+				$items['payment_status'] = $payment_status;
+				$items['user_can'] = $user_can[$opt_status] == 1 ? 'edit' : 'view';
+			}
+
+			// click On - hold
+
+			if( isset($update_est) && $request['update_est'] == 'update') {
+				$date_now = date("H:i Y/m/d" , strtotime("now") + 8*3600 );
+				
+				//update EST order
+				// $order_production_time = v3_get_production_time_order($order);
+				// $order_est_completion = v3_recalc_time_completed($date_now , $order_production_time , $order)['production_datetime_completed'];
+				// 
+				// 
+
+				// update EST item
+				if($item) {
+					$item_production_time = v3_get_production_time_item($item ,$order, true);
+					$item_est_completion = v3_recalc_time_completed($date_now , $item_production_time , $order)['production_datetime_completed'];
+					wc_update_order_item_meta($item_id , '_item_time_completed' , date('d/m/Y H:i a' , strtotime($item_est_completion)) );
+					$items['date_completed'] = date('d/m/Y H:i a' , strtotime($item_est_completion));
+					if( strtotime($item_est_completion) > strtotime(show_est_completion($order)['production_datetime_completed']) ) {
+						NB_Order_Meta::update_post_meta( $order->get_id() , '_order_time_completed', date('d/m/Y H:i a' , strtotime($item_est_completion)) ); // Sync data
+						NB_Order_Meta::update_post_meta( $order->get_id() , '_order_time_completed_str', strtotime($item_est_completion) ); // Sync data
+						$items['order_date_completed'] = date('d/m/Y H:i a' , strtotime($item_est_completion));
+					} else {
+						$items['order_date_completed'] = get_post_meta( $order->get_id() , '_order_time_completed', true );
+					}
+					if( ( strtotime($item_est_completion) - strtotime("now") - 8*3600 )/3600 <= 2 && ( $opt_status != 'collection_point' && $opt_status != 'collected' )  ) {
+						$items['check_expiring'] = 'expiring';
+					}
+				}
+				update_post_meta($order_id , 'order_on_hold' , '');
+				wc_update_order_item_meta($item_id , '_item_on_hold' , '');
+			}
+
+			// update log
+			$list_status = unserialize(get_option('custom_status_order'));
+			if(!isset($list_status)) {
+				$list_status = array(
+			        'order_received'		=> 'Order Received',
+			        'processing'			=> 'Processing',
+			        'artwork_amendment'		=> 'Artwork Amendment',
+			        'collection_point'		=> 'Collection Point',
+			        'collected'				=> 'Collected',
+			        'cancelled'				=> 'Cancelled',
+			    );
+			}
+			$status_name = $list_status[$opt_status];
+			if($status_name != '' && $item) {
+				$this->add_order_notes($request , $status_name ,  $item_index.' - '.$items['name']);
+			}
+			//end
+		}
+		$items['payment_status'] = $payment_status;
+		$response = rest_ensure_response( $items);
+		return $response;
+	}
+
 	public function search($request) {
 		global $wpdb;
 
@@ -1815,7 +2259,7 @@ class WC_REST_Custom_Controller {
 		    }
 		}
 		if($id != '') {
-		    $where_post[] = 'wp_posts.ID LIKE "%'.$id.'%"';
+		    $where_post[] = 'wp_posts.ID = '.$id;
 		}
 		if($status != '') {
 		    $where_meta[] = 'wp_nb_order_meta.order_status = "'.$status.'"';
@@ -1858,25 +2302,30 @@ class WC_REST_Custom_Controller {
 		$_where_post_sql = count($where_post) > 0 ? implode(' AND ', $where_post) : '';
 
 		$first_Sql = 'SELECT wp_posts.ID FROM wp_posts';
+		$first_count_Sql = 'SELECT count(wp_posts.ID) as total FROM wp_posts';
 
 		if($_where_meta_sql) {
 		    $first_Sql .= ' INNER JOIN wp_nb_order_meta ON wp_posts.ID = wp_nb_order_meta.order_id WHERE ';
+		    $first_count_Sql .= ' INNER JOIN wp_nb_order_meta ON wp_posts.ID = wp_nb_order_meta.order_id WHERE ';
 		    $_where_meta_sql = ' AND ' . $_where_meta_sql;
 		} else {
 		   $first_Sql .= ' WHERE ';
+		   $first_count_Sql .= ' WHERE ';
 		}
 
 		$sql = $first_Sql . $_where_post_sql . $_where_meta_sql . ' ORDER BY wp_posts.post_date DESC LIMIT ' . $offset . ',' . $posts_per_page;
-		$total_sql = $first_Sql . $_where_post_sql . $_where_meta_sql;
+		$total_sql = $first_count_Sql . $_where_post_sql . $_where_meta_sql;
 
 		global $wpdb;
 
 		$total_results = $wpdb->get_results($total_sql);
 		$results = $wpdb->get_results($sql);
+
 		$data = array();
 		foreach ($results as $key => $value) {
 			$data[] = $this->get_order( $value->ID, $request );
 		}
+
 		$datas = array();
 		$datas['sql'] = $total_sql;
 		$datas['orders'] = $data;
