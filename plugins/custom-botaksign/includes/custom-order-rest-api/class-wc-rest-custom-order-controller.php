@@ -817,7 +817,7 @@ class WC_REST_Custom_Controller {
 			NB_Order_Meta::nb_sync_order($order_id, 'status');
 		}
 		if($payment_status != '') {
-			// NB_Order_Meta::update_post_meta($order_id , '_payment_status' , $payment_status); // Sync data
+			NB_Order_Meta::update_post_meta($order_id , '_payment_status' , $payment_status); // Sync data
 		}
 		$invoice_number = get_post_meta($order->get_id() , '_wcpdf_invoice_number' , true);
 		$link_pdf_invoice = '';
