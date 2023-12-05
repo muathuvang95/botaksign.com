@@ -764,7 +764,7 @@ class WC_REST_Custom_Controller {
 		foreach ($order_items as $item_id => $item) {
 			$production_time = v3_get_production_time_item($item ,$order , true);
 			$_production_time = v3_get_production_time_item($item ,$order , false);
-			if(strpos("RUSH",$_production_time) !== false) {
+			if(strpos($_production_time,"RUSH") !== false) {
 				$is_rush = true;
 			}
 			$time_completed = date( 'd/m/Y H:i a' , strtotime( v3_get_time_completed_item($production_time ,$order)['production_datetime_completed'] ) );
