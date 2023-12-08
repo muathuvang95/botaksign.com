@@ -72,6 +72,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/bucket-browser-for-aws-s3/buc
 require_once plugin_dir_path(__FILE__) . 'includes/filebird/filebird.php';
 require_once plugin_dir_path(__FILE__) . 'includes/custom-order-rest-api/functions.php';
 require_once plugin_dir_path(__FILE__) . 'includes/custom-order-rest-api/class-wc-rest-custom-order-controller.php';
+require_once plugin_dir_path(__FILE__) . 'includes/custom-order-rest-api/class-botaksign-dashboard-controller.php';
 require_once plugin_dir_path(__FILE__) . 'includes/custom-order-rest-api/class.nb_ordermeta.php';
 require plugin_dir_path( __DIR__ ) . 'nb-offload-media/vendor/autoload.php';    //custom botak s3: require autoload S3
 add_action('wp_ajax_create_pages', 'create_default_pages', 2);
@@ -5579,6 +5580,11 @@ function nb_set_date_order_status_changed_onhold_to_processing($order_id , $stat
         if($order_items) {
             v3_add_order_notes($order_id , $status_order , 'update_status_order');
             NB_Order_Meta::update_post_meta( $order_id , '_order_status' , $status_order); // Sync data
+
+            if(!NB_Order_Meta::is_sync($order_id)) {
+                NB_Order_Meta::nb_sync_order($order_id, 'paypal_update'); // Sync data
+            }
+
             foreach ( $order_items as $item_id => $item ) {
                 if( wc_get_product($item->get_product_id()) && !wc_get_product($item->get_product_id())->is_type( 'service' ) ){
                     wc_update_order_item_meta($item_id , '_item_status' , $status_item);

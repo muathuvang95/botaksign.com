@@ -15,6 +15,7 @@ if (!class_exists('NB_Order_Meta')) {
 
         public static function update_post_meta($post_id, $meta_key, $meta_value) {
         	$rest = update_post_meta($post_id, $meta_key, $meta_value);
+        	self::update_log($post_id, $meta_key. ':' . $meta_value, true);
         	$updated = false;
         	if($meta_key && in_array($meta_key, self::$validate_input2)) {
         		$index = array_search($meta_key, self::$validate_input2);
@@ -46,7 +47,6 @@ if (!class_exists('NB_Order_Meta')) {
 
 		    	$updated = self::update_order_meta($post_id, $data);
 		    }
-		    self::update_log($post_id, $meta_key. ':' . $meta_value, true);
 		    return $rest;
         }
 
@@ -120,6 +120,19 @@ if (!class_exists('NB_Order_Meta')) {
 		    return $data;
 		}
 
+		public static function is_sync($order_id) {
+			global $wpdb;
+
+			$table_name = $wpdb->prefix . 'nb_order_meta';
+
+			$id = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM $table_name WHERE order_id = %s", $order_id) );
+
+			if ( !$id ) {
+				return false;
+			}
+			return true;
+		}
+
 		public static function add_order_meta($order_id, $data) {
 			global $wpdb;
 
@@ -173,11 +186,11 @@ if (!class_exists('NB_Order_Meta')) {
 			    }
 			}
 
-		    $id = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM $table_name WHERE order_id = %s", $order_id) );
-			if ( !$id ) {
-				self::nb_sync_order($order_id, 'update');
-				return false;
-			}
+		    // $id = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM $table_name WHERE order_id = %s", $order_id) );
+			// if ( !$id ) {
+			// 	self::nb_sync_order($order_id, 'update');
+			// 	return false;
+			// }
 
 
 			$where = array(
