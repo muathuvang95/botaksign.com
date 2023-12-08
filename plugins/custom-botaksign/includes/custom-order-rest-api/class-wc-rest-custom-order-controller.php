@@ -789,22 +789,23 @@ class WC_REST_Custom_Controller {
 		}
 		// update status payment by woocoomerce
 		$payment_status = get_post_meta($order->get_id() , '_payment_status' , true);
-		if($payment_status != 'paid') {
+		$_payment_status = $payment_status;
+		if($_payment_status != 'paid') {
 			if( ($order->get_payment_method() == 'paypal' || $order->get_payment_method() == 'omise_paynow' || $order->get_payment_method() == 'omise') && ( $order->get_status() == 'on-hold' || $order->get_status() == 'pending' ) ) {
-				$payment_status = 'pendding';
+				$_payment_status = 'pendding';
 			} 
 			if ($order->get_payment_method() == 'cod') {
-				$payment_status = 'pendding';
+				$_payment_status = 'pendding';
 			}
 			if( ($order->get_payment_method() == 'paypal' || $order->get_payment_method() == 'omise_paynow' || $order->get_payment_method() == 'omise') && ( $order->get_status() == 'processing' || $order->get_status() == 'completed' ) ) {
-				$payment_status = 'paid';
+				$_payment_status = 'paid';
 			}
 			if( $order->get_status() == 'cancelled' ||  $order->get_status() == 'failed') {
-				$payment_status = 'cancelled';
+				$_payment_status = 'cancelled';
 			}
 			
 			if(get_post_meta( $order_id , '_order_status' , true) == 'Cancelled') {
-				$payment_status = 'cancelled';
+				$_payment_status = 'cancelled';
 			}
 		}
 		// if( get_post_meta($order_id, '_cxecrt_status_od', true) == 11 || get_post_meta($order_id, '_cxecrt_status_od', true) == 9 ) {
@@ -816,8 +817,9 @@ class WC_REST_Custom_Controller {
 		if($order_status != $_order_status_sync) {
 			NB_Order_Meta::nb_sync_order($order_id, 'status');
 		}
-		if($payment_status != '') {
-			NB_Order_Meta::update_post_meta($order_id , '_payment_status' , $payment_status); // Sync data
+		if($payment_status != $_payment_status) {
+			NB_Order_Meta::update_post_meta($order_id , '_payment_status' , $_payment_status); // Sync data
+			$payment_status = $_payment_status;
 		}
 		$invoice_number = get_post_meta($order->get_id() , '_wcpdf_invoice_number' , true);
 		$link_pdf_invoice = '';

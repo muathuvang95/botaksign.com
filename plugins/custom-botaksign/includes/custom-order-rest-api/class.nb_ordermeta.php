@@ -5,9 +5,9 @@ if (!class_exists('NB_Order_Meta')) {
 
 	class NB_Order_Meta {
 
-		public static $validate_input = array('specialist_id', 'order_status', 'post_date', 'order_time_completed', 'order_time_completed_str', 'order_time_out', 'billing_first_name', 'billing_last_name', 'billing_company', 'payment_method', 'payment_status', 'delivery', 'order_create', 'order_update');
+		public static $validate_input = array('specialist_id', 'order_status', 'post_date', 'order_time_completed', 'order_time_completed_str', 'order_time_out', 'billing_first_name', 'billing_last_name', 'billing_company', 'payment_method', 'payment_status', 'delivery', 'order_create', 'order_update', 'log');
 
-		public static $validate_input2 = array('_specialist_id', '_order_status', 'post_date', '_order_time_completed', '_order_time_completed_str', '_order_time_out', '_billing_first_name', '_billing_last_name', '_billing_company', '_payment_method', '_payment_status', 'delivery', 'order_create', 'order_update');
+		public static $validate_input2 = array('_specialist_id', '_order_status', 'post_date', '_order_time_completed', '_order_time_completed_str', '_order_time_out', '_billing_first_name', '_billing_last_name', '_billing_company', '_payment_method', '_payment_status', 'delivery', 'order_create', 'order_update', 'log');
 
 		public function __construct()
         {
@@ -46,9 +46,7 @@ if (!class_exists('NB_Order_Meta')) {
 
 		    	$updated = self::update_order_meta($post_id, $data);
 		    }
-		    if(!$updated) {
-		    	self::update_log($post_id, $meta_key. ':' . $meta_value, true);
-		    }
+		    self::update_log($post_id, $meta_key. ':' . $meta_value, true);
 		    return $rest;
         }
 
@@ -213,7 +211,7 @@ if (!class_exists('NB_Order_Meta')) {
 			$log = self::get_order_meta($order_id, 'log');
 			$new_log = $log.','.$message;
 			if($action) {
-				self::update_order_meta($order_id, array('log', $new_log));
+				self::update_order_meta($order_id, array('log' => $new_log));
 			}
 		}
 
