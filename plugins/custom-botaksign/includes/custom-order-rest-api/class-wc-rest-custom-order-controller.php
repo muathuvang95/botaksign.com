@@ -75,6 +75,15 @@ class WC_REST_Custom_Controller {
 			)
 		));
 
+		// get link download design V4
+		register_rest_route( $this->namespacev4, '/' . $this->rest_base . '/download-design/(?P<id>[\d]+)', array(
+			array(
+				'methods'  => WP_REST_Server::READABLE,
+				'callback' => array( $this, 'v4_get_link_design' ),
+				'permission_callback' => array( $this, 'get_item_permissions_check' ),
+			)
+		));
+
 		// get order items  by order id V4
 		register_rest_route( $this->namespacev4, '/' . $this->rest_base . '/items/(?P<id>[\d]+)', array(
 			array(
@@ -934,6 +943,51 @@ class WC_REST_Custom_Controller {
 
 		return $data;
 
+	}
+
+	public function v4_get_link_design($request) {
+		$order_id = (int) $request['id'];
+		$link_s3 = '';
+		$order = wc_get_order($order_id);
+		if($order) {
+			//zip file s3
+	        $product_s3 = $order->get_items();
+	        $list_nbu_Prefix_s3 = array();
+	        $list_nbd_Prefix_s3 = array();
+	        foreach($product_s3 as $order_item_id => $product) {
+	            $nbu_item_key_s3 = wc_get_order_item_meta($order_item_id, '_nbu');  
+	            $nbd_item_key_s3 = wc_get_order_item_meta($order_item_id, '_nbd'); 
+	            if($nbu_item_key_s3) {
+	            	$list_nbu_Prefix_s3[] = $nbu_item_key_s3;
+	            }
+	            if($nbd_item_key_s3) {
+	            	$list_nbd_Prefix_s3[] = $nbd_item_key_s3;
+	            }     
+	        }
+	        $list_nbd_Prefix_s3 = array('123','345','76546');
+	        if(count($list_nbu_Prefix_s3) > 0) {
+	        	$listNbuPrefixStr = implode(",",$list_nbu_Prefix_s3);
+	        }
+			if($list_nbd_Prefix_s3) {
+				$listNbdPrefixStr = implode(",",$list_nbd_Prefix_s3);
+			}
+			$url_s3 = get_home_url().'/s3_zip/index.php?order_id='.$order_id;
+			if($listNbuPrefixStr) {
+				$url_s3.= '&prefix_nbu='.$listNbuPrefixStr;
+			}
+			if($listNbdPrefixStr) {
+				$url_s3.= '&prefix_nbd='.$listNbdPrefixStr;
+			}
+
+			if( count($list_nbu_Prefix_s3) || count($list_nbd_Prefix_s3)  ) {
+				// $link_s3 = str_replace( 'http' , 'https' ,v3_getLinkAWS($order_id) );
+				$link_s3 = $url_s3.'&t='.strtotime('now');
+			}
+		}
+		$response = rest_ensure_response( array(
+			'link_download' => $link_s3,
+		));
+		return $response;
 	}
 
 	public function get_order_detail_by_id($request) {
