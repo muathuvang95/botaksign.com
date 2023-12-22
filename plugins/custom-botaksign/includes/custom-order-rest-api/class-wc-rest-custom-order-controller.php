@@ -547,6 +547,16 @@ class WC_REST_Custom_Controller {
     	return $user_id;
     }
 
+    public function get_cookie_id_by_auth() {
+    	$headers = apache_request_headers();
+
+        $logged_in_cookie = isset($headers['Authorization']) ? $headers['Authorization'] : '';
+
+        if(!$logged_in_cookie) return false;
+
+    	return $logged_in_cookie;
+    }
+
 	public function get_item_permissions_check() {
 		$user_id = $this->get_user_id_by_auth();
 
@@ -839,13 +849,15 @@ class WC_REST_Custom_Controller {
 		// global $botakit;
 	    $link_down = '';
 	    if ($order_id) {
+	    	$cookie = $this->get_cookie_id_by_auth();
+	    	$token = base64_encode($cookie . '|' . $order_id);
 	        // $html = v3_generate_order_detail_pdf($order_id);
 	        // $botakit->_content = $html;
 	        // $filename = 'order-' . $order_id . '.pdf';
 	        // $botakit->generate_pdf_template($filename , false);
 	        // $pdf_path = $botakit->_file_to_save . '/' . $filename;
 	        // $link_down = convertLinkDesign($pdf_path);
-	        $link_down = home_url().'/order-detail/?order_id='.$order_id;
+	        $link_down = home_url().'/order-detail/?order_id='.$order_id. '&token=' . $token;
 	    }
 
 	    //zip file s3
