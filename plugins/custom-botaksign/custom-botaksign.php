@@ -72,8 +72,8 @@ require_once plugin_dir_path(__FILE__) . 'includes/bucket-browser-for-aws-s3/buc
 require_once plugin_dir_path(__FILE__) . 'includes/filebird/filebird.php';
 require_once plugin_dir_path(__FILE__) . 'includes/custom-order-rest-api/functions.php';
 require_once plugin_dir_path(__FILE__) . 'includes/custom-order-rest-api/class-wc-rest-custom-order-controller.php';
-require_once plugin_dir_path(__FILE__) . 'includes/custom-order-rest-api/class-botaksign-dashboard-controller.php';
 require_once plugin_dir_path(__FILE__) . 'includes/custom-order-rest-api/class.nb_ordermeta.php';
+require_once plugin_dir_path(__FILE__) . 'includes/class-custom-feature.php';
 require plugin_dir_path( __DIR__ ) . 'nb-offload-media/vendor/autoload.php';    //custom botak s3: require autoload S3
 add_action('wp_ajax_create_pages', 'create_default_pages', 2);
 
