@@ -357,7 +357,23 @@ class WC_REST_Custom_Controller {
 				'callback' => array( $this, 'get_list_link_order_items_test' ),
 			)
 		));
+
+		// get setting options V4
+		register_rest_route( $this->namespacev4, '/' . $this->rest_base . '/headers', array(
+			array(
+				'methods'  => WP_REST_Server::READABLE,
+				'callback' => array( $this, 'get_headers' ),
+			)
+		));
 	}
+
+	public function get_headers() {
+    	$headers = apache_request_headers();
+
+    	$response = rest_ensure_response( $headers );
+
+		return $response;
+    }
 
 	public function logout($request) {
         wp_logout();
@@ -2172,11 +2188,25 @@ class WC_REST_Custom_Controller {
 		global $wpdb;
 
 		$total_results = $wpdb->get_results($total_sql);
-		$results = $wpdb->get_results($sql);
+		
+		$results = $wpdb->get_results($sql, ARRAY_A);
+
+		$count_results = array_count_values(array_column($results, 'ID'));
 
 		$data = array();
-		foreach ($results as $key => $value) {
-			$data[] = $this->get_order( $value->ID, $request );
+
+		foreach ($count_results as $key => $value) {
+		    if($value > 1) {
+		        $table_name = $wpdb->prefix . 'nb_order_meta';
+
+		        $nb_orders = $wpdb->get_results( $wpdb->prepare("SELECT id FROM $table_name WHERE order_id = %s", $key),  ARRAY_A);
+
+		        if(!empty($nb_orders[1]['id'])) {
+		            $wpdb->delete( $table_name, array( 'id' => $nb_orders[1]['id'] ) );
+		        }
+		        
+		    }
+		    $data[] = $this->get_order( $key, $request );
 		}
 
 		$datas = array();
@@ -2651,10 +2681,25 @@ class WC_REST_Custom_Controller {
 		$total_sql = 'SELECT count(wp_posts.ID) as total FROM wp_posts INNER JOIN wp_nb_order_meta ON wp_posts.ID = wp_nb_order_meta.order_id ' . $s1 . $where_post_sql . $s2 . $where_meta_sql;
 
 		$total_results = $wpdb->get_results($total_sql);
-		$results = $wpdb->get_results($sql);
+
+		$results = $wpdb->get_results($sql, ARRAY_A);
+
+		$count_results = array_count_values(array_column($results, 'ID'));
+
 		$data = array();
-		foreach ($results as $key => $value) {
-			$data[] = $this->get_order( $value->ID, $request );
+
+		foreach ($count_results as $key => $value) {
+		    if($value > 1) {
+		        $table_name = $wpdb->prefix . 'nb_order_meta';
+
+		        $nb_orders = $wpdb->get_results( $wpdb->prepare("SELECT id FROM $table_name WHERE order_id = %s", $key),  ARRAY_A);
+
+		        if(!empty($nb_orders[1]['id'])) {
+		            $wpdb->delete( $table_name, array( 'id' => $nb_orders[1]['id'] ) );
+		        }
+		        
+		    }
+		    $data[] = $this->get_order( $key, $request );
 		}
 		$datas = array();
 		$datas['sql'] = $total_sql;
