@@ -76,7 +76,7 @@ if (!class_exists('Botak_Custom_Feature')) {
                 if(!empty($_emails)) {
 
                     foreach ($_emails as $value) {
-                        if(!in_array($value, $email_alert_list)) {
+                        if($value && !in_array($value, $email_alert_list)) {
                             $email_alert_list[] = $value;
                         }
                     }
