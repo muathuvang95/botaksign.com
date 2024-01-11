@@ -71,19 +71,24 @@ if (!class_exists('Botak_Custom_Feature')) {
                 $product_id = $item->get_product_id();
                 $email_alert = get_post_meta($product_id, '_nbcf_email_alert', true);
 
-                if($email_alert) {
-                    $email_alert_list[$email_alert] = $email_alert;
+                $_emails = explode(',', $email_alert);
+
+                if(!empty($_emails)) {
+
+                    foreach ($_emails as $value) {
+                        if(!in_array($value, $email_alert_list)) {
+                            $email_alert_list[] = $value;
+                        }
+                    }
                 }
             }
 
             if(!empty($email_alert_list)) {
                 $subject = 'New Order #' . $order_id;
 
-                $message = 'Order ' . $order_id . ' has been created';
+                $message = 'Order #' . $order_id . ' has been created';
 
                 wp_mail($email_alert_list, $subject, $message);
-
-                wp_mail($to, $subject, $message, $headers);
             }
         }
     }
