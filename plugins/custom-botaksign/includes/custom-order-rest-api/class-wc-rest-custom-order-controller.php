@@ -2143,7 +2143,7 @@ class WC_REST_Custom_Controller {
 		}
 		if($company != '') {
 		    $company = esc_sql($company);
-		    $where_meta[] = 'wp_nb_order_meta.order_status LIKE "%'.$company.'%"';
+		    $where_meta[] = 'wp_nb_order_meta.billing_company LIKE "%'.$company.'%"';
 		}
 		if($payment != '') {
 		    $where_meta[] = 'wp_nb_order_meta.payment_method = "'.$payment.'"';
