@@ -53,7 +53,7 @@
 				<?php do_action( 'wpo_wcpdf_before_order_data', $this->type, $this->order ); ?>
 				<?php if ( isset($this->settings['display_number']) ) { ?>
 				<tr class="invoice-number">
-					<th><h3><?php _e( 'INVOICE NO.:', 'woocommerce-pdf-invoices-packing-slips' ); ?></h3></th>
+					<th><h3><?php _e( 'TAX INVOICE NO.:', 'woocommerce-pdf-invoices-packing-slips' ); ?></h3></th>
 					<td><h3 style="text-align: center"> <?php $this->invoice_number(); ?></h3></td>
 				</tr>
 				<?php } ?>
@@ -123,10 +123,23 @@
 					<tfoot>
 						<?php
                         $d = 0;
+                        $gst = 0;
+                        $taxs = array_slice($this->order->get_taxes(), 0, 1);
+		                if($taxs) {
+		                    $gst = array_shift($taxs)->get_rate_percent( 'view' );
+		                }
                         foreach( $this->get_woocommerce_totals() as $key => $total ) : ?>
 						<tr class="<?php echo $key; ?> rm-border">
 							<td class="no-borders"></td>
-							<th class="description" style="text-align: right;"><?php echo $total['label']; ?></th>
+							<th class="description" style="text-align: right;">
+								<?php
+									if(strtolower($total['label']) == 'gst') {
+										echo 'Add '. $gst . '% ' . $total['label']; 
+									} else {
+										echo $total['label']; 
+									}
+								?>
+							</th>
 							<td class="price" style="text-align: right;"><span class="totals-price"><?php echo $total['value']; ?></span></td>
 						</tr>
 						<?php endforeach; ?>
